@@ -1,0 +1,16 @@
+﻿# Sistema
+Thumbs.db
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+
+# Segredos
+.env
+.env.*
+*.key
+*.pem
+
+# Logs
+*.log

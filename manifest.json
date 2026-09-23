@@ -1,0 +1,10 @@
+﻿{
+  "name": "ViniGeoClima BA",
+  "short_name": "ViniGeo",
+  "description": "Monitoramento meteorológico, climático e ambiental.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#020805",
+  "theme_color": "#020805",
+  "lang": "pt-BR"
+}
