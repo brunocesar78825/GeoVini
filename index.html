@@ -8,7 +8,7 @@
 <meta name="description" content="ViniGeoClima BA — monitoramento meteorológico, climático e ambiental.">
 <meta name="author" content="BRUNO CESAR QUEIROZ DE SANT'ANA DO PRADO">
 
-<title>ViniGeoClima BA · Monitoramento do Clima</title>
+<title>ViniGeoClima BA · Meteorologia + Queimadas</title>
 
 <link rel="manifest" href="./manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -986,6 +986,446 @@ button{
     padding:7px;
   }
 }
+</style>
+<style id="vinigeo-global-upgrade-css">
+
+/* ==========================================================
+   VINIGEOCLIMA - GLOBAL UPGRADE
+   ========================================================== */
+
+#background{
+  z-index:-20 !important;
+}
+
+#vgContextVideo{
+  position:absolute;
+  inset:-4%;
+  width:108%;
+  height:108%;
+  object-fit:cover;
+  opacity:0;
+  pointer-events:none;
+  filter:saturate(.88) contrast(1.05);
+  transform:scale(1.04);
+  transition:
+    opacity 1.5s ease,
+    transform 16s ease,
+    filter 1s ease;
+  z-index:0;
+}
+
+#backgroundImage{
+  z-index:1;
+}
+
+#backgroundOverlay{
+  z-index:3;
+}
+
+#atmosphere{
+  z-index:4;
+}
+
+#backgroundImage.vgVideoHidden{
+  opacity:.76 !important;
+}
+
+#vgContextVideo.vgVideoActive{
+  opacity:.72;
+  transform:scale(1.08);
+}
+
+.menuBtn{
+  position:absolute !important;
+  left:16px !important;
+  right:auto !important;
+  z-index:20;
+}
+
+.topbar .brand{
+  margin-left:58px;
+}
+
+.vg-situation{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:18px;
+}
+
+.vg-situation-panel{
+  min-height:250px;
+  border-radius:28px;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+
+.vg-panel-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.vg-panel-title strong{
+  font-size:16px;
+}
+
+.vg-panel-title span{
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:.12em;
+}
+
+.vg-weather-large{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:22px;
+  align-items:center;
+}
+
+.vg-temp-big{
+  font-size:72px;
+  line-height:.9;
+  font-weight:800;
+  letter-spacing:-.07em;
+}
+
+.vg-weather-main{
+  min-width:0;
+}
+
+.vg-weather-condition{
+  font-size:24px;
+  font-weight:700;
+}
+
+.vg-weather-sub{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.vg-air-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-top:22px;
+}
+
+.vg-mini{
+  padding:13px;
+  border-radius:17px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.vg-mini-label{
+  font-size:9px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.vg-mini-value{
+  margin-top:7px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.vg-fire-panel{
+  border-color:rgba(255,115,70,.16);
+}
+
+.vg-fire-status{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+}
+
+.vg-fire-light{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#66737a;
+}
+
+.vg-fire-light.active{
+  background:#ff6a3d;
+  box-shadow:0 0 18px rgba(255,106,61,.8);
+}
+
+.vg-fire-number{
+  font-size:52px;
+  font-weight:800;
+  letter-spacing:-.05em;
+  margin-top:10px;
+}
+
+.vg-fire-label{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.vg-fire-data{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+
+.vg-fire-note{
+  margin-top:16px;
+  color:rgba(255,255,255,.52);
+  font-size:10px;
+  line-height:1.6;
+}
+
+.vg-section-heading{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.vg-section-heading h2{
+  margin:0;
+  font-size:17px;
+}
+
+.vg-section-heading span{
+  font-size:10px;
+  color:var(--muted);
+}
+
+#forecast{
+  grid-template-columns:repeat(9,1fr);
+}
+
+#forecast .day{
+  min-width:0;
+}
+
+.vg-map-enhanced{
+  position:relative;
+}
+
+.vg-map-badge{
+  position:absolute;
+  left:14px;
+  top:14px;
+  z-index:500;
+  padding:9px 12px;
+  border-radius:12px;
+  background:rgba(2,8,5,.78);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);
+  font-size:10px;
+}
+
+.vg-fire-map-button{
+  border:1px solid rgba(255,106,61,.3) !important;
+}
+
+.vg-pages{
+  position:fixed;
+  inset:0;
+  z-index:1800;
+  background:rgba(2,8,5,.72);
+  backdrop-filter:blur(18px);
+  display:none;
+  overflow:auto;
+  padding:24px;
+}
+
+.vg-pages.open{
+  display:block;
+}
+
+.vg-page-box{
+  width:min(1100px,100%);
+  min-height:calc(100vh - 48px);
+  margin:auto;
+  border-radius:30px;
+  padding:28px;
+  background:rgba(5,18,12,.94);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+}
+
+.vg-page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.vg-page-header h2{
+  margin:0;
+  font-size:24px;
+}
+
+.vg-page-header small{
+  color:var(--muted);
+}
+
+.vg-close-page{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:white;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.vg-page-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.vg-info-card{
+  border-radius:22px;
+  padding:20px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.vg-info-card h3{
+  margin:0 0 9px;
+  font-size:15px;
+}
+
+.vg-info-card p,
+.vg-info-card li{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.vg-info-card ul{
+  padding-left:18px;
+}
+
+.vg-alert-item{
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.vg-alert-title{
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+.vg-alert-text{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+
+.vg-context-label{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:40;
+  padding:8px 11px;
+  border-radius:12px;
+  background:rgba(2,8,5,.72);
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.65);
+  font-size:9px;
+  pointer-events:none;
+}
+
+.vg-fire-marker{
+  background:#ff653f;
+  border:2px solid rgba(255,255,255,.75);
+  box-shadow:0 0 14px rgba(255,70,30,.65);
+  border-radius:50%;
+}
+
+.vg-menu-pages-title{
+  color:var(--green) !important;
+}
+
+@media(max-width:900px){
+  .vg-situation{
+    grid-template-columns:1fr;
+  }
+
+  #forecast{
+    overflow-x:auto;
+    grid-template-columns:repeat(9,112px);
+  }
+}
+
+@media(max-width:720px){
+  .topbar .brand{
+    margin-left:54px;
+  }
+
+  .menuBtn{
+    left:10px !important;
+  }
+
+  .vg-situation-panel{
+    padding:19px;
+  }
+
+  .vg-weather-large{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .vg-temp-big{
+    font-size:64px;
+  }
+
+  .vg-air-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .vg-fire-data{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .vg-page-grid{
+    grid-template-columns:1fr;
+  }
+
+  .vg-pages{
+    padding:10px;
+  }
+
+  .vg-page-box{
+    padding:20px;
+    border-radius:22px;
+    min-height:calc(100vh - 20px);
+  }
+}
+
+body.vg-video-disabled #vgContextVideo{
+  display:none;
+}
+
+body.ultraMode #vgContextVideo,
+body.lightMode #vgContextVideo{
+  display:none;
+}
+
+body.reducedMotion #vgContextVideo{
+  transition:none;
+}
+
 </style>
 </head>
 
@@ -2520,6 +2960,1691 @@ setInterval(
 
 </script>
 
+<script id="vinigeo-global-upgrade-js">
+
+/* ==========================================================
+   VINIGEOCLIMA - GLOBAL UPGRADE ENGINE
+   Não substitui a base original.
+   ========================================================== */
+
+(function(){
+
+  const VG = {
+    fireLayer:null,
+    firePoints:[],
+    uf:"BA",
+    pageOpen:false
+  };
+
+  const sleep = ms =>
+    new Promise(resolve => setTimeout(resolve,ms));
+
+  const text = (id,value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+
+  const esc = value =>
+    String(value ?? "")
+      .replace(/[&<>"']/g,char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[char]));
+
+  /* ========================================================
+     VÍDEO CONTEXTUAL
+     ======================================================== */
+
+  function initContextVideo(){
+
+    if(document.getElementById("vgContextVideo"))
+      return;
+
+    const background = document.getElementById("background");
+
+    if(!background)
+      return;
+
+    const video = document.createElement("video");
+
+    video.id = "vgContextVideo";
+    video.muted = true;
+    video.loop = true;
+    video.autoplay = false;
+    video.playsInline = true;
+    video.preload = "metadata";
+
+    const image = document.getElementById("backgroundImage");
+
+    if(image)
+      background.insertBefore(video,image);
+
+    const label = document.createElement("div");
+    label.className = "vg-context-label";
+    label.id = "vgContextLabel";
+    label.textContent = "FUNDO METEOROLÓGICO";
+    background.appendChild(label);
+
+    return video;
+  }
+
+  async function useVerifiedVideo(scenario){
+
+    const video = initContextVideo();
+
+    if(!video)
+      return;
+
+    const path =
+      "./assets/events/" +
+      encodeURIComponent(scenario) +
+      "/verified.mp4";
+
+    try{
+
+      const check = await fetch(
+        path,
+        {
+          method:"HEAD",
+          cache:"no-store"
+        }
+      );
+
+      if(!check.ok)
+        throw new Error("Vídeo não encontrado");
+
+      if(
+        document.body.classList.contains("ultraMode") ||
+        document.body.classList.contains("lightMode") ||
+        state.reducedMotion
+      ){
+        video.pause();
+        video.classList.remove("vgVideoActive");
+        document.body.classList.add("vg-video-disabled");
+        return;
+      }
+
+      video.src = path;
+      video.currentTime = 0;
+
+      await video.play();
+
+      document.body.classList.remove("vg-video-disabled");
+
+      video.classList.add("vgVideoActive");
+
+      const label = document.getElementById("vgContextLabel");
+
+      if(label)
+        label.textContent =
+          "VÍDEO VERIFICADO · " +
+          scenario.toUpperCase();
+
+    }catch(error){
+
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+
+      video.classList.remove("vgVideoActive");
+
+      document.body.classList.remove("vg-video-disabled");
+
+      const label = document.getElementById("vgContextLabel");
+
+      if(label)
+        label.textContent =
+          "FUNDO METEOROLÓGICO · SEM VÍDEO VERIFICADO";
+    }
+  }
+
+  /* ========================================================
+     CARD PRINCIPAL
+     ======================================================== */
+
+  function createSituationCard(){
+
+    if(document.getElementById("vgSituation"))
+      return;
+
+    const hero =
+      document.querySelector(".hero");
+
+    if(!hero)
+      return;
+
+    const section = document.createElement("section");
+
+    section.className = "vg-situation";
+    section.id = "vgSituation";
+
+    section.innerHTML = `
+      <article class="vg-situation-panel glass">
+
+        <div class="vg-panel-title">
+          <strong>Situação meteorológica</strong>
+          <span>AGORA</span>
+        </div>
+
+        <div class="vg-weather-large">
+
+          <div class="vg-temp-big" id="vgTemp">
+            --
+          </div>
+
+          <div class="vg-weather-main">
+            <div class="vg-weather-condition" id="vgCondition">
+              Carregando...
+            </div>
+
+            <div class="vg-weather-sub" id="vgFeels">
+              Sensação: --
+            </div>
+
+            <div class="vg-weather-sub" id="vgHumidity">
+              Umidade: --
+            </div>
+          </div>
+
+        </div>
+
+        <div class="vg-air-row">
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              Qualidade do ar
+            </div>
+            <div class="vg-mini-value" id="vgAQI">
+              --
+            </div>
+          </div>
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              Chuva
+            </div>
+            <div class="vg-mini-value" id="vgRain">
+              --
+            </div>
+          </div>
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              Vento
+            </div>
+            <div class="vg-mini-value" id="vgWind">
+              --
+            </div>
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="vg-situation-panel glass vg-fire-panel">
+
+        <div class="vg-panel-title">
+
+          <strong>Queimadas próximas</strong>
+
+          <div class="vg-fire-status">
+            <span class="vg-fire-light" id="vgFireLight"></span>
+            <span id="vgFireStatus">
+              VERIFICANDO INPE
+            </span>
+          </div>
+
+        </div>
+
+        <div class="vg-fire-number" id="vgFireCount">
+          --
+        </div>
+
+        <div class="vg-fire-label">
+          focos ativos detectados na área de análise
+        </div>
+
+        <div class="vg-fire-data">
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              Mais próximo
+            </div>
+            <div class="vg-mini-value" id="vgFireDistance">
+              --
+            </div>
+          </div>
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              CO₂ emitido
+            </div>
+            <div class="vg-mini-value" id="vgFireCO2">
+              N/D
+            </div>
+          </div>
+
+          <div class="vg-mini">
+            <div class="vg-mini-label">
+              Fonte
+            </div>
+            <div class="vg-mini-value">
+              INPE
+            </div>
+          </div>
+
+        </div>
+
+        <div class="vg-fire-note" id="vgFireNote">
+          O sistema considera somente focos obtidos
+          de fonte compatível. Calor, seca ou baixa umidade
+          não são tratados como confirmação de incêndio.
+        </div>
+
+      </article>
+    `;
+
+    hero.insertAdjacentElement("afterend",section);
+  }
+
+  function updateSituation(){
+
+    if(typeof state === "undefined")
+      return;
+
+    const c = state.weather?.current;
+
+    if(c){
+
+      text(
+        "vgTemp",
+        Math.round(c.temperature_2m) + "°"
+      );
+
+      text(
+        "vgCondition",
+        typeof weatherCodeToText === "function"
+          ? weatherCodeToText(c.weather_code)
+          : "Condição atual"
+      );
+
+      text(
+        "vgFeels",
+        "Sensação: " +
+        Math.round(c.apparent_temperature) +
+        "°"
+      );
+
+      text(
+        "vgHumidity",
+        "Umidade: " +
+        Math.round(c.relative_humidity_2m) +
+        "%"
+      );
+
+      text(
+        "vgRain",
+        Math.round(
+          c.precipitation_probability ?? 0
+        ) + "%"
+      );
+
+      text(
+        "vgWind",
+        Math.round(
+          c.wind_speed_10m ?? 0
+        ) + " km/h"
+      );
+
+      if(
+        typeof chooseScenario === "function"
+      ){
+        const scenario = chooseScenario(c);
+        useVerifiedVideo(scenario);
+      }
+    }
+
+    if(state.air){
+
+      const aqi =
+        state.air.current?.us_aqi;
+
+      text(
+        "vgAQI",
+        aqi ?? "--"
+      );
+    }
+  }
+
+  /* ========================================================
+     PREVISÃO 9 DIAS
+     ======================================================== */
+
+  async function loadNineDays(){
+
+    if(typeof state === "undefined")
+      return;
+
+    try{
+
+      const url =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=" + state.lat +
+        "&longitude=" + state.lon +
+        "&daily=" +
+        [
+          "weather_code",
+          "temperature_2m_max",
+          "temperature_2m_min",
+          "precipitation_probability_max",
+          "uv_index_max"
+        ].join(",") +
+        "&timezone=auto" +
+        "&forecast_days=9";
+
+      const response =
+        await fetch(url,{cache:"no-store"});
+
+      if(!response.ok)
+        throw new Error("Forecast HTTP " + response.status);
+
+      const data = await response.json();
+
+      const container =
+        document.getElementById("forecast");
+
+      if(!container || !data.daily)
+        return;
+
+      container.innerHTML = "";
+
+      const total =
+        Math.min(9,data.daily.time.length);
+
+      for(let i=0;i<total;i++){
+
+        const date =
+          new Date(
+            data.daily.time[i] + "T12:00:00"
+          );
+
+        const day =
+          document.createElement("div");
+
+        day.className = "day glass";
+
+        const name =
+          i === 0
+            ? "Hoje"
+            : date.toLocaleDateString(
+                "pt-BR",
+                {weekday:"short"}
+              ).replace(".","");
+
+        const icon =
+          typeof weatherCodeToIcon === "function"
+            ? weatherCodeToIcon(
+                data.daily.weather_code[i]
+              )
+            : "🌤️";
+
+        day.innerHTML = `
+          <div class="dayName">
+            ${esc(name)}
+          </div>
+
+          <div class="dayIcon">
+            ${icon}
+          </div>
+
+          <div class="dayTemp">
+            ${Math.round(
+              data.daily.temperature_2m_max[i]
+            )}°
+            /
+            ${Math.round(
+              data.daily.temperature_2m_min[i]
+            )}°
+          </div>
+
+          <div class="dayRain">
+            ${Math.round(
+              data.daily
+                .precipitation_probability_max[i] ?? 0
+            )}% chuva
+          </div>
+        `;
+
+        container.appendChild(day);
+      }
+
+      const heading =
+        document.querySelector(
+          "#forecast"
+        )?.parentElement
+          ?.parentElement
+          ?.querySelector(
+            ".sectionTitle span"
+          );
+
+      if(heading)
+        heading.textContent =
+          "Hoje + próximos 8 dias";
+
+    }catch(error){
+
+      console.warn(
+        "ViniGeo 9 dias:",
+        error
+      );
+    }
+  }
+
+  /* ========================================================
+     MAPA DE FOCOS DO INPE
+     ======================================================== */
+
+  function distanceKm(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+  ){
+
+    const R = 6371;
+
+    const dLat =
+      (lat2-lat1) * Math.PI / 180;
+
+    const dLon =
+      (lon2-lon1) * Math.PI / 180;
+
+    const a =
+      Math.sin(dLat/2) ** 2 +
+      Math.cos(lat1*Math.PI/180) *
+      Math.cos(lat2*Math.PI/180) *
+      Math.sin(dLon/2) ** 2;
+
+    return (
+      R *
+      2 *
+      Math.atan2(
+        Math.sqrt(a),
+        Math.sqrt(1-a)
+      )
+    );
+  }
+
+  function stateNameToUF(name){
+
+    const mapUF = {
+      "Acre":"AC",
+      "Alagoas":"AL",
+      "Amapá":"AP",
+      "Amazonas":"AM",
+      "Bahia":"BA",
+      "Ceará":"CE",
+      "Distrito Federal":"DF",
+      "Espírito Santo":"ES",
+      "Goiás":"GO",
+      "Maranhão":"MA",
+      "Mato Grosso":"MT",
+      "Mato Grosso do Sul":"MS",
+      "Minas Gerais":"MG",
+      "Pará":"PA",
+      "Paraíba":"PB",
+      "Paraná":"PR",
+      "Pernambuco":"PE",
+      "Piauí":"PI",
+      "Rio de Janeiro":"RJ",
+      "Rio Grande do Norte":"RN",
+      "Rio Grande do Sul":"RS",
+      "Rondônia":"RO",
+      "Roraima":"RR",
+      "Santa Catarina":"SC",
+      "São Paulo":"SP",
+      "Sergipe":"SE",
+      "Tocantins":"TO"
+    };
+
+    return mapUF[name] || "BA";
+  }
+
+  async function detectUF(){
+
+    try{
+
+      const url =
+        "https://geocoding-api.open-meteo.com/v1/reverse" +
+        "?latitude=" + state.lat +
+        "&longitude=" + state.lon +
+        "&language=pt" +
+        "&format=json";
+
+      const response =
+        await fetch(url,{cache:"no-store"});
+
+      if(!response.ok)
+        return "BA";
+
+      const data =
+        await response.json();
+
+      return stateNameToUF(
+        data.results?.[0]?.admin1
+      );
+
+    }catch(error){
+
+      return "BA";
+    }
+  }
+
+  async function loadFireData(){
+
+    if(typeof L === "undefined")
+      return;
+
+    if(typeof state === "undefined")
+      return;
+
+    try{
+
+      VG.uf = await detectUF();
+
+      const url =
+        "https://dataserver-coids.inpe.br/" +
+        "queimadas/queimadas/focos/kml/" +
+        "estados-48h/focos_frentes_" +
+        VG.uf +
+        ".kml";
+
+      text(
+        "vgFireStatus",
+        "CARREGANDO INPE"
+      );
+
+      const response =
+        await fetch(url,{cache:"no-store"});
+
+      if(!response.ok)
+        throw new Error(
+          "INPE HTTP " + response.status
+        );
+
+      const xmlText =
+        await response.text();
+
+      const xml =
+        new DOMParser().parseFromString(
+          xmlText,
+          "application/xml"
+        );
+
+      const placemarks =
+        Array.from(
+          xml.getElementsByTagName(
+            "Placemark"
+          )
+        );
+
+      const points = [];
+
+      for(
+        const placemark of placemarks
+      ){
+
+        const coordinateNode =
+          placemark.getElementsByTagName(
+            "coordinates"
+          )[0];
+
+        if(!coordinateNode)
+          continue;
+
+        const raw =
+          coordinateNode.textContent.trim();
+
+        if(!raw)
+          continue;
+
+        const first =
+          raw.split(/\s+/)[0];
+
+        const parts =
+          first.split(",");
+
+        const lon =
+          Number(parts[0]);
+
+        const lat =
+          Number(parts[1]);
+
+        if(
+          !Number.isFinite(lat) ||
+          !Number.isFinite(lon)
+        )
+          continue;
+
+        const distance =
+          distanceKm(
+            state.lat,
+            state.lon,
+            lat,
+            lon
+          );
+
+        points.push({
+          lat,
+          lon,
+          distance
+        });
+      }
+
+      VG.firePoints = points;
+
+      if(VG.fireLayer){
+
+        try{
+          VG.fireLayer.clearLayers();
+          map.removeLayer(VG.fireLayer);
+        }catch(e){}
+
+      }
+
+      VG.fireLayer =
+        L.layerGroup();
+
+      const nearby =
+        points
+          .filter(
+            p => p.distance <= 100
+          )
+          .sort(
+            (a,b) =>
+              a.distance-b.distance
+          );
+
+      const display =
+        points
+          .filter(
+            p => p.distance <= 300
+          )
+          .sort(
+            (a,b) =>
+              a.distance-b.distance
+          )
+          .slice(0,800);
+
+      display.forEach(point => {
+
+        const marker =
+          L.circleMarker(
+            [point.lat,point.lon],
+            {
+              radius:5,
+              color:"#ff7548",
+              fillColor:"#ff542d",
+              fillOpacity:.82,
+              weight:1
+            }
+          );
+
+        marker.bindPopup(
+          "<strong>Foco de fogo ativo</strong><br>" +
+          "Fonte: INPE<br>" +
+          "Distância aproximada: " +
+          point.distance.toFixed(1) +
+          " km"
+        );
+
+        marker.addTo(
+          VG.fireLayer
+        );
+      });
+
+      if(
+        map &&
+        nearby.length > 0
+      ){
+        VG.fireLayer.addTo(map);
+      }
+
+      const count =
+        nearby.length;
+
+      text(
+        "vgFireCount",
+        count
+      );
+
+      if(count > 0){
+
+        const nearest =
+          nearby[0].distance;
+
+        text(
+          "vgFireDistance",
+          nearest.toFixed(1) + " km"
+        );
+
+        const light =
+          document.getElementById(
+            "vgFireLight"
+          );
+
+        if(light)
+          light.classList.add("active");
+
+        text(
+          "vgFireStatus",
+          "FOCO CONFIRMADO"
+        );
+
+        text(
+          "vgFireNote",
+          count +
+          " foco(s) ativo(s) do produto " +
+          "do INPE estão dentro de aproximadamente " +
+          "100 km da localização analisada. " +
+          "Isso representa detecção de fogo ativo por satélite; " +
+          "não significa, sozinho, que seja um incêndio florestal."
+        );
+
+      }else{
+
+        text(
+          "vgFireDistance",
+          "Nenhum"
+        );
+
+        text(
+          "vgFireStatus",
+          "SEM FOCO PRÓXIMO"
+        );
+
+        text(
+          "vgFireNote",
+          "Nenhum foco do produto consultado " +
+          "foi encontrado dentro de aproximadamente " +
+          "100 km da localização analisada."
+        );
+      }
+
+      text(
+        "vgFireCO2",
+        "N/D"
+      );
+
+    }catch(error){
+
+      console.warn(
+        "ViniGeo INPE:",
+        error
+      );
+
+      text(
+        "vgFireCount",
+        "--"
+      );
+
+      text(
+        "vgFireDistance",
+        "--"
+      );
+
+      text(
+        "vgFireStatus",
+        "DADO INDISPONÍVEL"
+      );
+
+      text(
+        "vgFireCO2",
+        "N/D"
+      );
+
+      text(
+        "vgFireNote",
+        "Não foi possível acessar o produto " +
+        "de focos do INPE neste momento. " +
+        "Nenhum incêndio é inferido automaticamente."
+      );
+    }
+  }
+
+  function toggleFireLayer(){
+
+    if(!map || !VG.fireLayer)
+      return;
+
+    if(map.hasLayer(VG.fireLayer)){
+
+      map.removeLayer(
+        VG.fireLayer
+      );
+
+      showToast(
+        "Focos do INPE ocultados."
+      );
+
+    }else{
+
+      VG.fireLayer.addTo(map);
+
+      showToast(
+        "Focos do INPE exibidos."
+      );
+    }
+  }
+
+  /* ========================================================
+     NOVAS 5 PÁGINAS
+     ======================================================== */
+
+  function createPages(){
+
+    if(document.getElementById("vgPages"))
+      return;
+
+    const pages =
+      document.createElement("div");
+
+    pages.id = "vgPages";
+    pages.className = "vg-pages";
+
+    pages.innerHTML = `
+      <div class="vg-page-box">
+
+        <div class="vg-page-header">
+
+          <div>
+            <h2 id="vgPageTitle">
+              ViniGeoClima
+            </h2>
+            <small id="vgPageSubtitle">
+              Centro de informações
+            </small>
+          </div>
+
+          <button
+            class="vg-close-page"
+            id="vgClosePage">
+            ✕
+          </button>
+
+        </div>
+
+        <div id="vgPageContent"></div>
+
+      </div>
+    `;
+
+    document.body.appendChild(pages);
+
+    document
+      .getElementById("vgClosePage")
+      .addEventListener(
+        "click",
+        closePage
+      );
+
+    pages.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target === pages
+        )
+          closePage();
+      }
+    );
+  }
+
+  function openPage(
+    title,
+    subtitle,
+    content
+  ){
+
+    createPages();
+
+    text(
+      "vgPageTitle",
+      title
+    );
+
+    text(
+      "vgPageSubtitle",
+      subtitle
+    );
+
+    const contentEl =
+      document.getElementById(
+        "vgPageContent"
+      );
+
+    if(contentEl)
+      contentEl.innerHTML = content;
+
+    document
+      .getElementById("vgPages")
+      .classList.add("open");
+
+    VG.pageOpen = true;
+
+    closeMenu();
+  }
+
+  function closePage(){
+
+    const pages =
+      document.getElementById(
+        "vgPages"
+      );
+
+    if(pages)
+      pages.classList.remove("open");
+
+    VG.pageOpen = false;
+  }
+
+  function pageMaps(){
+
+    openPage(
+      "Mapas",
+      "Meteorologia, satélite, relevo e focos de fogo",
+      `
+        <div class="vg-page-grid">
+
+          <div class="vg-info-card">
+            <h3>Mapa principal</h3>
+            <p>
+              O mapa da página inicial continua sendo
+              o mapa operacional do ViniGeoClima.
+            </p>
+            <button
+              class="btn primary"
+              onclick="
+                closePage();
+                document.getElementById('map')
+                  .scrollIntoView({behavior:'smooth'});
+              ">
+              Abrir mapa
+            </button>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Focos de fogo</h3>
+            <p>
+              Os pontos de fogo são carregados do
+              produto KML de 48 horas do Programa
+              Queimadas do INPE.
+            </p>
+            <button
+              class="btn"
+              onclick="
+                closePage();
+                if(typeof toggleFireLayer==='function')
+                  toggleFireLayer();
+              ">
+              Alternar focos
+            </button>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Satélite</h3>
+            <p>
+              A camada de satélite existente pode
+              ser ativada diretamente pelo mapa.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Relevo</h3>
+            <p>
+              A camada de relevo existente continua
+              disponível sem substituir o mapa principal.
+            </p>
+          </div>
+
+        </div>
+      `
+    );
+  }
+
+  function pageData(){
+
+    const weather =
+      state.weather?.current || {};
+
+    const air =
+      state.air?.current || {};
+
+    openPage(
+      "Dados",
+      "Indicadores atuais da localização",
+      `
+        <div class="vg-page-grid">
+
+          <div class="vg-info-card">
+            <h3>Meteorologia</h3>
+            <p>
+              Temperatura:
+              <strong>
+                ${esc(weather.temperature_2m ?? "--")} °C
+              </strong>
+            </p>
+            <p>
+              Sensação:
+              <strong>
+                ${esc(weather.apparent_temperature ?? "--")} °C
+              </strong>
+            </p>
+            <p>
+              Umidade:
+              <strong>
+                ${esc(weather.relative_humidity_2m ?? "--")}%
+              </strong>
+            </p>
+            <p>
+              Pressão:
+              <strong>
+                ${esc(weather.pressure_msl ?? "--")} hPa
+              </strong>
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Qualidade do ar</h3>
+            <p>
+              AQI:
+              <strong>
+                ${esc(air.us_aqi ?? "--")}
+              </strong>
+            </p>
+            <p>
+              PM2.5:
+              <strong>
+                ${esc(air.pm2_5 ?? "--")} µg/m³
+              </strong>
+            </p>
+            <p>
+              PM10:
+              <strong>
+                ${esc(air.pm10 ?? "--")} µg/m³
+              </strong>
+            </p>
+            <p>
+              CO:
+              <strong>
+                ${esc(air.carbon_monoxide ?? "--")}
+              </strong>
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Queimadas</h3>
+            <p>
+              Focos próximos:
+              <strong>
+                ${esc(
+                  document.getElementById("vgFireCount")?.textContent
+                  || "--"
+                )}
+              </strong>
+            </p>
+            <p>
+              Fonte:
+              <strong>INPE</strong>
+            </p>
+            <p>
+              CO₂ por foco:
+              <strong>não disponível neste produto</strong>
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Atualização</h3>
+            <p>
+              Os dados meteorológicos são atualizados
+              automaticamente pelo sistema existente.
+            </p>
+            <p>
+              A camada de focos consulta o produto
+              de 48 horas disponível pelo INPE.
+            </p>
+          </div>
+
+        </div>
+      `
+    );
+  }
+
+  function pageInformation(){
+
+    openPage(
+      "Informações",
+      "Como o ViniGeoClima funciona",
+      `
+        <div class="vg-page-grid">
+
+          <div class="vg-info-card">
+            <h3>Arquitetura</h3>
+            <p>
+              FONTES → COLETA → VALIDAÇÃO →
+              COMPARAÇÃO → VINIGEO IA →
+              CONSOLIDAÇÃO → APRESENTAÇÃO.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Meteorologia</h3>
+            <p>
+              O sistema utiliza Open-Meteo para
+              previsão e indicadores meteorológicos.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Qualidade do ar</h3>
+            <p>
+              Os indicadores atmosféricos são obtidos
+              do serviço de qualidade do ar utilizado
+              pelo projeto.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Queimadas</h3>
+            <p>
+              Focos de fogo são tratados separadamente
+              dos indicadores meteorológicos.
+              Calor ou seca não são considerados
+              confirmação de incêndio.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>ViniGeo IA</h3>
+            <p>
+              A análise local organiza os indicadores
+              disponíveis e apresenta uma interpretação
+              baseada nos dados observados.
+            </p>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>Limitações</h3>
+            <p>
+              O ViniGeoClima é informativo e educacional.
+              Não substitui órgãos oficiais ou sistemas
+              de emergência.
+            </p>
+          </div>
+
+        </div>
+      `
+    );
+  }
+
+  function pageAlerts(){
+
+    const current =
+      state.weather?.current;
+
+    const alerts = [];
+
+    if(current){
+
+      if(
+        [95,96,99].includes(
+          current.weather_code
+        )
+      ){
+        alerts.push({
+          title:"Condição compatível com tempestade",
+          text:
+            "Os indicadores meteorológicos atuais " +
+            "incluem código compatível com tempestade."
+        });
+      }
+
+      if(
+        current.wind_speed_10m >= 40
+      ){
+        alerts.push({
+          title:"Vento elevado",
+          text:
+            "A velocidade do vento está elevada " +
+            "no momento da análise."
+        });
+      }
+
+      if(
+        current.temperature_2m >= 35
+      ){
+        alerts.push({
+          title:"Temperatura elevada",
+          text:
+            "A temperatura atual está em uma faixa " +
+            "elevada para a análise do sistema."
+        });
+      }
+    }
+
+    const fireCount =
+      Number(
+        document.getElementById(
+          "vgFireCount"
+        )?.textContent
+      );
+
+    if(
+      Number.isFinite(fireCount) &&
+      fireCount > 0
+    ){
+      alerts.push({
+        title:"Focos de fogo detectados",
+        text:
+          fireCount +
+          " foco(s) foram encontrados na área " +
+          "de análise pelo produto consultado do INPE."
+      });
+    }
+
+    if(!alerts.length){
+
+      alerts.push({
+        title:"Nenhum alerta automático dominante",
+        text:
+          "Os indicadores disponíveis no momento " +
+          "não produziram um alerta automático dominante."
+      });
+    }
+
+    openPage(
+      "Alertas",
+      "Eventos detectados pelos dados disponíveis",
+      `
+        ${alerts.map(item => `
+          <div class="vg-alert-item">
+            <div class="vg-alert-title">
+              ${esc(item.title)}
+            </div>
+            <div class="vg-alert-text">
+              ${esc(item.text)}
+            </div>
+          </div>
+        `).join("")}
+
+        <div class="vg-info-card">
+          <h3>Importante</h3>
+          <p>
+            A ausência de um alerta nesta página não
+            significa ausência de risco. Para situações
+            reais de emergência, acompanhe os órgãos
+            oficiais competentes.
+          </p>
+        </div>
+      `
+    );
+  }
+
+  function pageSafety(){
+
+    openPage(
+      "Como se comportar",
+      "Orientações gerais para situações meteorológicas e ambientais",
+      `
+        <div class="vg-page-grid">
+
+          <div class="vg-info-card">
+            <h3>🌧 Chuva forte</h3>
+            <ul>
+              <li>Evite áreas sujeitas a alagamento.</li>
+              <li>Não atravesse áreas inundadas.</li>
+              <li>Acompanhe os alertas oficiais.</li>
+            </ul>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>⛈ Tempestade</h3>
+            <ul>
+              <li>Procure abrigo seguro.</li>
+              <li>Evite locais abertos.</li>
+              <li>Afaste-se de estruturas metálicas e árvores.</li>
+            </ul>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>🔥 Queimada / fumaça</h3>
+            <ul>
+              <li>Evite exposição desnecessária à fumaça.</li>
+              <li>Mantenha portas e janelas fechadas quando apropriado.</li>
+              <li>Procure orientação das autoridades locais.</li>
+            </ul>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>🌡 Calor</h3>
+            <ul>
+              <li>Hidrate-se.</li>
+              <li>Evite exposição prolongada ao sol.</li>
+              <li>Redobre a atenção com crianças e idosos.</li>
+            </ul>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>🌫 Qualidade do ar ruim</h3>
+            <ul>
+              <li>Reduza atividades externas intensas quando recomendado.</li>
+              <li>Acompanhe a qualidade do ar.</li>
+              <li>Siga orientações de saúde oficiais.</li>
+            </ul>
+          </div>
+
+          <div class="vg-info-card">
+            <h3>🚨 Emergência</h3>
+            <p>
+              Em uma situação real de emergência,
+              siga as instruções dos órgãos oficiais,
+              defesa civil, bombeiros e autoridades locais.
+            </p>
+          </div>
+
+        </div>
+      `
+    );
+  }
+
+  /* ========================================================
+     MENU
+     ======================================================== */
+
+  function addMenuPages(){
+
+    const aside =
+      document.querySelector(
+        "#drawer .drawerPanel"
+      );
+
+    if(!aside)
+      return;
+
+    if(
+      document.getElementById(
+        "vgMenuPages"
+      )
+    )
+      return;
+
+    const group =
+      document.createElement(
+        "div"
+      );
+
+    group.className =
+      "drawerGroup";
+
+    group.id =
+      "vgMenuPages";
+
+    group.innerHTML = `
+      <h3 class="vg-menu-pages-title">
+        PÁGINAS
+      </h3>
+
+      <button
+        class="drawerItem"
+        data-vg-page="maps">
+        🗺 Mapas
+      </button>
+
+      <button
+        class="drawerItem"
+        data-vg-page="data">
+        📊 Dados
+      </button>
+
+      <button
+        class="drawerItem"
+        data-vg-page="information">
+        ℹ Informações
+      </button>
+
+      <button
+        class="drawerItem"
+        data-vg-page="alerts">
+        ⚠ Alertas
+      </button>
+
+      <button
+        class="drawerItem"
+        data-vg-page="safety">
+        🛡 Como se comportar
+      </button>
+    `;
+
+    aside.insertBefore(
+      group,
+      aside.firstElementChild.nextElementSibling
+    );
+
+    group
+      .querySelectorAll(
+        "[data-vg-page]"
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const page =
+              button.dataset.vgPage;
+
+            if(page === "maps")
+              pageMaps();
+
+            if(page === "data")
+              pageData();
+
+            if(page === "information")
+              pageInformation();
+
+            if(page === "alerts")
+              pageAlerts();
+
+            if(page === "safety")
+              pageSafety();
+          }
+        );
+      });
+  }
+
+  /* ========================================================
+     CONTROLES DO MAPA
+     ======================================================== */
+
+  function addFireMapButton(){
+
+    const controls =
+      document.querySelector(
+        ".mapControls"
+      );
+
+    if(!controls)
+      return;
+
+    if(
+      document.getElementById(
+        "vgFireMapButton"
+      )
+    )
+      return;
+
+    const button =
+      document.createElement("button");
+
+    button.id =
+      "vgFireMapButton";
+
+    button.className =
+      "vg-fire-map-button";
+
+    button.textContent =
+      "Focos INPE";
+
+    button.addEventListener(
+      "click",
+      toggleFireLayer
+    );
+
+    controls.appendChild(
+      button
+    );
+
+    const wrap =
+      document.querySelector(
+        ".mapWrap"
+      );
+
+    if(wrap)
+      wrap.classList.add(
+        "vg-map-enhanced"
+      );
+
+    if(
+      wrap &&
+      !document.getElementById(
+        "vgMapBadge"
+      )
+    ){
+
+      const badge =
+        document.createElement(
+          "div"
+        );
+
+      badge.id =
+        "vgMapBadge";
+
+      badge.className =
+        "vg-map-badge";
+
+      badge.textContent =
+        "MAPA + FOCOS DE FOGO";
+
+      wrap.appendChild(
+        badge
+      );
+    }
+  }
+
+  /* ========================================================
+     ATUALIZAÇÃO DA CAMADA
+     ======================================================== */
+
+  async function vgRefresh(){
+
+    try{
+      createSituationCard();
+      addMenuPages();
+      addFireMapButton();
+      initContextVideo();
+
+      updateSituation();
+
+      await loadNineDays();
+
+      await loadFireData();
+
+      updateSituation();
+
+    }catch(error){
+
+      console.warn(
+        "ViniGeo upgrade:",
+        error
+      );
+    }
+  }
+
+  /* ========================================================
+     OBSERVAR ATUALIZAÇÕES DA BASE
+     ======================================================== */
+
+  function installWatcher(){
+
+    let lastLat = null;
+    let lastLon = null;
+
+    setInterval(() => {
+
+      if(
+        typeof state === "undefined"
+      )
+        return;
+
+      if(
+        state.lat !== lastLat ||
+        state.lon !== lastLon
+      ){
+
+        lastLat = state.lat;
+        lastLon = state.lon;
+
+        vgRefresh();
+      }
+
+    },5000);
+  }
+
+  /* ========================================================
+     BOOT
+     ======================================================== */
+
+  function boot(){
+
+    vgRefresh();
+
+    installWatcher();
+
+    setInterval(
+      () => {
+        vgRefresh();
+      },
+      10 * 60 * 1000
+    );
+  }
+
+  if(
+    document.readyState === "loading"
+  ){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => setTimeout(
+        boot,
+        1200
+      )
+    );
+
+  }else{
+
+    setTimeout(
+      boot,
+      1200
+    );
+  }
+
+})();
+
+</script>
 </body>
 </html>
+
 

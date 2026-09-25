@@ -1,0 +1,2525 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="theme-color" content="#020805">
+<meta name="description" content="ViniGeoClima BA — monitoramento meteorológico, climático e ambiental.">
+<meta name="author" content="BRUNO CESAR QUEIROZ DE SANT'ANA DO PRADO">
+
+<title>ViniGeoClima BA · Monitoramento do Clima</title>
+
+<link rel="manifest" href="./manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIINfQ3r8w3KxN3eW4l5v8m0K0w5j7k0k0="
+  crossorigin=""
+>
+
+<style>
+:root{
+  --bg:#020805;
+  --bg2:#06140d;
+  --glass:rgba(5,18,12,.48);
+  --glass2:rgba(8,25,17,.62);
+  --line:rgba(255,255,255,.12);
+  --text:#f2fff8;
+  --muted:rgba(235,255,245,.64);
+  --green:#42e58a;
+  --cyan:#62e5ff;
+  --gold:#ffd166;
+  --danger:#ff746f;
+  --shadow:0 20px 80px rgba(0,0,0,.38);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#020805;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+#background{
+  position:fixed;
+  inset:0;
+  z-index:-10;
+  overflow:hidden;
+  background:#020805;
+}
+
+#backgroundImage{
+  position:absolute;
+  inset:-5%;
+  width:110%;
+  height:110%;
+  object-fit:cover;
+  opacity:.76;
+  filter:saturate(.82) contrast(1.04);
+  transform:scale(1.04);
+  transition:
+    opacity 1.4s ease,
+    transform 12s ease,
+    filter 1.2s ease;
+}
+
+#backgroundOverlay{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 25%,rgba(66,229,138,.08),transparent 35%),
+    linear-gradient(180deg,rgba(0,0,0,.28),rgba(2,8,5,.72) 78%,#020805 100%);
+}
+
+#atmosphere{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.atmo-particle{
+  position:absolute;
+  pointer-events:none;
+  border-radius:50%;
+  opacity:0;
+}
+
+.rain-particle{
+  width:1px;
+  height:18px;
+  background:rgba(200,245,255,.65);
+  transform:rotate(16deg);
+  animation:rainFall linear infinite;
+}
+
+.wind-particle{
+  width:3px;
+  height:3px;
+  background:rgba(220,255,242,.55);
+  box-shadow:0 0 10px rgba(98,229,255,.25);
+  animation:windMove linear infinite;
+}
+
+.fog-particle{
+  width:220px;
+  height:90px;
+  border-radius:50%;
+  background:rgba(240,255,250,.035);
+  filter:blur(18px);
+  animation:fogMove ease-in-out infinite;
+}
+
+@keyframes rainFall{
+  from{
+    transform:translate3d(0,-15vh,0) rotate(16deg);
+  }
+  to{
+    transform:translate3d(-5vw,115vh,0) rotate(16deg);
+  }
+}
+
+@keyframes windMove{
+  from{
+    transform:translate3d(-15vw,0,0);
+  }
+  to{
+    transform:translate3d(120vw,0,0);
+  }
+}
+
+@keyframes fogMove{
+  0%,100%{
+    transform:translateX(-12vw) scale(1);
+    opacity:.15;
+  }
+  50%{
+    transform:translateX(18vw) scale(1.16);
+    opacity:.34;
+  }
+}
+
+#app{
+  width:min(1500px,100%);
+  margin:auto;
+  padding:18px;
+}
+
+.glass{
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.095),
+    rgba(255,255,255,.025)
+  );
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+}
+
+.topbar{
+  min-height:72px;
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:12px 16px;
+  position:sticky;
+  top:12px;
+  z-index:50;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brandMark{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(66,229,138,.45);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  position:relative;
+  box-shadow:0 0 25px rgba(66,229,138,.12);
+}
+
+.brandMark::before,
+.brandMark::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(98,229,255,.35);
+}
+
+.brandMark::before{
+  inset:7px;
+}
+
+.brandMark::after{
+  inset:13px;
+}
+
+.brandMark span{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 14px var(--green);
+}
+
+.brandText strong{
+  display:block;
+  font-size:14px;
+  letter-spacing:.08em;
+}
+
+.brandText small{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.search{
+  flex:1;
+  max-width:620px;
+  display:flex;
+  gap:8px;
+}
+
+.search input{
+  width:100%;
+  min-width:0;
+  border:1px solid var(--line);
+  outline:none;
+  background:rgba(0,0,0,.2);
+  color:white;
+  border-radius:15px;
+  padding:12px 15px;
+}
+
+.search input::placeholder{
+  color:rgba(255,255,255,.42);
+}
+
+.btn{
+  border:1px solid var(--line);
+  color:white;
+  background:rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:10px 14px;
+  transition:.25s ease;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.11);
+}
+
+.btn.primary{
+  border-color:rgba(66,229,138,.38);
+  background:rgba(66,229,138,.10);
+}
+
+.menuBtn{
+  width:44px;
+  height:44px;
+  padding:0;
+  font-size:20px;
+}
+
+.location{
+  margin-top:18px;
+  padding:14px 18px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.locationName{
+  font-size:18px;
+  font-weight:700;
+}
+
+.locationMeta{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.statusDot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.hero{
+  margin-top:18px;
+  min-height:430px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:18px;
+}
+
+.heroMain{
+  border-radius:30px;
+  padding:34px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+
+.heroMain::after{
+  content:"";
+  position:absolute;
+  inset:auto -20% -55% -20%;
+  height:70%;
+  background:radial-gradient(ellipse,rgba(66,229,138,.13),transparent 65%);
+  pointer-events:none;
+}
+
+.weatherState{
+  position:relative;
+  z-index:2;
+}
+
+.weatherLabel{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+}
+
+.temperature{
+  font-size:clamp(74px,10vw,148px);
+  line-height:.85;
+  letter-spacing:-.07em;
+  font-weight:700;
+  margin:18px 0;
+  text-shadow:0 8px 45px rgba(0,0,0,.35);
+}
+
+.condition{
+  font-size:clamp(22px,3vw,34px);
+  font-weight:600;
+}
+
+.feels{
+  margin-top:8px;
+  color:var(--muted);
+}
+
+.heroSide{
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:18px;
+}
+
+.aiCard{
+  border-radius:30px;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+
+.aiHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.aiTitle{
+  font-weight:700;
+}
+
+.aiBadge{
+  font-size:10px;
+  letter-spacing:.1em;
+  padding:6px 8px;
+  border-radius:20px;
+  color:var(--green);
+  border:1px solid rgba(66,229,138,.25);
+  background:rgba(66,229,138,.06);
+}
+
+.aiOrb{
+  width:90px;
+  height:90px;
+  margin:25px auto 16px;
+  border-radius:50%;
+  border:1px solid rgba(66,229,138,.35);
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+
+.aiOrb::before,
+.aiOrb::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(98,229,255,.25);
+  border-radius:50%;
+  animation:orbSpin 7s linear infinite;
+}
+
+.aiOrb::before{
+  inset:8px;
+}
+
+.aiOrb::after{
+  inset:18px;
+  animation-direction:reverse;
+  animation-duration:5s;
+}
+
+.aiCore{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 30px var(--green);
+  animation:corePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes orbSpin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes corePulse{
+  0%,100%{transform:scale(.8);opacity:.75}
+  50%{transform:scale(1.25);opacity:1}
+}
+
+.aiText{
+  color:rgba(245,255,250,.82);
+  font-size:14px;
+  line-height:1.65;
+}
+
+.aiProcess{
+  margin-top:15px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.12em;
+  min-height:16px;
+}
+
+.quickStats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.stat{
+  border-radius:22px;
+  padding:18px;
+  min-height:110px;
+  transition:.35s ease;
+}
+
+.stat:hover{
+  transform:translateY(-3px);
+  border-color:rgba(66,229,138,.24);
+}
+
+.statLabel{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.statValue{
+  margin-top:12px;
+  font-size:26px;
+  font-weight:700;
+}
+
+.statSub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.section{
+  margin-top:18px;
+}
+
+.sectionTitle{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.sectionTitle h2{
+  margin:0;
+  font-size:17px;
+}
+
+.sectionTitle span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+}
+
+.metric{
+  border-radius:20px;
+  padding:17px;
+}
+
+.metricIcon{
+  font-size:20px;
+  opacity:.9;
+}
+
+.metricName{
+  margin-top:14px;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.metricValue{
+  margin-top:5px;
+  font-size:19px;
+  font-weight:700;
+}
+
+.forecast{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+}
+
+.day{
+  border-radius:20px;
+  padding:16px 12px;
+  text-align:center;
+  transition:.3s ease;
+}
+
+.day:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,.09);
+}
+
+.dayName{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.dayIcon{
+  font-size:28px;
+  margin:15px 0;
+}
+
+.dayTemp{
+  font-size:17px;
+  font-weight:700;
+}
+
+.dayRain{
+  color:var(--cyan);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.mapWrap{
+  border-radius:28px;
+  overflow:hidden;
+  position:relative;
+}
+
+#map{
+  height:500px;
+  width:100%;
+  background:#06140d;
+}
+
+.mapControls{
+  position:absolute;
+  top:14px;
+  right:14px;
+  z-index:500;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.mapControls button{
+  border:1px solid rgba(255,255,255,.14);
+  color:white;
+  background:rgba(2,8,5,.72);
+  backdrop-filter:blur(12px);
+  border-radius:11px;
+  padding:8px 10px;
+  font-size:10px;
+}
+
+.environmentGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.environmentCard{
+  border-radius:24px;
+  padding:22px;
+  min-height:160px;
+}
+
+.envTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.envValue{
+  font-size:28px;
+  font-weight:700;
+  margin-top:20px;
+}
+
+.envDesc{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+  margin-top:5px;
+}
+
+.fireStatus{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+}
+
+.fireDot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--muted);
+}
+
+.sources{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.source{
+  border-radius:18px;
+  padding:15px;
+  font-size:11px;
+}
+
+.source strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.source span{
+  color:var(--muted);
+}
+
+.disclaimer{
+  margin:22px 0 5px;
+  padding:18px;
+  border-radius:20px;
+  color:rgba(255,255,255,.58);
+  font-size:10px;
+  line-height:1.7;
+}
+
+.footer{
+  text-align:center;
+  color:rgba(255,255,255,.35);
+  font-size:10px;
+  padding:20px 0 35px;
+}
+
+.drawer{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  pointer-events:none;
+}
+
+.drawerShade{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  opacity:0;
+  transition:.3s ease;
+}
+
+.drawerPanel{
+  position:absolute;
+  right:0;
+  top:0;
+  bottom:0;
+  width:min(420px,94vw);
+  padding:22px;
+  background:rgba(3,12,8,.91);
+  border-left:1px solid var(--line);
+  backdrop-filter:blur(25px);
+  transform:translateX(100%);
+  transition:.4s cubic-bezier(.2,.8,.2,1);
+  overflow-y:auto;
+}
+
+.drawer.open{
+  pointer-events:auto;
+}
+
+.drawer.open .drawerShade{
+  opacity:1;
+}
+
+.drawer.open .drawerPanel{
+  transform:translateX(0);
+}
+
+.drawerHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.drawerTitle{
+  font-weight:700;
+}
+
+.drawerGroup{
+  margin-bottom:18px;
+}
+
+.drawerGroup h3{
+  margin:0 0 8px;
+  color:var(--green);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.drawerItem{
+  width:100%;
+  text-align:left;
+  padding:13px 14px;
+  margin:4px 0;
+  border:1px solid transparent;
+  background:rgba(255,255,255,.035);
+  color:white;
+  border-radius:12px;
+  font-size:12px;
+}
+
+.drawerItem:hover{
+  border-color:var(--line);
+  background:rgba(255,255,255,.07);
+}
+
+.performance{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.performance button{
+  flex:1;
+  min-width:70px;
+  padding:9px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:white;
+  border-radius:10px;
+  font-size:10px;
+}
+
+.performance button.active{
+  border-color:rgba(66,229,138,.5);
+  color:var(--green);
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translate(-50%,30px);
+  z-index:2000;
+  padding:12px 16px;
+  border-radius:13px;
+  background:rgba(3,12,8,.92);
+  border:1px solid var(--line);
+  color:white;
+  font-size:11px;
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.leaflet-control-layers,
+.leaflet-control-zoom{
+  border:1px solid rgba(255,255,255,.15)!important;
+}
+
+.leaflet-control-layers{
+  background:rgba(3,12,8,.8)!important;
+  color:white!important;
+}
+
+.lightMode #backgroundImage{
+  opacity:.54;
+}
+
+.lightMode .atmo-particle{
+  display:none;
+}
+
+.ultraMode #backgroundImage{
+  display:none;
+}
+
+.ultraMode .glass{
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+.ultraMode .atmo-particle{
+  display:none;
+}
+
+.ultraMode #map{
+  height:330px;
+}
+
+.reducedMotion *,
+.reducedMotion *::before,
+.reducedMotion *::after{
+  animation:none!important;
+  transition:none!important;
+  scroll-behavior:auto!important;
+}
+
+@media(max-width:1100px){
+  .hero{
+    grid-template-columns:1fr;
+  }
+
+  .metrics{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .sources{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:720px){
+  #app{
+    padding:10px;
+  }
+
+  .topbar{
+    top:7px;
+    border-radius:18px;
+    padding:10px;
+    flex-wrap:wrap;
+  }
+
+  .brandText{
+    display:none;
+  }
+
+  .search{
+    order:3;
+    flex-basis:100%;
+    max-width:none;
+  }
+
+  .location{
+    border-radius:17px;
+    padding:12px;
+  }
+
+  .hero{
+    min-height:0;
+  }
+
+  .heroMain{
+    min-height:380px;
+    border-radius:24px;
+    padding:23px;
+  }
+
+  .aiCard{
+    border-radius:24px;
+  }
+
+  .temperature{
+    font-size:80px;
+  }
+
+  .quickStats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .metrics{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .forecast{
+    overflow-x:auto;
+    grid-template-columns:repeat(7,110px);
+    padding-bottom:5px;
+  }
+
+  .environmentGrid{
+    grid-template-columns:1fr;
+  }
+
+  .sources{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #map{
+    height:380px;
+  }
+
+  .mapControls{
+    top:8px;
+    right:8px;
+  }
+
+  .mapControls button{
+    padding:7px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="background">
+  <img id="backgroundImage" alt="">
+  <div id="backgroundOverlay"></div>
+  <div id="atmosphere"></div>
+</div>
+
+<div id="app">
+
+<header class="topbar glass">
+
+  <div class="brand">
+    <div class="brandMark"><span></span></div>
+
+    <div class="brandText">
+      <strong>VINIGEOCLIMA</strong>
+      <small>MONITORAMENTO DO CLIMA</small>
+    </div>
+  </div>
+
+  <div class="search">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Pesquisar cidade, estado ou região..."
+      autocomplete="off"
+    >
+    <button class="btn primary" id="searchBtn">Buscar</button>
+  </div>
+
+  <button class="btn menuBtn" id="menuBtn">☰</button>
+
+</header>
+
+<section class="location glass">
+
+  <div>
+    <div class="locationName" id="locationName">Macaúbas, BA</div>
+    <div class="locationMeta" id="locationMeta">
+      Localização inicial
+    </div>
+  </div>
+
+  <div class="status">
+    <span class="statusDot"></span>
+    <span id="systemStatus">SISTEMA ONLINE</span>
+  </div>
+
+</section>
+
+<main>
+
+<section class="hero">
+
+  <div class="heroMain glass">
+
+    <div class="weatherState">
+
+      <div class="weatherLabel">CONDIÇÃO ATUAL</div>
+
+      <div class="temperature" id="temperature">
+        --°
+      </div>
+
+      <div class="condition" id="condition">
+        Carregando...
+      </div>
+
+      <div class="feels" id="feels">
+        Sensação: --
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="heroSide">
+
+    <div class="aiCard glass">
+
+      <div class="aiHeader">
+        <div class="aiTitle">ViniGeo IA</div>
+        <div class="aiBadge">ANÁLISE LOCAL</div>
+      </div>
+
+      <div class="aiOrb">
+        <div class="aiCore"></div>
+      </div>
+
+      <div class="aiText" id="aiText">
+        Inicializando análise meteorológica...
+      </div>
+
+      <div class="aiProcess" id="aiProcess">
+        PREPARANDO DADOS...
+      </div>
+
+    </div>
+
+    <div class="quickStats">
+
+      <div class="stat glass">
+        <div class="statLabel">UMIDADE</div>
+        <div class="statValue" id="quickHumidity">--%</div>
+        <div class="statSub">relativa</div>
+      </div>
+
+      <div class="stat glass">
+        <div class="statLabel">VENTO</div>
+        <div class="statValue" id="quickWind">--</div>
+        <div class="statSub" id="quickWindDir">--</div>
+      </div>
+
+      <div class="stat glass">
+        <div class="statLabel">CHUVA</div>
+        <div class="statValue" id="quickRain">--%</div>
+        <div class="statSub">probabilidade</div>
+      </div>
+
+      <div class="stat glass">
+        <div class="statLabel">QUALIDADE DO AR</div>
+        <div class="statValue" id="quickAQI">--</div>
+        <div class="statSub" id="quickAQIDesc">aguardando</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="sectionTitle">
+    <h2>Dados meteorológicos</h2>
+    <span id="updatedAt">Atualizando...</span>
+  </div>
+
+  <div class="metrics">
+
+    <div class="metric glass">
+      <div class="metricIcon">💧</div>
+      <div class="metricName">Ponto de orvalho</div>
+      <div class="metricValue" id="dewPoint">--</div>
+    </div>
+
+    <div class="metric glass">
+      <div class="metricIcon">◉</div>
+      <div class="metricName">Pressão</div>
+      <div class="metricValue" id="pressure">--</div>
+    </div>
+
+    <div class="metric glass">
+      <div class="metricIcon">☁</div>
+      <div class="metricName">Nebulosidade</div>
+      <div class="metricValue" id="clouds">--</div>
+    </div>
+
+    <div class="metric glass">
+      <div class="metricIcon">☀</div>
+      <div class="metricName">Índice UV</div>
+      <div class="metricValue" id="uv">--</div>
+    </div>
+
+    <div class="metric glass">
+      <div class="metricIcon">💨</div>
+      <div class="metricName">Rajada</div>
+      <div class="metricValue" id="gust">--</div>
+    </div>
+
+    <div class="metric glass">
+      <div class="metricIcon">🌧</div>
+      <div class="metricName">Precipitação</div>
+      <div class="metricValue" id="precip">--</div>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="sectionTitle">
+    <h2>Previsão</h2>
+    <span>Próximos 7 dias</span>
+  </div>
+
+  <div class="forecast" id="forecast"></div>
+
+</section>
+
+<section class="section">
+
+  <div class="sectionTitle">
+    <h2>Mapa meteorológico</h2>
+    <span>Camadas sob demanda</span>
+  </div>
+
+  <div class="mapWrap glass">
+
+    <div id="map"></div>
+
+    <div class="mapControls">
+      <button id="normalMap">Mapa</button>
+      <button id="satMap">Satélite</button>
+      <button id="terrainMap">Relevo</button>
+      <button id="locateBtn">Minha posição</button>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="sectionTitle">
+    <h2>Ambiente</h2>
+    <span>Indicadores complementares</span>
+  </div>
+
+  <div class="environmentGrid">
+
+    <div class="environmentCard glass">
+
+      <div class="envTop">
+        <strong>Qualidade do ar</strong>
+        <span id="aqiStatus">--</span>
+      </div>
+
+      <div class="envValue" id="aqiLarge">--</div>
+
+      <div class="envDesc" id="aqiDetails">
+        Aguardando dados de qualidade do ar.
+      </div>
+
+    </div>
+
+    <div class="environmentCard glass">
+
+      <div class="envTop">
+        <strong>Focos de fogo</strong>
+
+        <div class="fireStatus">
+          <span class="fireDot" id="fireDot"></span>
+          <span id="fireStatus">VERIFICAÇÃO</span>
+        </div>
+
+      </div>
+
+      <div class="envValue" id="fireValue">
+        --
+      </div>
+
+      <div class="envDesc" id="fireDetails">
+        A integração de focos de fogo depende de fonte compatível e disponível.
+        O sistema não considera calor ou seca como evidência de incêndio.
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="sectionTitle">
+    <h2>Fontes e processamento</h2>
+    <span>Transparência</span>
+  </div>
+
+  <div class="sources">
+
+    <div class="source glass">
+      <strong>Open-Meteo</strong>
+      <span>Dados meteorológicos e previsão</span>
+    </div>
+
+    <div class="source glass">
+      <strong>Open-Meteo Air Quality</strong>
+      <span>Indicadores atmosféricos</span>
+    </div>
+
+    <div class="source glass">
+      <strong>OpenStreetMap</strong>
+      <span>Base cartográfica</span>
+    </div>
+
+    <div class="source glass">
+      <strong>ViniGeo IA</strong>
+      <span>Organização, análise e consolidação</span>
+    </div>
+
+  </div>
+
+</section>
+
+<div class="disclaimer glass">
+  <strong>Importante:</strong>
+  ViniGeoClima é um portal informativo e educacional.
+  Não substitui órgãos oficiais, alertas meteorológicos ou sistemas de emergência.
+  Para situações de risco, consulte as autoridades e fontes oficiais competentes.
+</div>
+
+<div class="footer">
+  ViniGeoClima BA · BRUNO CESAR QUEIROZ DE SANT'ANA DO PRADO
+  <br>
+  Sistema experimental de informação meteorológica, climática e ambiental.
+</div>
+
+</main>
+
+</div>
+
+<!-- MENU -->
+
+<div class="drawer" id="drawer">
+
+  <div class="drawerShade" id="drawerShade"></div>
+
+  <aside class="drawerPanel">
+
+    <div class="drawerHead">
+      <div class="drawerTitle">ViniGeoClima</div>
+      <button class="btn" id="closeMenu">✕</button>
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Meteorologia</h3>
+
+      <button class="drawerItem" onclick="focusSection('forecast')">
+        Previsão horária
+      </button>
+
+      <button class="drawerItem" onclick="focusSection('metrics')">
+        Dados detalhados
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Histórico será integrado ao módulo histórico.')">
+        Histórico
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Camada de vento preparada para evolução.')">
+        Vento
+      </button>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Mapas</h3>
+
+      <button class="drawerItem" onclick="document.getElementById('satMap').click()">
+        Satélite
+      </button>
+
+      <button class="drawerItem" onclick="document.getElementById('terrainMap').click()">
+        Relevo
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Radar será carregado somente quando solicitado.')">
+        Radar
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Camadas meteorológicas sob demanda.')">
+        Camadas
+      </button>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Atmosfera</h3>
+
+      <button class="drawerItem" onclick="showToast('Análise atmosférica baseada nos indicadores disponíveis.')">
+        Análise atmosférica
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Frentes e massas de ar serão exibidas quando houver dados compatíveis.')">
+        Massas de ar / Frente fria
+      </button>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Ambiental</h3>
+
+      <button class="drawerItem" onclick="focusSection('environment')">
+        Qualidade do ar
+      </button>
+
+      <button class="drawerItem" onclick="focusSection('environment')">
+        Queimadas / focos de fogo
+      </button>
+
+      <button class="drawerItem" onclick="showToast('Módulo hidrológico preparado para integração.')">
+        Água
+      </button>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>ViniGeo IA</h3>
+
+      <button class="drawerItem" onclick="runAI(true)">
+        Executar análise
+      </button>
+
+      <button class="drawerItem" onclick="showToast('O consenso é construído a partir dos dados disponíveis.')">
+        Consenso
+      </button>
+
+      <button class="drawerItem" onclick="showToast('A análise utiliza indicadores objetivos disponíveis no sistema.')">
+        Evidências
+      </button>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Desempenho</h3>
+
+      <div class="performance">
+
+        <button id="modeAuto">Auto</button>
+        <button id="modeFull">Full</button>
+        <button id="modeLight">Leve</button>
+        <button id="modeUltra">Ultra</button>
+
+      </div>
+
+    </div>
+
+    <div class="drawerGroup">
+
+      <h3>Sistema</h3>
+
+      <button class="drawerItem" onclick="location.reload()">
+        Atualizar sistema
+      </button>
+
+      <button class="drawerItem" onclick="showToast('ViniGeoClima operacional.')">
+        Diagnóstico
+      </button>
+
+    </div>
+
+  </aside>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin="">
+</script>
+
+<script>
+
+const state = {
+  lat: -13.0194,
+  lon: -42.6986,
+  city: "Macaúbas",
+  country: "Brasil",
+  weather: null,
+  air: null,
+  performance: "auto",
+  reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+};
+
+const images = {
+
+  clear:
+    "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=82",
+
+  cloudy:
+    "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=2200&q=82",
+
+  rain:
+    "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=2200&q=82",
+
+  storm:
+    "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=2200&q=82",
+
+  fog:
+    "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=2200&q=82",
+
+  wind:
+    "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=82",
+
+  heat:
+    "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=82",
+
+  cold:
+    "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?auto=format&fit=crop&w=2200&q=82",
+
+  night:
+    "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2200&q=82"
+};
+
+let map;
+let marker;
+let layers = {};
+let toastTimer;
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function showToast(message){
+
+  clearTimeout(toastTimer);
+
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+
+  toastTimer = setTimeout(() => {
+    $("toast").classList.remove("show");
+  }, 3200);
+}
+
+function setText(id,value){
+  const el = $(id);
+  if(el) el.textContent = value;
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function weatherCodeToText(code){
+
+  if(code === 0) return "Céu limpo";
+
+  if([1,2].includes(code))
+    return "Parcialmente nublado";
+
+  if(code === 3)
+    return "Nublado";
+
+  if([45,48].includes(code))
+    return "Neblina";
+
+  if([51,53,55,56,57].includes(code))
+    return "Garoa";
+
+  if([61,63,65,66,67,80,81,82].includes(code))
+    return "Chuva";
+
+  if([71,73,75,77,85,86].includes(code))
+    return "Neve / precipitação congelada";
+
+  if([95,96,99].includes(code))
+    return "Tempestade";
+
+  return "Condição variável";
+}
+
+function weatherCodeToIcon(code){
+
+  if(code === 0) return "☀️";
+  if([1,2].includes(code)) return "🌤️";
+  if(code === 3) return "☁️";
+  if([45,48].includes(code)) return "🌫️";
+  if([51,53,55,56,57].includes(code)) return "🌦️";
+  if([61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+  if([95,96,99].includes(code)) return "⛈️";
+  if([71,73,75,77,85,86].includes(code)) return "❄️";
+
+  return "🌥️";
+}
+
+function getWindDirection(deg){
+
+  if(deg === null || deg === undefined)
+    return "--";
+
+  const directions = [
+    "N","NE","L","SE","S","SO","O","NO"
+  ];
+
+  return directions[
+    Math.round(deg / 45) % 8
+  ];
+}
+
+function chooseScenario(current){
+
+  const code = current.weather_code;
+  const temp = current.temperature_2m;
+  const wind = current.wind_speed_10m;
+
+  if([95,96,99].includes(code))
+    return "storm";
+
+  if([61,63,65,66,67,80,81,82].includes(code))
+    return "rain";
+
+  if([45,48].includes(code))
+    return "fog";
+
+  if(wind >= 45)
+    return "wind";
+
+  if(temp >= 35)
+    return "heat";
+
+  if(temp <= 8)
+    return "cold";
+
+  if([1,2,3].includes(code))
+    return "cloudy";
+
+  return "clear";
+}
+
+function setBackground(scenario){
+
+  const image = $("backgroundImage");
+  const source = images[scenario] || images.clear;
+
+  image.style.opacity = "0";
+
+  setTimeout(() => {
+
+    image.src = source;
+    image.onload = () => {
+
+      image.style.opacity = ".76";
+
+      if(!state.reducedMotion){
+        image.style.transform = "scale(1.04)";
+
+        setTimeout(() => {
+          image.style.transform = "scale(1.10)";
+        },100);
+      }
+
+    };
+
+  },500);
+
+  createAtmosphere(scenario);
+}
+
+function createAtmosphere(scenario){
+
+  const container = $("atmosphere");
+  container.innerHTML = "";
+
+  if(
+    state.performance === "ultra" ||
+    state.performance === "light" ||
+    state.reducedMotion
+  ){
+    return;
+  }
+
+  if(scenario === "rain" || scenario === "storm"){
+
+    const count = scenario === "storm" ? 65 : 38;
+
+    for(let i=0;i<count;i++){
+
+      const p = document.createElement("div");
+
+      p.className = "atmo-particle rain-particle";
+
+      p.style.left = Math.random()*100 + "%";
+      p.style.top = Math.random()*100 + "%";
+      p.style.animationDuration =
+        (0.65 + Math.random()*.8) + "s";
+
+      p.style.animationDelay =
+        (-Math.random()*2) + "s";
+
+      container.appendChild(p);
+    }
+
+  }
+
+  if(scenario === "wind"){
+
+    for(let i=0;i<28;i++){
+
+      const p = document.createElement("div");
+
+      p.className = "atmo-particle wind-particle";
+
+      p.style.left = Math.random()*100 + "%";
+      p.style.top = (10 + Math.random()*80) + "%";
+
+      p.style.animationDuration =
+        (2 + Math.random()*3) + "s";
+
+      p.style.animationDelay =
+        (-Math.random()*5) + "s";
+
+      container.appendChild(p);
+    }
+
+  }
+
+  if(scenario === "fog"){
+
+    for(let i=0;i<7;i++){
+
+      const p = document.createElement("div");
+
+      p.className = "atmo-particle fog-particle";
+
+      p.style.left = Math.random()*100 + "%";
+      p.style.top = (20 + Math.random()*60) + "%";
+
+      p.style.animationDuration =
+        (12 + Math.random()*12) + "s";
+
+      p.style.animationDelay =
+        (-Math.random()*10) + "s";
+
+      container.appendChild(p);
+    }
+
+  }
+
+}
+
+async function runAI(manual=false){
+
+  if(!state.weather)
+    return;
+
+  setText("aiProcess","ANALISANDO METEOROLOGIA...");
+  await sleep(state.reducedMotion ? 100 : 500);
+
+  setText("aiProcess","COMPARANDO INDICADORES...");
+  await sleep(state.reducedMotion ? 100 : 500);
+
+  setText("aiProcess","CONSOLIDANDO...");
+  await sleep(state.reducedMotion ? 100 : 500);
+
+  const current = state.weather.current;
+
+  const temp = current.temperature_2m;
+  const humidity = current.relative_humidity_2m;
+  const wind = current.wind_speed_10m;
+  const rain = current.precipitation_probability ?? 0;
+  const code = current.weather_code;
+
+  let result = "";
+
+  if([95,96,99].includes(code)){
+
+    result =
+      "Há indicadores compatíveis com condição de tempestade. " +
+      "A análise considera o código meteorológico, precipitação e vento.";
+
+  }else if(rain >= 70){
+
+    result =
+      "A probabilidade de precipitação está elevada. " +
+      "Convém acompanhar a evolução da chuva e possíveis atualizações.";
+
+  }else if(temp >= 35){
+
+    result =
+      "A temperatura está elevada. " +
+      "A análise indica uma condição de calor significativo no momento.";
+
+  }else if(wind >= 40){
+
+    result =
+      "O vento apresenta velocidade elevada. " +
+      "A direção e as rajadas devem ser acompanhadas.";
+
+  }else if(humidity >= 85){
+
+    result =
+      "A umidade está elevada. " +
+      "As condições atmosféricas favorecem maior sensação de abafamento.";
+
+  }else{
+
+    result =
+      "As condições atuais não apresentam, pelos indicadores disponíveis, " +
+      "um sinal meteorológico dominante de maior intensidade.";
+
+  }
+
+  setText("aiText",result);
+
+  setText(
+    "aiProcess",
+    manual ? "ANÁLISE CONCLUÍDA" : "CONSENSO ATUALIZADO"
+  );
+}
+
+function airQualityText(index){
+
+  if(index === null || index === undefined)
+    return "Sem dados";
+
+  if(index <= 20)
+    return "Boa";
+
+  if(index <= 40)
+    return "Razoável";
+
+  if(index <= 60)
+    return "Moderada";
+
+  if(index <= 80)
+    return "Ruim";
+
+  if(index <= 100)
+    return "Muito ruim";
+
+  return "Extremamente ruim";
+}
+
+async function loadAirQuality(){
+
+  try{
+
+    const url =
+      "https://air-quality-api.open-meteo.com/v1/air-quality" +
+      "?latitude=" + state.lat +
+      "&longitude=" + state.lon +
+      "&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,ozone,us_aqi" +
+      "&timezone=auto";
+
+    const response = await fetch(url);
+
+    if(!response.ok)
+      throw new Error("Air quality HTTP " + response.status);
+
+    const data = await response.json();
+
+    state.air = data;
+
+    const aqi = data.current?.us_aqi;
+
+    setText("quickAQI", aqi ?? "--");
+    setText("quickAQIDesc", airQualityText(aqi));
+
+    setText("aqiLarge", aqi ?? "--");
+    setText("aqiStatus", airQualityText(aqi));
+
+    setText(
+      "aqiDetails",
+      "PM2.5: " +
+      (data.current?.pm2_5 ?? "--") +
+      " µg/m³ · PM10: " +
+      (data.current?.pm10 ?? "--") +
+      " µg/m³ · O₃: " +
+      (data.current?.ozone ?? "--") +
+      " µg/m³"
+    );
+
+  }catch(error){
+
+    console.warn("Qualidade do ar:",error);
+
+    setText("quickAQI","--");
+    setText("quickAQIDesc","indisponível");
+    setText("aqiLarge","--");
+    setText(
+      "aqiDetails",
+      "Dados de qualidade do ar indisponíveis neste momento."
+    );
+  }
+}
+
+async function loadWeather(){
+
+  setText("systemStatus","ATUALIZANDO");
+
+  try{
+
+    const url =
+      "https://api.open-meteo.com/v1/forecast" +
+      "?latitude=" + state.lat +
+      "&longitude=" + state.lon +
+      "&current=" +
+      [
+        "temperature_2m",
+        "relative_humidity_2m",
+        "apparent_temperature",
+        "precipitation",
+        "rain",
+        "pressure_msl",
+        "wind_speed_10m",
+        "wind_direction_10m",
+        "wind_gusts_10m",
+        "cloud_cover",
+        "weather_code"
+      ].join(",") +
+      "&hourly=" +
+      [
+        "temperature_2m",
+        "precipitation_probability",
+        "weather_code"
+      ].join(",") +
+      "&daily=" +
+      [
+        "weather_code",
+        "temperature_2m_max",
+        "temperature_2m_min",
+        "precipitation_probability_max",
+        "uv_index_max"
+      ].join(",") +
+      "&timezone=auto" +
+      "&forecast_days=7";
+
+    const response = await fetch(url);
+
+    if(!response.ok)
+      throw new Error("Weather HTTP " + response.status);
+
+    const data = await response.json();
+
+    state.weather = data;
+
+    renderWeather(data);
+
+    await loadAirQuality();
+
+    await runAI();
+
+    setText("systemStatus","SISTEMA ONLINE");
+
+  }catch(error){
+
+    console.error(error);
+
+    setText("systemStatus","ERRO DE DADOS");
+
+    setText(
+      "aiText",
+      "Não foi possível atualizar os dados meteorológicos agora. " +
+      "Verifique a conexão e tente novamente."
+    );
+
+    setText("aiProcess","AGUARDANDO NOVA TENTATIVA");
+
+  }
+}
+
+function renderWeather(data){
+
+  const c = data.current;
+
+  setText(
+    "temperature",
+    Math.round(c.temperature_2m) + "°"
+  );
+
+  setText(
+    "condition",
+    weatherCodeToText(c.weather_code)
+  );
+
+  setText(
+    "feels",
+    "Sensação: " +
+    Math.round(c.apparent_temperature) +
+    "°"
+  );
+
+  setText(
+    "quickHumidity",
+    Math.round(c.relative_humidity_2m) + "%"
+  );
+
+  setText(
+    "quickWind",
+    Math.round(c.wind_speed_10m) + " km/h"
+  );
+
+  setText(
+    "quickWindDir",
+    getWindDirection(c.wind_direction_10m)
+  );
+
+  setText(
+    "quickRain",
+    Math.round(c.precipitation_probability ?? 0) + "%"
+  );
+
+  setText(
+    "dewPoint",
+    "--"
+  );
+
+  setText(
+    "pressure",
+    Math.round(c.pressure_msl) + " hPa"
+  );
+
+  setText(
+    "clouds",
+    Math.round(c.cloud_cover) + "%"
+  );
+
+  setText(
+    "uv",
+    data.daily?.uv_index_max?.[0] != null
+      ? Number(data.daily.uv_index_max[0]).toFixed(1)
+      : "--"
+  );
+
+  setText(
+    "gust",
+    Math.round(c.wind_gusts_10m) + " km/h"
+  );
+
+  setText(
+    "precip",
+    Number(c.precipitation ?? 0).toFixed(1) + " mm"
+  );
+
+  setText(
+    "updatedAt",
+    "Atualizado " +
+    new Date().toLocaleTimeString("pt-BR",{
+      hour:"2-digit",
+      minute:"2-digit"
+    })
+  );
+
+  const scenario = chooseScenario(c);
+
+  setBackground(scenario);
+
+  renderForecast(data);
+
+  updateMarker();
+
+}
+
+function renderForecast(data){
+
+  const container = $("forecast");
+
+  container.innerHTML = "";
+
+  if(!data.daily)
+    return;
+
+  for(let i=0;i<7;i++){
+
+    const date = new Date(
+      data.daily.time[i] + "T12:00:00"
+    );
+
+    const day = document.createElement("div");
+
+    day.className = "day glass";
+
+    day.innerHTML = `
+      <div class="dayName">
+        ${date.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".","")}
+      </div>
+
+      <div class="dayIcon">
+        ${weatherCodeToIcon(data.daily.weather_code[i])}
+      </div>
+
+      <div class="dayTemp">
+        ${Math.round(data.daily.temperature_2m_max[i])}°
+        /
+        ${Math.round(data.daily.temperature_2m_min[i])}°
+      </div>
+
+      <div class="dayRain">
+        ${Math.round(data.daily.precipitation_probability_max[i] ?? 0)}% chuva
+      </div>
+    `;
+
+    container.appendChild(day);
+  }
+}
+
+async function searchLocation(){
+
+  const query = $("searchInput").value.trim();
+
+  if(!query)
+    return;
+
+  setText("systemStatus","LOCALIZANDO");
+
+  try{
+
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/search" +
+      "?name=" +
+      encodeURIComponent(query) +
+      "&count=1" +
+      "&language=pt" +
+      "&format=json";
+
+    const response = await fetch(url);
+
+    if(!response.ok)
+      throw new Error("Geocoding HTTP " + response.status);
+
+    const data = await response.json();
+
+    if(!data.results?.length){
+
+      showToast("Localização não encontrada.");
+      setText("systemStatus","SISTEMA ONLINE");
+      return;
+    }
+
+    const place = data.results[0];
+
+    state.lat = place.latitude;
+    state.lon = place.longitude;
+    state.city = place.name;
+    state.country = place.country || "Brasil";
+
+    setText(
+      "locationName",
+      place.name +
+      (place.admin1 ? ", " + place.admin1 : "")
+    );
+
+    setText(
+      "locationMeta",
+      place.country +
+      " · " +
+      state.lat.toFixed(3) +
+      ", " +
+      state.lon.toFixed(3)
+    );
+
+    updateMapPosition();
+
+    await loadWeather();
+
+    showToast("Localização atualizada.");
+
+  }catch(error){
+
+    console.error(error);
+
+    setText("systemStatus","ERRO");
+
+    showToast("Não foi possível localizar esse lugar.");
+
+    setTimeout(
+      () => setText("systemStatus","SISTEMA ONLINE"),
+      2500
+    );
+  }
+}
+
+function initMap(){
+
+  map = L.map("map",{
+    zoomControl:true,
+    preferCanvas:true
+  }).setView(
+    [state.lat,state.lon],
+    5
+  );
+
+  layers.normal = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom:19,
+      attribution:"© OpenStreetMap contributors"
+    }
+  ).addTo(map);
+
+  layers.satellite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom:19,
+      attribution:"Tiles © Esri"
+    }
+  );
+
+  layers.terrain = L.tileLayer(
+    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom:17,
+      attribution:"© OpenStreetMap contributors, SRTM"
+    }
+  );
+
+  marker = L.marker(
+    [state.lat,state.lon]
+  ).addTo(map);
+
+  marker.bindPopup(
+    "<strong>ViniGeoClima</strong><br>Local analisado"
+  );
+}
+
+function updateMarker(){
+
+  if(!map || !marker)
+    return;
+
+  marker.setLatLng([
+    state.lat,
+    state.lon
+  ]);
+
+  marker.bindPopup(
+    "<strong>" +
+    state.city +
+    "</strong><br>ViniGeoClima"
+  );
+}
+
+function updateMapPosition(){
+
+  if(!map)
+    return;
+
+  map.flyTo(
+    [state.lat,state.lon],
+    10,
+    {
+      duration: state.reducedMotion ? 0 : 1.5
+    }
+  );
+
+  updateMarker();
+}
+
+function locateUser(){
+
+  if(!navigator.geolocation){
+
+    showToast("Geolocalização não disponível.");
+    return;
+  }
+
+  setText("systemStatus","LOCALIZANDO DISPOSITIVO");
+
+  navigator.geolocation.getCurrentPosition(
+
+    async position => {
+
+      state.lat = position.coords.latitude;
+      state.lon = position.coords.longitude;
+      state.city = "Minha localização";
+
+      setText(
+        "locationName",
+        "Minha localização"
+      );
+
+      setText(
+        "locationMeta",
+        state.lat.toFixed(4) +
+        ", " +
+        state.lon.toFixed(4)
+      );
+
+      updateMapPosition();
+
+      await loadWeather();
+
+      setText("systemStatus","SISTEMA ONLINE");
+
+    },
+
+    error => {
+
+      console.warn(error);
+
+      showToast(
+        "Não foi possível obter sua localização."
+      );
+
+      setText(
+        "systemStatus",
+        "SISTEMA ONLINE"
+      );
+    },
+
+    {
+      enableHighAccuracy:false,
+      timeout:10000,
+      maximumAge:300000
+    }
+  );
+}
+
+function switchMap(layer){
+
+  if(!map)
+    return;
+
+  Object.values(layers).forEach(item => {
+
+    if(map.hasLayer(item))
+      map.removeLayer(item);
+
+  });
+
+  layer.addTo(map);
+}
+
+function openMenu(){
+
+  $("drawer").classList.add("open");
+}
+
+function closeMenu(){
+
+  $("drawer").classList.remove("open");
+}
+
+function focusSection(type){
+
+  closeMenu();
+
+  let target = null;
+
+  if(type === "forecast")
+    target = $("forecast");
+
+  if(type === "metrics")
+    target = document.querySelector(".metrics");
+
+  if(type === "environment")
+    target = document.querySelector(".environmentGrid");
+
+  if(target){
+
+    target.scrollIntoView({
+      behavior: state.reducedMotion ? "auto" : "smooth",
+      block:"center"
+    });
+
+  }
+}
+
+function setPerformance(mode){
+
+  state.performance = mode;
+
+  document.body.classList.remove(
+    "lightMode",
+    "ultraMode"
+  );
+
+  document
+    .querySelectorAll(".performance button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  const button = $("mode" + mode.charAt(0).toUpperCase()+mode.slice(1));
+
+  if(button)
+    button.classList.add("active");
+
+  if(mode === "light")
+    document.body.classList.add("lightMode");
+
+  if(mode === "ultra")
+    document.body.classList.add("ultraMode");
+
+  if(state.weather)
+    setBackground(
+      chooseScenario(state.weather.current)
+    );
+
+  localStorage.setItem(
+    "vinigeo-performance",
+    mode
+  );
+
+  showToast(
+    "Modo " +
+    mode +
+    " ativado."
+  );
+}
+
+function autoPerformance(){
+
+  const connection =
+    navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection;
+
+  let mode = "full";
+
+  if(
+    state.reducedMotion ||
+    window.innerWidth < 600
+  ){
+    mode = "light";
+  }
+
+  if(connection){
+
+    if(
+      connection.saveData ||
+      ["slow-2g","2g"].includes(connection.effectiveType)
+    ){
+      mode = "ultra";
+    }
+
+  }
+
+  setPerformance(mode);
+}
+
+$("searchBtn").addEventListener(
+  "click",
+  searchLocation
+);
+
+$("searchInput").addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Enter")
+      searchLocation();
+
+  }
+);
+
+$("menuBtn").addEventListener(
+  "click",
+  openMenu
+);
+
+$("closeMenu").addEventListener(
+  "click",
+  closeMenu
+);
+
+$("drawerShade").addEventListener(
+  "click",
+  closeMenu
+);
+
+$("normalMap").addEventListener(
+  "click",
+  () => switchMap(layers.normal)
+);
+
+$("satMap").addEventListener(
+  "click",
+  () => switchMap(layers.satellite)
+);
+
+$("terrainMap").addEventListener(
+  "click",
+  () => switchMap(layers.terrain)
+);
+
+$("locateBtn").addEventListener(
+  "click",
+  locateUser
+);
+
+$("modeAuto").addEventListener(
+  "click",
+  autoPerformance
+);
+
+$("modeFull").addEventListener(
+  "click",
+  () => setPerformance("full")
+);
+
+$("modeLight").addEventListener(
+  "click",
+  () => setPerformance("light")
+);
+
+$("modeUltra").addEventListener(
+  "click",
+  () => setPerformance("ultra")
+);
+
+async function start(){
+
+  try{
+
+    initMap();
+
+    const saved =
+      localStorage.getItem(
+        "vinigeo-performance"
+      );
+
+    if(saved){
+      setPerformance(saved);
+    }else{
+      autoPerformance();
+    }
+
+    await loadWeather();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Erro ao iniciar o ViniGeoClima."
+    );
+
+  }
+}
+
+start();
+
+setInterval(
+  loadWeather,
+  10 * 60 * 1000
+);
+
+</script>
+
+</body>
+</html>
+

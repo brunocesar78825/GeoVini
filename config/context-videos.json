@@ -1,0 +1,16 @@
+﻿{
+  "regra": "somente videos verificados",
+  "resolucao_preferencial": "3840x2160",
+  "eventos": {
+    "clear": "assets/events/clear/verified.mp4",
+    "cloudy": "assets/events/cloudy/verified.mp4",
+    "rain": "assets/events/rain/verified.mp4",
+    "storm": "assets/events/storm/verified.mp4",
+    "fog": "assets/events/fog/verified.mp4",
+    "wind": "assets/events/wind/verified.mp4",
+    "heat": "assets/events/heat/verified.mp4",
+    "cold": "assets/events/cold/verified.mp4",
+    "flood": "assets/events/flood/verified.mp4",
+    "wildfire": "assets/events/wildfire/verified.mp4"
+  }
+}
