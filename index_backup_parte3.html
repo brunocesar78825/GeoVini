@@ -2083,45 +2083,6 @@ async function loadFires(){
 }
 
 
-function stateToUF(value){
-  const normalized = String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .toUpperCase()
-    .trim();
-
-  const map = {
-    "ACRE":"AC",
-    "ALAGOAS":"AL",
-    "AMAPA":"AP",
-    "AMAZONAS":"AM",
-    "BAHIA":"BA",
-    "CEARA":"CE",
-    "DISTRITO FEDERAL":"DF",
-    "ESPIRITO SANTO":"ES",
-    "GOIAS":"GO",
-    "MARANHAO":"MA",
-    "MATO GROSSO":"MT",
-    "MATO GROSSO DO SUL":"MS",
-    "MINAS GERAIS":"MG",
-    "PARA":"PA",
-    "PARAIBA":"PB",
-    "PARANA":"PR",
-    "PERNAMBUCO":"PE",
-    "PIAUI":"PI",
-    "RIO DE JANEIRO":"RJ",
-    "RIO GRANDE DO NORTE":"RN",
-    "RIO GRANDE DO SUL":"RS",
-    "RONDONIA":"RO",
-    "RORAIMA":"RR",
-    "SANTA CATARINA":"SC",
-    "SAO PAULO":"SP",
-    "SERGIPE":"SE",
-    "TOCANTINS":"TO"
-  };
-
-  return map[normalized] || (normalized.length === 2 ? normalized : "BA");
-}
 function getInpeURL(uf){
 
     return (
@@ -2448,8 +2409,7 @@ async function searchCity(name){
         );
 
 
-        await loadVideoConfig();
-  await refreshAll();
+        await refreshAll();
 
 
         toast(
@@ -2941,8 +2901,7 @@ $("#locationButton")
                             position.coords.longitude;
 
 
-                        await loadVideoConfig();
-  await refreshAll();
+                        await refreshAll();
 
 
                         state.map.setView(
@@ -3046,8 +3005,7 @@ $("#analyze")
 
     initMap();
 
-    await loadVideoConfig();
-  await refreshAll();
+    await refreshAll();
 
     setInterval(
         refreshAll,
@@ -3060,14 +3018,5 @@ $("#analyze")
 
 </script>
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  });
-}
-</script>
 </body>
 </html>
-
-

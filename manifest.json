@@ -1,10 +1,13 @@
 ﻿{
   "name": "ViniGeoClima BA",
   "short_name": "ViniGeo",
-  "description": "Monitoramento meteorológico, climático e ambiental.",
+  "description": "Meteorologia, qualidade do ar e queimadas.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#020805",
-  "theme_color": "#020805",
-  "lang": "pt-BR"
+  "background_color": "#03070b",
+  "theme_color": "#061018",
+  "lang": "pt-BR",
+  "orientation": "portrait-primary",
+  "icons": []
 }

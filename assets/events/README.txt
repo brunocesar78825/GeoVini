@@ -1,35 +1,56 @@
-﻿VINIGEOCLIMA - VIDEOS CONTEXTUAIS VERIFICADOS
+﻿VINIGEOCLIMA BA
+VÍDEOS DE FUNDO
 
-O site NÃO deve usar vídeos aleatórios para representar um desastre.
+IMPORTANTE
 
-Coloque somente vídeos cuja ocorrência tenha sido confirmada
-e que corresponda ao fenômeno que será mostrado.
+Os vídeos atmosféricos servem para dar contexto visual
+à condição meteorológica.
 
-Arquivos aceitos:
+Eles NÃO devem ser interpretados como prova de que um
+evento aconteceu na cidade.
 
-clear\verified.mp4
-cloudy\verified.mp4
-rain\verified.mp4
-storm\verified.mp4
-fog\verified.mp4
-wind\verified.mp4
-heat\verified.mp4
-cold\verified.mp4
-flood\verified.mp4
-wildfire\verified.mp4
+Exemplo:
 
-Preferência:
-- MP4
-- H.264
-- 3840x2160 para vídeo 4K
-- sem áudio ou áudio removido
-- duração curta
-- loop natural
-- conteúdo real correspondente ao fenômeno
+Um vídeo de chuva pode representar visualmente chuva,
+mas isso não significa que aquele vídeo foi gravado na
+cidade atual.
 
-IMPORTANTE:
-O sistema somente reproduz o vídeo quando o arquivo
-verified.mp4 existir.
+INCÊNDIO E ENCHENTE
 
-Sem vídeo verificado:
-o site continua usando o fundo meteorológico existente.
+Para incêndio ou enchente, o sistema deve exigir:
+
+1. Fonte confiável.
+2. Local compatível.
+3. Data compatível.
+4. Evento realmente confirmado.
+
+Nunca usar uma imagem ou vídeo aleatório para afirmar
+que existe um incêndio ou enchente.
+
+ARQUIVOS ESPERADOS
+
+clear/verified.mp4
+cloudy/verified.mp4
+rain/verified.mp4
+storm/verified.mp4
+fog/verified.mp4
+wind/verified.mp4
+heat/verified.mp4
+cold/verified.mp4
+flood/verified.mp4
+wildfire/verified.mp4
+
+RECOMENDAÇÃO
+
+Use vídeos licenciados para reutilização, como os
+disponibilizados em plataformas que permitem uso conforme
+suas respectivas licenças.
+
+Antes de publicar um vídeo, confira a licença da página
+original.
+
+O site não baixa vídeos automaticamente da internet
+durante o funcionamento.
+
+Isso evita depender de URLs temporárias e reduz risco
+de quebra do site.

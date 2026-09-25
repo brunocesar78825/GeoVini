@@ -1,0 +1,90 @@
+﻿{
+  "version": 1,
+
+  "important_rule": "Um vídeo visual não é prova de que um evento aconteceu na região.",
+
+  "atmospheric_videos": {
+
+    "clear": {
+      "file": "assets/events/clear/verified.mp4",
+      "purpose": "Atmosfera de céu limpo",
+      "verified": false
+    },
+
+    "cloudy": {
+      "file": "assets/events/cloudy/verified.mp4",
+      "purpose": "Atmosfera nublada",
+      "verified": false
+    },
+
+    "rain": {
+      "file": "assets/events/rain/verified.mp4",
+      "purpose": "Atmosfera de chuva",
+      "verified": false
+    },
+
+    "storm": {
+      "file": "assets/events/storm/verified.mp4",
+      "purpose": "Atmosfera de tempestade",
+      "verified": false
+    },
+
+    "fog": {
+      "file": "assets/events/fog/verified.mp4",
+      "purpose": "Atmosfera de neblina",
+      "verified": false
+    },
+
+    "wind": {
+      "file": "assets/events/wind/verified.mp4",
+      "purpose": "Atmosfera de vento",
+      "verified": false
+    },
+
+    "heat": {
+      "file": "assets/events/heat/verified.mp4",
+      "purpose": "Atmosfera de calor",
+      "verified": false
+    },
+
+    "cold": {
+      "file": "assets/events/cold/verified.mp4",
+      "purpose": "Atmosfera de frio",
+      "verified": false
+    },
+
+    "wildfire": {
+      "file": "assets/events/wildfire/verified.mp4",
+      "purpose": "Registro visual de incêndio",
+      "verified": false
+    },
+
+    "flood": {
+      "file": "assets/events/flood/verified.mp4",
+      "purpose": "Registro visual de inundação",
+      "verified": false
+    }
+
+  },
+
+  "event_verification": {
+
+    "wildfire": {
+      "requires": [
+        "fonte oficial ou registro confiável",
+        "localização compatível",
+        "data compatível"
+      ]
+    },
+
+    "flood": {
+      "requires": [
+        "fonte oficial ou registro confiável",
+        "localização compatível",
+        "data compatível"
+      ]
+    }
+
+  }
+
+}
