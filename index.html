@@ -1,75 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 
 <meta charset="UTF-8">
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    content="width=device-width, initial-scale=1.0"
 >
 
 <meta
     name="theme-color"
-    content="#06121d"
+    content="#03070b"
 >
 
 <meta
     name="description"
-    content="ViniGeoClima BA — monitoramento meteorológico e ambiental da Bahia."
->
-
-<meta
-    name="application-name"
-    content="ViniGeoClima BA"
+    content="ViniGeoClima BA — monitoramento meteorológico, ambiental, hidrológico e de riscos."
 >
 
 <title>ViniGeoClima BA</title>
 
-<link rel="icon" href="data:,">
-
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
-
 <style>
-
-/* =========================================================
-   VINIGEOCLIMA BA
-   DESIGN SYSTEM
-========================================================= */
-
-:root{
-
-    --bg:#050d15;
-    --bg2:#081722;
-    --panel:#0b1d2b;
-    --panel2:#0e2638;
-
-    --text:#f3f9ff;
-    --muted:#91aabd;
-
-    --cyan:#28c4ff;
-    --cyan2:#008cff;
-
-    --green:#35df91;
-    --yellow:#ffd34f;
-    --orange:#ff9d3d;
-    --red:#ff5c64;
-
-    --border:rgba(255,255,255,.09);
-
-    --glass:
-        rgba(7,22,34,.82);
-
-    --radius:20px;
-
-    --shadow:
-        0 20px 70px rgba(0,0,0,.34);
-}
-
 
 /* =========================================================
    RESET
@@ -86,1264 +38,951 @@ html{
 }
 
 body{
-
+    font-family:Arial,Helvetica,sans-serif;
+    color:#eef8ff;
+    background:#03070b;
     min-height:100vh;
+    overflow-x:hidden;
+}
 
-    color:var(--text);
-
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
 
     background:
-
         radial-gradient(
-            circle at 10% 0%,
-            rgba(0,160,255,.12),
-            transparent 32%
+            circle at 20% 10%,
+            rgba(0,180,255,.08),
+            transparent 35%
         ),
 
         radial-gradient(
-            circle at 90% 20%,
-            rgba(0,255,180,.06),
-            transparent 30%
+            circle at 80% 80%,
+            rgba(0,120,255,.06),
+            transparent 35%
         ),
 
-        linear-gradient(
-            180deg,
-            #050d15,
-            #071824 55%,
-            #050d15
-        );
-
-    line-height:1.5;
+        #03070b;
 }
-
-button,
-input{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-a{
-    color:var(--cyan);
-}
-
-img{
-    max-width:100%;
-    display:block;
-}
-
 
 /* =========================================================
-   TOPO
+   HEADER
 ========================================================= */
 
-.topbar{
-
+header{
     position:sticky;
-
     top:0;
+    z-index:1000;
 
-    z-index:2000;
+    width:100%;
 
-    height:72px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:
-        10px
-        max(16px,env(safe-area-inset-right))
-        10px
-        max(16px,env(safe-area-inset-left));
-
-    background:
-        rgba(4,13,21,.86);
-
-    backdrop-filter:
-        blur(20px);
+    background:rgba(3,9,14,.92);
 
     border-bottom:
-        1px solid var(--border);
+        1px solid
+        rgba(0,200,255,.20);
+
+    backdrop-filter:blur(18px);
 }
 
-.brand{
+.header{
+    max-width:1500px;
+    margin:auto;
+
+    min-height:74px;
+
+    padding:
+        12px
+        22px;
 
     display:flex;
-
     align-items:center;
+    justify-content:space-between;
 
-    gap:12px;
-
-    min-width:0;
+    gap:20px;
 }
 
-.logo{
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-    width:46px;
-    height:46px;
+.logo-symbol{
+    width:43px;
+    height:43px;
 
-    display:grid;
+    border-radius:50%;
 
-    place-items:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    flex-shrink:0;
-
-    border-radius:15px;
-
-    font-size:24px;
+    font-size:22px;
 
     background:
-        linear-gradient(
-            135deg,
-            #24caff,
-            #0879ff
+        radial-gradient(
+            circle,
+            #13caff 0%,
+            #07506c 45%,
+            #06131c 70%
         );
 
     box-shadow:
-        0 8px 28px
-        rgba(0,150,255,.28);
+        0 0 25px
+        rgba(0,200,255,.25);
 }
 
-.brand-name{
-
-    font-weight:900;
-
-    font-size:15px;
-
-    letter-spacing:.7px;
-
-    white-space:nowrap;
+.logo{
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:.3px;
 }
 
-.brand-sub{
-
-    color:var(--muted);
-
-    font-size:10px;
-
-    margin-top:2px;
+.logo span{
+    color:#14caff;
 }
 
-.top-actions{
+.tagline{
+    color:#718995;
+    font-size:11px;
+    margin-top:4px;
+}
 
+nav{
     display:flex;
+    align-items:center;
+    justify-content:flex-end;
 
     gap:7px;
+    flex-wrap:wrap;
 }
 
-.icon-button{
-
-    width:42px;
-    height:42px;
-
+nav button{
     border:
-        1px solid var(--border);
-
-    border-radius:13px;
-
-    color:white;
+        1px solid
+        rgba(0,200,255,.18);
 
     background:
-        rgba(255,255,255,.05);
+        rgba(7,20,29,.75);
 
-    display:grid;
+    color:#c7efff;
 
-    place-items:center;
+    padding:
+        9px
+        12px;
 
-    font-size:19px;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:12px;
 }
 
-.icon-button:hover{
+nav button:hover{
+    border-color:#16caff;
 
     background:
-        rgba(255,255,255,.1);
-}
+        rgba(0,160,220,.13);
 
+    transform:
+        translateY(-1px);
+}
 
 /* =========================================================
    CONTAINER
 ========================================================= */
 
 .container{
-
-    width:
-        min(
-            1280px,
-            calc(100% - 28px)
-        );
-
-    margin:
-        20px auto 60px;
-}
-
-
-/* =========================================================
-   CARD
-========================================================= */
-
-.card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15,38,56,.96),
-            rgba(6,20,31,.96)
-        );
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    box-shadow:
-        var(--shadow);
-}
-
-.section{
-    margin-bottom:18px;
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-card{
-
-    padding:16px;
-}
-
-.search-row{
-
-    display:flex;
-
-    gap:9px;
-}
-
-.search-input{
-
-    flex:1;
-
-    min-width:0;
-
-    height:50px;
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    border-radius:14px;
-
-    outline:none;
-
-    color:white;
-
-    background:
-        rgba(255,255,255,.045);
+    max-width:1500px;
+    margin:auto;
 
     padding:
-        0 16px;
+        24px
+        22px
+        60px;
 }
-
-.search-input::placeholder{
-    color:#70889a;
-}
-
-.search-input:focus{
-
-    border-color:
-        rgba(40,196,255,.65);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(40,196,255,.09);
-}
-
-.primary-button{
-
-    min-height:50px;
-
-    padding:
-        0 20px;
-
-    border:none;
-
-    border-radius:14px;
-
-    color:white;
-
-    font-weight:900;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--cyan),
-            var(--cyan2)
-        );
-
-    box-shadow:
-        0 10px 28px
-        rgba(0,130,255,.2);
-}
-
-.primary-button:hover{
-    filter:brightness(1.08);
-}
-
-.status{
-
-    margin-top:9px;
-
-    color:var(--muted);
-
-    font-size:12px;
-}
-
-.suggestions{
-
-    display:grid;
-
-    gap:6px;
-
-    margin-top:9px;
-}
-
-.suggestion{
-
-    text-align:left;
-
-    color:white;
-
-    background:
-        rgba(255,255,255,.04);
-
-    border:
-        1px solid var(--border);
-
-    border-radius:12px;
-
-    padding:11px 13px;
-}
-
 
 /* =========================================================
-   SECTION HEADER
-========================================================= */
-
-.section-header{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:12px;
-
-    padding:
-        20px 20px 0;
-}
-
-.eyebrow{
-
-    display:block;
-
-    color:var(--cyan);
-
-    font-size:10px;
-
-    font-weight:900;
-
-    letter-spacing:2px;
-
-    margin-bottom:4px;
-}
-
-.section-header h2{
-
-    font-size:20px;
-
-    line-height:1.1;
-}
-
-.section-header p{
-
-    color:var(--muted);
-
-    font-size:12px;
-
-    margin-top:4px;
-}
-
-.small-button{
-
-    color:white;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid var(--border);
-
-    border-radius:11px;
-
-    padding:
-        8px 12px;
-
-    font-size:11px;
-
-    font-weight:800;
-}
-
-.small-button:hover{
-
-    background:
-        rgba(255,255,255,.1);
-}
-
-
-/* =========================================================
-   HERO / CLIMA ATUAL
+   HERO
 ========================================================= */
 
 .hero{
+    min-height:390px;
 
-    padding:24px;
+    border-radius:22px;
 
-    min-height:330px;
-}
-
-.hero::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:340px;
-    height:340px;
-
-    right:-150px;
-    top:-180px;
-
-    border-radius:50%;
-
-    background:
-        rgba(40,196,255,.12);
-
-    filter:blur(18px);
-
-    pointer-events:none;
-}
-
-.hero-top{
+    overflow:hidden;
 
     position:relative;
 
-    z-index:1;
-
     display:flex;
+    align-items:flex-end;
 
-    align-items:flex-start;
-
-    justify-content:space-between;
-
-    gap:20px;
-}
-
-.hero-city{
-
-    font-size:
-        clamp(
-            27px,
-            5vw,
-            42px
-        );
-
-    font-weight:900;
-
-    line-height:1.05;
-}
-
-.hero-update{
-
-    color:var(--muted);
-
-    font-size:11px;
-
-    margin-top:7px;
-}
-
-.weather-icon{
-
-    width:78px;
-    height:78px;
-
-    border-radius:24px;
-
-    display:grid;
-
-    place-items:center;
-
-    font-size:43px;
-
-    flex-shrink:0;
-
-    background:
-        rgba(255,255,255,.05);
+    margin-bottom:24px;
 
     border:
-        1px solid var(--border);
+        1px solid
+        rgba(0,200,255,.18);
+
+    background:
+        linear-gradient(
+            0deg,
+            rgba(2,7,11,.95),
+            rgba(2,7,11,.22),
+            rgba(2,7,11,.10)
+        ),
+        url("images/fundo-principal.jpg");
+
+    background-size:cover;
+    background-position:center;
 }
 
-.temperature-row{
-
+.hero-content{
     position:relative;
+    z-index:2;
 
-    z-index:1;
+    padding:34px;
 
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
-    margin-top:26px;
+    max-width:800px;
 }
 
-.temperature{
-
-    font-size:
-        clamp(
-            62px,
-            12vw,
-            100px
-        );
-
-    line-height:.9;
-
-    font-weight:900;
-
-    letter-spacing:-6px;
-}
-
-.condition{
-
-    font-size:18px;
-
-    font-weight:900;
-}
-
-.feels{
-
-    color:var(--muted);
-
-    font-size:12px;
-
-    margin-top:5px;
-}
-
-.metrics{
-
-    position:relative;
-
-    z-index:1;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(5,1fr);
-
-    gap:9px;
-
-    margin-top:28px;
-}
-
-.metric{
-
-    padding:14px;
-
-    min-height:82px;
-
-    border-radius:15px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-}
-
-.metric-label{
-
-    display:block;
-
-    color:var(--muted);
-
-    font-size:10px;
-
-    margin-bottom:4px;
-}
-
-.metric-value{
-
-    font-size:17px;
-
-    font-weight:900;
-}
-
-
-/* =========================================================
-   DASHBOARD GRID
-========================================================= */
-
-.dashboard-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        1.5fr
-        .5fr;
-
-    gap:18px;
-}
-
-
-/* =========================================================
-   MAPA
-========================================================= */
-
-.map-card{
-
-    min-width:0;
-}
-
-.map-tools{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:6px;
+.hero-label{
+    display:inline-block;
 
     padding:
-        15px 20px 0;
-}
-
-.map-button{
-
-    border:
-        1px solid var(--border);
-
-    border-radius:11px;
-
-    padding:
-        8px 11px;
-
-    color:white;
-
-    background:
-        rgba(255,255,255,.045);
-
-    font-size:11px;
-
-    font-weight:800;
-}
-
-.map-button.active{
-
-    color:#9ee8ff;
-
-    background:
-        rgba(40,196,255,.15);
-
-    border-color:
-        rgba(40,196,255,.42);
-}
-
-#map{
-
-    width:100%;
-
-    height:530px;
-
-    margin-top:15px;
-}
-
-.map-status{
-
-    padding:
-        11px 20px 15px;
-
-    color:var(--muted);
-
-    font-size:11px;
-}
-
-.map-overlay{
-
-    position:absolute;
-
-    left:15px;
-
-    bottom:48px;
-
-    z-index:900;
-
-    max-width:230px;
-
-    padding:10px 12px;
-
-    border-radius:13px;
-
-    color:white;
-
-    background:
-        rgba(4,15,24,.88);
-
-    border:
-        1px solid var(--border);
-
-    backdrop-filter:
-        blur(12px);
-
-    font-size:11px;
-}
-
-
-/* =========================================================
-   SIDE MONITOR
-========================================================= */
-
-.monitor-stack{
-
-    display:grid;
-
-    gap:18px;
-
-    align-content:start;
-}
-
-.monitor-card{
-
-    padding-bottom:18px;
-}
-
-.monitor-content{
-
-    padding:
-        17px 20px 0;
-}
-
-.big-number{
-
-    font-size:39px;
-
-    font-weight:900;
-
-    line-height:1;
-}
-
-.monitor-label{
-
-    color:var(--muted);
-
-    font-size:11px;
-
-    margin-top:5px;
-}
-
-.status-pill{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    margin-top:12px;
-
-    padding:
-        6px 10px;
+        6px
+        10px;
 
     border-radius:20px;
 
     font-size:10px;
 
-    font-weight:900;
+    letter-spacing:1px;
+
+    color:#6edfff;
 
     background:
-        rgba(53,223,145,.1);
-
-    color:#7df1b7;
+        rgba(0,150,220,.12);
 
     border:
         1px solid
-        rgba(53,223,145,.2);
+        rgba(0,200,255,.25);
+
+    margin-bottom:12px;
 }
 
+.hero h1{
+    font-size:
+        clamp(
+            30px,
+            5vw,
+            54px
+        );
+
+    line-height:1.05;
+
+    margin-bottom:14px;
+}
+
+.hero h1 span{
+    color:#13caff;
+}
+
+.hero p{
+    color:#b1c4cd;
+
+    max-width:690px;
+
+    line-height:1.65;
+
+    font-size:14px;
+}
+
+.status-row{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+
+    margin-top:20px;
+}
+
+.status{
+    padding:
+        8px
+        11px;
+
+    border-radius:8px;
+
+    background:
+        rgba(3,15,23,.75);
+
+    border:
+        1px solid
+        rgba(0,190,255,.15);
+
+    color:#8ea8b5;
+
+    font-size:11px;
+}
+
+.status strong{
+    color:#50d9ff;
+}
 
 /* =========================================================
-   AIR
+   SECTIONS
 ========================================================= */
 
-.air-layout{
+.section{
+    margin-top:32px;
+
+    scroll-margin-top:95px;
+}
+
+.section-title{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-bottom:15px;
+}
+
+.section-title h2{
+    font-size:21px;
+}
+
+.section-title p{
+    color:#718894;
+    font-size:12px;
+    margin-top:5px;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                190px,
+                1fr
+            )
+        );
+
+    gap:13px;
+}
+
+.card{
+    min-height:150px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:15px;
+
+    border:
+        1px solid
+        rgba(0,190,255,.15);
+
+    cursor:pointer;
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        box-shadow .25s;
+
+    background-size:cover;
+    background-position:center;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            0deg,
+            rgba(2,7,11,.94),
+            rgba(2,7,11,.45),
+            rgba(2,7,11,.20)
+        );
+}
+
+.card:hover{
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(0,210,255,.50);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,150,220,.12);
+}
+
+.card-content{
+    position:relative;
+    z-index:2;
+
+    height:100%;
+    min-height:150px;
+
+    padding:19px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-end;
+}
+
+.card-icon{
+    font-size:28px;
+
+    margin-bottom:auto;
+}
+
+.card h3{
+    font-size:16px;
+
+    margin-bottom:6px;
+}
+
+.card p{
+    color:#a2b8c2;
+
+    font-size:11px;
+
+    line-height:1.45;
+}
+
+.card-tempo{
+    background-image:
+        url("images/tempo.jpg");
+}
+
+.card-alertas{
+    background-image:
+        url("images/alertas.jpg");
+}
+
+.card-satelite{
+    background-image:
+        url("images/satelite.jpg");
+}
+
+.card-queimadas{
+    background-image:
+        url("images/queimadas.jpg");
+}
+
+.card-aguas{
+    background-image:
+        url("images/aguas.jpg");
+}
+
+.card-ambiente{
+    background-image:
+        url("images/ambiente.jpg");
+}
+
+/* =========================================================
+   MAPAS
+========================================================= */
+
+.maps-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:17px;
+}
+
+.map-card{
+    overflow:hidden;
+
+    border-radius:17px;
+
+    background:#061018;
+
+    border:
+        1px solid
+        rgba(0,200,255,.20);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,.25);
+}
+
+.map-card.aiba{
+    border-color:
+        rgba(255,196,72,.35);
+}
+
+.map-header{
+    min-height:61px;
+
+    padding:
+        13px
+        16px;
 
     display:flex;
 
     align-items:center;
 
-    gap:15px;
-}
+    justify-content:space-between;
 
-.air-score{
-
-    width:82px;
-    height:82px;
-
-    display:grid;
-
-    place-items:center;
-
-    flex-shrink:0;
-
-    border-radius:23px;
-
-    font-size:25px;
-
-    font-weight:900;
-
-    background:
-        rgba(53,223,145,.1);
-
-    color:#7df1b7;
-
-    border:
+    border-bottom:
         1px solid
-        rgba(53,223,145,.23);
+        rgba(0,200,255,.12);
 }
 
-.air-label{
-
-    font-weight:900;
-
-    font-size:17px;
+.map-header h3{
+    font-size:15px;
 }
 
-.air-details{
+.map-header p{
+    color:#738c99;
 
-    color:var(--muted);
-
-    font-size:11px;
-
-    margin-top:6px;
-}
-
-
-/* =========================================================
-   ALERTA
-========================================================= */
-
-.alert-box{
-
-    padding:13px;
-
-    border-radius:14px;
-
-    background:
-        rgba(255,255,255,.04);
-
-    border:
-        1px solid var(--border);
-
-    margin-top:9px;
-}
-
-.alert-title{
-
-    font-weight:900;
-
-    font-size:12px;
-}
-
-.alert-text{
-
-    color:var(--muted);
-
-    font-size:11px;
+    font-size:10px;
 
     margin-top:4px;
 }
 
+.map-tag{
+    font-size:9px;
 
-/* =========================================================
-   FORECAST
-========================================================= */
+    letter-spacing:.8px;
 
-.forecast-card{
-
-    padding-bottom:20px;
-}
-
-.daily-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:8px;
+    color:#55dcff;
 
     padding:
-        18px 20px 0;
-}
+        6px
+        8px;
 
-.day{
-
-    text-align:center;
-
-    padding:14px 7px;
-
-    border-radius:16px;
+    border-radius:6px;
 
     background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid rgba(255,255,255,.06);
+        rgba(0,160,220,.08);
 }
 
-.day-name{
+.aiba .map-tag{
+    color:#ffd267;
 
-    color:var(--muted);
-
-    font-size:10px;
-
-    font-weight:800;
+    background:
+        rgba(255,190,60,.08);
 }
 
-.day-icon{
+.map-frame{
+    width:100%;
 
-    font-size:27px;
+    height:450px;
 
-    margin:9px 0;
+    border:0;
+
+    display:block;
+
+    background:#02070b;
 }
 
-.day-temp{
+.map-footer{
+    padding:12px 15px;
 
-    font-size:17px;
-
-    font-weight:900;
-}
-
-.day-low{
-
-    color:var(--muted);
-
-    font-size:11px;
-
-    margin-top:2px;
-}
-
-.day-rain{
-
-    color:#71d8ff;
-
-    font-size:10px;
-
-    margin-top:7px;
-}
-
-
-/* =========================================================
-   HOURLY
-========================================================= */
-
-.hourly-card{
-
-    padding-bottom:20px;
-}
-
-.hourly-list{
+    border-top:
+        1px solid
+        rgba(0,200,255,.10);
 
     display:flex;
 
-    gap:8px;
+    align-items:center;
 
-    overflow-x:auto;
+    justify-content:space-between;
 
-    padding:
-        18px 20px 2px;
+    gap:10px;
 }
 
-.hour{
-
-    min-width:84px;
-
-    text-align:center;
-
-    padding:12px 7px;
-
-    border-radius:15px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-}
-
-.hour-time{
-
-    color:var(--muted);
+.map-footer span{
+    color:#718894;
 
     font-size:10px;
+
+    line-height:1.4;
 }
 
-.hour-icon{
+.map-link{
+    display:inline-block;
 
-    font-size:23px;
+    text-decoration:none;
 
-    margin:7px 0;
-}
+    color:#5bdcff;
 
-.hour-temp{
+    border:
+        1px solid
+        rgba(0,200,255,.25);
 
-    font-weight:900;
-}
-
-.hour-rain{
-
-    color:#71d8ff;
-
-    font-size:9px;
-
-    margin-top:5px;
-}
-
-
-/* =========================================================
-   MONITORAMENTO AMBIENTAL
-========================================================= */
-
-.environment-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:18px;
-}
-
-.environment-card{
-
-    padding-bottom:20px;
-}
-
-.environment-value{
+    background:
+        rgba(0,160,220,.08);
 
     padding:
-        18px 20px 0;
+        8px
+        10px;
+
+    border-radius:7px;
+
+    font-size:10px;
+
+    white-space:nowrap;
 }
 
-.environment-value strong{
-
-    display:block;
-
-    font-size:25px;
-
-    font-weight:900;
+.map-link:hover{
+    background:
+        rgba(0,190,255,.16);
 }
 
-.environment-value span{
+/* =========================================================
+   FONTES
+========================================================= */
 
-    display:block;
+.source-filter{
+    display:flex;
 
-    color:var(--muted);
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-bottom:15px;
+}
+
+.source-filter button{
+    padding:
+        8px
+        11px;
+
+    border-radius:8px;
+
+    border:
+        1px solid
+        rgba(0,190,255,.15);
+
+    background:#07131b;
+
+    color:#8fa9b5;
+
+    cursor:pointer;
 
     font-size:11px;
-
-    margin-top:4px;
 }
 
+.source-filter button.active{
+    color:#5bddff;
 
-/* =========================================================
-   EDUCATION
-========================================================= */
+    border-color:
+        rgba(0,200,255,.45);
 
-.education-card{
-
-    padding-bottom:22px;
+    background:
+        rgba(0,160,220,.10);
 }
 
-.education-intro{
-
-    color:var(--muted);
-
-    font-size:12px;
-
-    padding:
-        18px 20px 0;
-}
-
-.book-grid{
-
+.sources{
     display:grid;
 
     grid-template-columns:
-        repeat(3,1fr);
+        repeat(
+            auto-fit,
+            minmax(
+                240px,
+                1fr
+            )
+        );
 
-    gap:15px;
-
-    padding:
-        18px 20px 0;
+    gap:10px;
 }
 
-.book{
+.source{
+    min-height:95px;
 
-    overflow:hidden;
+    padding:14px;
 
-    border-radius:16px;
+    border-radius:11px;
 
     background:
-        rgba(255,255,255,.035);
+        linear-gradient(
+            145deg,
+            #08151e,
+            #050c12
+        );
 
     border:
-        1px solid var(--border);
+        1px solid
+        rgba(0,190,255,.13);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    transition:.2s;
 }
 
-.book img{
+.source:hover{
+    border-color:
+        rgba(0,200,255,.35);
 
-    width:100%;
-
-    aspect-ratio:16/9;
-
-    object-fit:cover;
-
-    background:#111;
+    transform:
+        translateY(-2px);
 }
 
-.book-info{
+.source-top{
+    display:flex;
 
-    padding:13px;
+    justify-content:space-between;
+
+    gap:10px;
 }
 
-.book-info strong{
+.source-name{
+    font-size:13px;
 
-    display:block;
-
-    font-size:14px;
+    font-weight:bold;
 }
 
-.book-info span{
+.source-category{
+    font-size:9px;
 
-    display:block;
+    color:#5bdcff;
 
-    color:var(--muted);
+    padding:
+        4px
+        6px;
+
+    border-radius:5px;
+
+    background:
+        rgba(0,170,230,.08);
+
+    white-space:nowrap;
+}
+
+.source-description{
+    color:#718a96;
 
     font-size:10px;
 
-    margin-top:3px;
+    line-height:1.4;
 }
 
+.source-button{
+    border:0;
 
-/* =========================================================
-   INFORMATION
-========================================================= */
-
-.information-list{
+    border-radius:7px;
 
     padding:
-        18px 20px 20px;
+        8px
+        10px;
 
-    display:grid;
+    background:
+        rgba(0,170,230,.10);
 
-    gap:8px;
+    color:#5bdcff;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    align-self:flex-start;
 }
 
-.info-item{
+.source-button:hover{
+    background:
+        rgba(0,190,255,.18);
+}
 
-    padding:13px;
+/* =========================================================
+   NOTÍCIAS
+========================================================= */
+
+.news-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                230px,
+                1fr
+            )
+        );
+
+    gap:12px;
+}
+
+.news-card{
+    padding:18px;
 
     border-radius:13px;
 
-    background:
-        rgba(255,255,255,.045);
+    background:#07131b;
 
     border:
-        1px solid rgba(255,255,255,.06);
+        1px solid
+        rgba(0,190,255,.14);
+}
+
+.news-card .news-icon{
+    font-size:25px;
+
+    margin-bottom:15px;
+}
+
+.news-card h3{
+    font-size:15px;
+
+    margin-bottom:7px;
+}
+
+.news-card p{
+    color:#7f96a1;
+
+    font-size:11px;
+
+    line-height:1.5;
+
+    margin-bottom:13px;
+}
+
+.news-card a{
+    color:#55d9ff;
+
+    text-decoration:none;
 
     font-size:11px;
 }
 
-
 /* =========================================================
-   FOOTER
+   CRÉDITOS
 ========================================================= */
 
-footer{
+.credits{
+    margin-top:45px;
 
-    color:#667f91;
+    padding:25px 0;
 
-    text-align:center;
+    border-top:
+        1px solid
+        rgba(0,190,255,.12);
 
-    font-size:10px;
+    color:#718894;
 
-    padding:
-        28px 10px 10px;
+    font-size:11px;
 
     line-height:1.7;
 }
 
+.credits strong{
+    color:#b9d4df;
+}
+
+.credits a{
+    color:#54d9ff;
+
+    text-decoration:none;
+}
+
+/*
+   IMPORTANTE:
+   Não existe mais galeria de imagens aqui.
+   As imagens continuam nos fundos das seções,
+   mas não são repetidas no final.
+*/
 
 /* =========================================================
    MODAL
 ========================================================= */
 
-dialog{
+.modal{
+    position:fixed;
 
-    width:
-        min(560px,calc(100% - 25px));
+    inset:0;
 
-    border:none;
+    z-index:5000;
 
-    padding:0;
+    display:none;
 
-    border-radius:20px;
+    align-items:center;
 
-    color:white;
+    justify-content:center;
 
-    background:#0b1d2b;
-
-    box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.7);
-}
-
-dialog::backdrop{
+    padding:18px;
 
     background:
-        rgba(0,0,0,.74);
+        rgba(0,0,0,.78);
 
     backdrop-filter:
-        blur(7px);
+        blur(10px);
 }
 
-.dialog-header{
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:min(
+        1100px,
+        100%
+    );
+
+    height:min(
+        760px,
+        90vh
+    );
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    background:#061018;
+
+    border:
+        1px solid
+        rgba(0,200,255,.25);
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.modal-head{
+    min-height:57px;
+
+    padding:
+        10px
+        15px;
 
     display:flex;
 
@@ -1351,1456 +990,2417 @@ dialog::backdrop{
 
     justify-content:space-between;
 
-    padding:17px;
-
     border-bottom:
-        1px solid var(--border);
+        1px solid
+        rgba(0,200,255,.12);
 }
 
-.dialog-header h2{
-    font-size:17px;
+.modal-head span{
+    font-size:13px;
+
+    color:#ccefff;
 }
 
-.close-button{
+.modal-close{
+    border:0;
 
-    width:37px;
-    height:37px;
+    background:none;
 
-    border:
-        1px solid var(--border);
+    color:#91a8b3;
 
-    border-radius:11px;
+    font-size:27px;
 
-    color:white;
-
-    background:
-        rgba(255,255,255,.05);
-
-    font-size:21px;
+    cursor:pointer;
 }
 
-.dialog-body{
-
-    padding:18px;
-}
-
-.dialog-body label{
-
-    display:block;
-
-    font-size:12px;
-
-    font-weight:800;
-
-    margin-bottom:7px;
-}
-
-.dialog-input{
-
+.modal-frame{
     width:100%;
 
-    height:46px;
+    flex:1;
 
-    color:white;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid var(--border);
-
-    border-radius:12px;
-
-    outline:none;
-
-    padding:
-        0 12px;
+    border:0;
 }
-
-.dialog-text{
-
-    color:var(--muted);
-
-    font-size:11px;
-
-    margin-top:9px;
-}
-
-.dialog-actions{
-
-    display:flex;
-
-    gap:7px;
-
-    margin-top:15px;
-}
-
 
 /* =========================================================
-   CARTILHA MODAL
+   RESPONSIVO
 ========================================================= */
 
-.image-dialog{
+@media(max-width:950px){
 
-    width:
-        min(1000px,96vw);
-
-    max-height:95vh;
-
-    overflow:auto;
-
-    background:#05090d;
-}
-
-.image-dialog img{
-
-    width:100%;
-
-    max-height:88vh;
-
-    object-fit:contain;
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast{
-
-    position:fixed;
-
-    left:50%;
-
-    bottom:
-        max(
-            18px,
-            env(safe-area-inset-bottom)
-        );
-
-    transform:
-        translateX(-50%);
-
-    z-index:9999;
-
-    width:
-        min(
-            calc(100% - 30px),
-            520px
-        );
-
-    padding:
-        13px 15px;
-
-    text-align:center;
-
-    border-radius:14px;
-
-    color:white;
-
-    background:
-        rgba(5,17,27,.96);
-
-    border:
-        1px solid var(--border);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.5);
-
-    font-size:12px;
-}
-
-.hidden{
-    display:none !important;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1000px){
-
-    .dashboard-grid{
-
-        grid-template-columns:1fr;
-    }
-
-    .monitor-stack{
-
-        grid-template-columns:
-            repeat(3,1fr);
-    }
-
-    .metrics{
-
-        grid-template-columns:
-            repeat(3,1fr);
-    }
-
-    .environment-grid{
-
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-}
-
-@media(max-width:700px){
-
-    .container{
-
-        width:
-            calc(100% - 16px);
-
-        margin-top:10px;
-    }
-
-    .topbar{
-
-        height:64px;
-    }
-
-    .logo{
-
-        width:40px;
-        height:40px;
-
-        border-radius:12px;
-    }
-
-    .brand-name{
-
-        font-size:12px;
-    }
-
-    .brand-sub{
-
-        font-size:8px;
-    }
-
-    .search-row{
+    .header{
+        align-items:flex-start;
 
         flex-direction:column;
     }
 
-    .primary-button{
-
+    nav{
         width:100%;
+
+        justify-content:flex-start;
+    }
+
+    .maps-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .container{
+        padding:
+            15px
+            12px
+            40px;
     }
 
     .hero{
+        min-height:330px;
 
-        padding:19px;
+        border-radius:16px;
     }
 
-    .temperature{
-
-        font-size:62px;
+    .hero-content{
+        padding:22px;
     }
 
-    .weather-icon{
-
-        width:62px;
-        height:62px;
-
-        font-size:34px;
-    }
-
-    .metrics{
-
+    .cards{
         grid-template-columns:
-            repeat(2,1fr);
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
     }
 
-    .monitor-stack{
+    .card-content{
+        min-height:130px;
 
-        grid-template-columns:1fr;
+        padding:13px;
     }
 
-    .daily-grid{
-
-        grid-template-columns:
-            repeat(2,1fr);
+    .card{
+        min-height:130px;
     }
 
-    .environment-grid{
-
-        grid-template-columns:1fr;
+    .map-frame{
+        height:350px;
     }
 
-    .book-grid{
+    .map-footer{
+        align-items:flex-start;
 
-        grid-template-columns:1fr;
-    }
-
-    #map{
-
-        height:400px;
+        flex-direction:column;
     }
 
 }
 
 </style>
 
-</head><body>
+</head>
 
-<!-- =========================================================
-     TOPO
-========================================================= -->
+<body><header>
 
-<header class="topbar">
+<div class="header">
 
-    <div class="brand">
+<div class="logo-area">
 
-        <div class="logo">
-            🌦️
-        </div>
+<div class="logo-symbol">
+🌎
+</div>
 
-        <div>
+<div>
 
-            <div class="brand-name">
-                VINIGEOCLIMA BA
-            </div>
+<div class="logo">
+ViniGeoClima <span>BA</span>
+</div>
 
-            <div class="brand-sub">
-                meteorologia • ambiente • monitoramento
-            </div>
+<div class="tagline">
+Monitoramento climático, ambiental e territorial da Bahia
+</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
+<nav>
 
-    <div class="top-actions">
+<button onclick="irPara('inicio')">
+Início
+</button>
 
-        <button
-            id="refreshButton"
-            class="icon-button"
-            title="Atualizar"
-        >
-            ↻
-        </button>
+<button onclick="irPara('monitoramento')">
+Monitoramento
+</button>
 
-        <button
-            id="menuButton"
-            class="icon-button"
-            title="Configurações"
-        >
-            ⚙️
-        </button>
+<button onclick="irPara('mapas')">
+Mapas
+</button>
 
-    </div>
+<button onclick="irPara('fontes')">
+Fontes
+</button>
+
+<button onclick="irPara('noticias')">
+Notícias
+</button>
+
+<button onclick="irPara('creditos')">
+Informações
+</button>
+
+</nav>
+
+</div>
 
 </header>
 
 
 <main class="container">
 
-
-<!-- =========================================================
-     PESQUISA
-========================================================= -->
-
-<section class="card search-card section">
-
-    <form id="searchForm">
-
-        <div class="search-row">
-
-            <input
-                id="locationInput"
-                class="search-input"
-                type="search"
-                value="Barreiras, Bahia"
-                autocomplete="off"
-                placeholder="Digite uma cidade..."
-                aria-label="Pesquisar cidade"
-            >
-
-            <button
-                type="submit"
-                class="primary-button"
-            >
-                🔎 Pesquisar
-            </button>
-
-        </div>
-
-    </form>
-
-
-    <div
-        id="searchStatus"
-        class="status"
-    >
-        Preparando monitoramento...
-    </div>
-
-
-    <div
-        id="suggestions"
-        class="suggestions hidden"
-    ></div>
-
-</section>
-
-
-<!-- =========================================================
-     CLIMA ATUAL
-========================================================= -->
+<!-- =====================================================
+     INÍCIO
+===================================================== -->
 
 <section
-    id="weatherCard"
-    class="card hero section"
+    class="hero"
+    id="inicio"
 >
 
-    <div class="hero-top">
+<div class="hero-content">
 
-        <div>
+<div class="hero-label">
+MONITORAMENTO AMBIENTAL E METEOROLÓGICO
+</div>
 
-            <span class="eyebrow">
-                CONDIÇÕES ATUAIS
-            </span>
+<h1>
+ViniGeoClima
+<span>BA</span>
+</h1>
 
-            <h1
-                id="cityName"
-                class="hero-city"
-            >
-                Barreiras, Bahia
-            </h1>
+<p>
+Portal de acompanhamento do tempo, clima,
+chuvas, ventos, satélite, queimadas,
+qualidade ambiental, águas e informações
+meteorológicas da Bahia.
+</p>
 
-            <div
-                id="updateTime"
-                class="hero-update"
-            >
-                Carregando...
-            </div>
+<div class="status-row">
 
-        </div>
+<div class="status">
+Sistema:
+<strong>ONLINE</strong>
+</div>
 
+<div class="status">
+Estado:
+<strong>BAHIA</strong>
+</div>
 
-        <div
-            id="weatherIcon"
-            class="weather-icon"
-        >
-            🌤️
-        </div>
+<div class="status">
+Atualização:
+<strong>AGORA</strong>
+</div>
 
-    </div>
+<div class="status">
+Fontes:
+<strong>40+</strong>
+</div>
 
+</div>
 
-    <div class="temperature-row">
-
-        <div
-            id="temperature"
-            class="temperature"
-        >
-            --°
-        </div>
-
-        <div>
-
-            <div
-                id="condition"
-                class="condition"
-            >
-                Carregando...
-            </div>
-
-            <div class="feels">
-
-                Sensação:
-
-                <strong id="feelsLike">
-                    --°
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="metrics">
-
-        <div class="metric">
-
-            <span class="metric-label">
-                💧 UMIDADE
-            </span>
-
-            <strong
-                id="humidity"
-                class="metric-value"
-            >
-                --%
-            </strong>
-
-        </div>
-
-
-        <div class="metric">
-
-            <span class="metric-label">
-                💨 VENTO
-            </span>
-
-            <strong
-                id="wind"
-                class="metric-value"
-            >
-                -- km/h
-            </strong>
-
-        </div>
-
-
-        <div class="metric">
-
-            <span class="metric-label">
-                🌧️ CHUVA
-            </span>
-
-            <strong
-                id="rain"
-                class="metric-value"
-            >
-                -- mm
-            </strong>
-
-        </div>
-
-
-        <div class="metric">
-
-            <span class="metric-label">
-                🧭 PRESSÃO
-            </span>
-
-            <strong
-                id="pressure"
-                class="metric-value"
-            >
-                -- hPa
-            </strong>
-
-        </div>
-
-
-        <div class="metric">
-
-            <span class="metric-label">
-                💨 RAJADA
-            </span>
-
-            <strong
-                id="gust"
-                class="metric-value"
-            >
-                -- km/h
-            </strong>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- =========================================================
-     MAPA + MONITORAMENTO
-========================================================= -->
+<!-- =====================================================
+     MONITORAMENTO
+===================================================== -->
 
-<div class="dashboard-grid section">
+<section
+    class="section"
+    id="monitoramento"
+>
 
+<div class="section-title">
 
-    <!-- MAPA -->
+<div>
 
-    <section class="card map-card">
+<h2>
+🌦️ Monitoramento
+</h2>
 
-        <div class="section-header">
+<p>
+Principais áreas de acompanhamento
+</p>
 
-            <div>
-
-                <span class="eyebrow">
-                    MONITORAMENTO
-                </span>
-
-                <h2>
-                    Mapa meteorológico
-                </h2>
-
-                <p>
-                    Explore as condições da região.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="map-tools">
-
-            <button
-                class="map-button active"
-                data-layer="street"
-            >
-                🗺️ Mapa
-            </button>
-
-            <button
-                class="map-button"
-                data-layer="satellite"
-            >
-                🛰️ Satélite
-            </button>
-
-            <button
-                class="map-button"
-                data-layer="terrain"
-            >
-                ⛰️ Terreno
-            </button>
-
-            <button
-                id="radarButton"
-                class="map-button"
-            >
-                🌧️ Radar
-            </button>
-
-            <button
-                id="radarPlayButton"
-                class="map-button"
-            >
-                ▶ Radar
-            </button>
-
-        </div>
-
-
-        <div id="map"></div>
-
-
-        <div
-            id="mapStatus"
-            class="map-status"
-        >
-            Carregando mapa...
-        </div>
-
-        <div
-            id="mapOverlay"
-            class="map-overlay"
-        >
-            📡 Monitoramento meteorológico
-        </div>
-
-    </section>
-
-
-    <!-- PAINEL LATERAL -->
-
-    <div class="monitor-stack">
-
-
-        <!-- QUALIDADE DO AR -->
-
-        <section class="card monitor-card">
-
-            <div class="section-header">
-
-                <div>
-
-                    <span class="eyebrow">
-                        AMBIENTE
-                    </span>
-
-                    <h2>
-                        Qualidade do ar
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="monitor-content">
-
-                <div class="air-layout">
-
-                    <div
-                        id="airScore"
-                        class="air-score"
-                    >
-                        --
-                    </div>
-
-                    <div>
-
-                        <div
-                            id="airLabel"
-                            class="air-label"
-                        >
-                            Carregando...
-                        </div>
-
-                        <div
-                            id="airDetails"
-                            class="air-details"
-                        >
-                            PM2.5: --<br>
-                            PM10: --<br>
-                            O₃: --
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- FOCOS -->
-
-        <section class="card monitor-card">
-
-            <div class="section-header">
-
-                <div>
-
-                    <span class="eyebrow">
-                        FOGO
-                    </span>
-
-                    <h2>
-                        Focos de calor
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="monitor-content">
-
-                <div
-                    id="fireNumber"
-                    class="big-number"
-                >
-                    —
-                </div>
-
-                <div class="monitor-label">
-                    NASA FIRMS
-                </div>
-
-                <div class="status-pill">
-                    integração preparada
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- SOL -->
-
-        <section class="card monitor-card">
-
-            <div class="section-header">
-
-                <div>
-
-                    <span class="eyebrow">
-                        ASTRONOMIA
-                    </span>
-
-                    <h2>
-                        Sol
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="monitor-content">
-
-                <div
-                    id="sunrise"
-                    class="big-number"
-                >
-                    --:--
-                </div>
-
-                <div class="monitor-label">
-                    nascer do sol
-                </div>
-
-                <div
-                    id="sunset"
-                    class="status-pill"
-                >
-                    pôr do sol --:--
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     PREVISÃO DIÁRIA
-========================================================= -->
+<div class="cards">
 
-<section class="card forecast-card section">
 
-    <div class="section-header">
+<div
+    class="card card-tempo"
+    onclick="irPara('mapas')"
+>
 
-        <div>
+<div class="card-content">
 
-            <span class="eyebrow">
-                PREVISÃO
-            </span>
+<div class="card-icon">
+🌦️
+</div>
 
-            <h2>
-                Próximos 7 dias
-            </h2>
+<h3>
+Tempo e Clima
+</h3>
 
-            <p>
-                Temperatura, chuva e condições previstas.
-            </p>
+<p>
+Previsão, chuva, temperatura,
+vento e condições meteorológicas.
+</p>
 
-        </div>
-
-    </div>
-
-
-    <div
-        id="dailyForecast"
-        class="daily-grid"
-    ></div>
-
-</section>
-
-
-<!-- =========================================================
-     PREVISÃO HORÁRIA
-========================================================= -->
-
-<section class="card hourly-card section">
-
-    <div class="section-header">
-
-        <div>
-
-            <span class="eyebrow">
-                HORA A HORA
-            </span>
-
-            <h2>
-                Próximas 24 horas
-            </h2>
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="hourlyForecast"
-        class="hourly-list"
-    ></div>
-
-</section>
-
-
-<!-- =========================================================
-     MONITORAMENTO AMBIENTAL
-========================================================= -->
-
-<div class="environment-grid section">
-
-
-    <section class="card environment-card">
-
-        <div class="section-header">
-
-            <div>
-
-                <span class="eyebrow">
-                    CHUVA
-                </span>
-
-                <h2>
-                    Precipitação
-                </h2>
-
-            </div>
-
-        </div>
-
-        <div class="environment-value">
-
-            <strong id="rainProbability">
-                --%
-            </strong>
-
-            <span>
-                probabilidade máxima prevista
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <section class="card environment-card">
-
-        <div class="section-header">
-
-            <div>
-
-                <span class="eyebrow">
-                    TEMPERATURA
-                </span>
-
-                <h2>
-                    Máxima prevista
-                </h2>
-
-            </div>
-
-        </div>
-
-        <div class="environment-value">
-
-            <strong id="maxTemperature">
-                --°
-            </strong>
-
-            <span>
-                temperatura máxima do período
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <section class="card environment-card">
-
-        <div class="section-header">
-
-            <div>
-
-                <span class="eyebrow">
-                    VENTO
-                </span>
-
-                <h2>
-                    Rajada máxima
-                </h2>
-
-            </div>
-
-        </div>
-
-        <div class="environment-value">
-
-            <strong id="maxWind">
-                -- km/h
-            </strong>
-
-            <span>
-                maior rajada prevista
-            </span>
-
-        </div>
-
-    </section>
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     ANÁLISE AUTOMÁTICA
-========================================================= -->
+<div
+    class="card card-alertas"
+    onclick="irPara('fontes')"
+>
 
-<section class="card section">
+<div class="card-content">
 
-    <div class="section-header">
+<div class="card-icon">
+⚠️
+</div>
 
-        <div>
+<h3>
+Alertas
+</h3>
 
-            <span class="eyebrow">
-                ANÁLISE
-            </span>
+<p>
+Acompanhe informações de risco,
+chuvas fortes e condições adversas.
+</p>
 
-            <h2>
-                O que está acontecendo?
-            </h2>
+</div>
 
-            <p>
-                Resumo automático das condições observadas.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div
-        id="informationList"
-        class="information-list"
-    ></div>
+<div
+    class="card card-satelite"
+    onclick="irPara('fontes')"
+>
 
-</section>
+<div class="card-content">
 
+<div class="card-icon">
+🛰️
+</div>
 
-<!-- =========================================================
-     EDUCAÇÃO AMBIENTAL
-========================================================= -->
+<h3>
+Satélite
+</h3>
 
-<section class="card education-card section">
+<p>
+Imagens e sistemas de observação
+da atmosfera e superfície.
+</p>
 
-    <div class="section-header">
+</div>
 
-        <div>
-
-            <span class="eyebrow">
-                EDUCAÇÃO AMBIENTAL
-            </span>
-
-            <h2>
-                Conheça o ambiente
-            </h2>
-
-            <p>
-                Informação sobre clima, água, fogo e qualidade do ar.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <p class="education-intro">
+<div
+    class="card card-queimadas"
+    onclick="irPara('fontes')"
+>
 
-        O ViniGeoClima também funciona como uma plataforma
-        educativa para ajudar a compreender os fenômenos
-        meteorológicos e ambientais da Bahia.
+<div class="card-content">
 
-    </p>
+<div class="card-icon">
+🔥
+</div>
 
+<h3>
+Queimadas
+</h3>
 
-    <div class="book-grid">
+<p>
+Focos de fogo, incêndios e
+monitoramento ambiental.
+</p>
 
+</div>
 
-        <article class="book">
-
-            <img
-                src="https://images.unsplash.com/photo-1561470508-fd4df1ed90b2?auto=format&fit=crop&w=900&q=80"
-                alt="Paisagem natural"
-                loading="lazy"
-            >
-
-            <div class="book-info">
-
-                <strong>
-                    🌎 Clima
-                </strong>
-
-                <span>
-                    Entenda temperatura, chuva, vento e pressão.
-                </span>
-
-            </div>
-
-        </article>
+</div>
 
 
-        <article class="book">
+<div
+    class="card card-aguas"
+    onclick="irPara('fontes')"
+>
 
-            <img
-                src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=80"
-                alt="Floresta"
-                loading="lazy"
-            >
+<div class="card-content">
 
-            <div class="book-info">
+<div class="card-icon">
+💧
+</div>
 
-                <strong>
-                    🌳 Meio ambiente
-                </strong>
+<h3>
+Águas
+</h3>
 
-                <span>
-                    Relação entre clima e preservação ambiental.
-                </span>
+<p>
+Rios, reservatórios, hidrologia
+e recursos hídricos.
+</p>
 
-            </div>
+</div>
 
-        </article>
-
-
-        <article class="book">
-
-            <img
-                src="https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=900&q=80"
-                alt="Chuva"
-                loading="lazy"
-            >
-
-            <div class="book-info">
-
-                <strong>
-                    🌧️ Chuva
-                </strong>
-
-                <span>
-                    Como interpretar precipitação e previsão.
-                </span>
-
-            </div>
-
-        </article>
+</div>
 
 
-    </div>
+<div
+    class="card card-ambiente"
+    onclick="irPara('fontes')"
+>
+
+<div class="card-content">
+
+<div class="card-icon">
+🌱
+</div>
+
+<h3>
+Ambiente
+</h3>
+
+<p>
+Vegetação, conservação,
+território e meio ambiente.
+</p>
+
+</div>
+
+</div>
+
+
+</div>
 
 </section>
 
 
-<!-- =========================================================
-     RODAPÉ
-========================================================= -->
+<!-- =====================================================
+     MAPAS
+===================================================== -->
 
-<footer>
+<section
+    class="section"
+    id="mapas"
+>
 
-    <p>
-        <strong>VINIGEOCLIMA BA</strong>
-    </p>
+<div class="section-title">
 
-    <p>
-        Dados meteorológicos:
-        Open-Meteo
-        ·
-        Mapas:
-        OpenStreetMap / Leaflet
-        ·
-        Radar:
-        RainViewer
-    </p>
+<div>
 
-    <p>
-        Projeto informativo e educativo.
-        Verifique fontes oficiais para decisões de emergência.
-    </p>
+<h2>
+🗺️ Mapas meteorológicos e ambientais
+</h2>
 
-</footer>
+<p>
+Windy para visão meteorológica e AIBA
+para monitoramento ambiental da Bahia.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="maps-grid">
+
+
+<!-- =====================================================
+     MAPA 1 — WINDY
+===================================================== -->
+
+<div class="map-card">
+
+<div class="map-header">
+
+<div>
+
+<h3>
+🌎 Brasil — Windy
+</h3>
+
+<p>
+Visão meteorológica nacional
+</p>
+
+</div>
+
+<div class="map-tag">
+WINDY
+</div>
+
+</div>
+
+
+<iframe
+
+class="map-frame"
+
+src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=default&metricWind=default&zoom=4&overlay=wind&product=ecmwf&level=surface&lat=-14.2&lon=-51.9"
+
+loading="lazy"
+
+allowfullscreen
+
+title="Mapa meteorológico do Brasil - Windy"
+
+></iframe>
+
+
+<div class="map-footer">
+
+<span>
+Mapa meteorológico interativo
+do Brasil.
+</span>
+
+<a
+    class="map-link"
+    href="https://www.windy.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+Abrir Windy
+</a>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MAPA 2 — AIBA
+===================================================== -->
+
+<div class="map-card aiba">
+
+<div class="map-header">
+
+<div>
+
+<h3>
+🟨 Bahia — Monitoramento AIBA
+</h3>
+
+<p>
+Mapa ambiental e monitoramento territorial
+</p>
+
+</div>
+
+<div class="map-tag">
+AIBA
+</div>
+
+</div>
+
+
+<iframe
+
+class="map-frame"
+
+src="https://monitoramento.aiba.org.br/"
+
+loading="lazy"
+
+allowfullscreen
+
+title="Monitoramento Ambiental AIBA"
+
+></iframe>
+
+
+<div class="map-footer">
+
+<span>
+Monitoramento da AIBA com mapa,
+focos de incêndio, vento, áreas de risco
+e camadas ambientais.
+</span>
+
+<a
+    class="map-link"
+    href="https://monitoramento.aiba.org.br/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+Abrir AIBA
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FONTES
+===================================================== -->
+
+<section
+    class="section"
+    id="fontes"
+>
+
+<div class="section-title">
+
+<div>
+
+<h2>
+🌐 40 sites e órgãos
+</h2>
+
+<p>
+Fontes para consulta meteorológica,
+ambiental, hidrológica e jornalística.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="source-filter">
+
+<button
+    class="active"
+    onclick="filtrarFontes('todos',this)"
+>
+Todos
+</button>
+
+<button
+    onclick="filtrarFontes('meteorologia',this)"
+>
+Meteorologia
+</button>
+
+<button
+    onclick="filtrarFontes('ambiental',this)"
+>
+Ambiental
+</button>
+
+<button
+    onclick="filtrarFontes('hidrologia',this)"
+>
+Águas
+</button>
+
+<button
+    onclick="filtrarFontes('noticias',this)"
+>
+Notícias
+</button>
+
+</div>
+
+
+<div class="sources">
+
+
+<!-- 01 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Windy
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Mapas meteorológicos, vento,
+chuva e previsão.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.windy.com/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 02 -->
+
+<div
+    class="source"
+    data-category="meteorologia oficial"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+INMET
+</div>
+
+<div class="source-category">
+OFICIAL
+</div>
+
+</div>
+
+<div class="source-description">
+Instituto Nacional de Meteorologia.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/inmet/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 03 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+CPTEC / INPE
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Previsões e produtos meteorológicos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.cptec.inpe.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 04 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+CEMADEN
+</div>
+
+<div class="source-category">
+RISCO
+</div>
+
+</div>
+
+<div class="source-description">
+Monitoramento e prevenção de desastres.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/cemaden/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 05 -->
+
+<div
+    class="source"
+    data-category="hidrologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+ANA
+</div>
+
+<div class="source-category">
+ÁGUAS
+</div>
+
+</div>
+
+<div class="source-description">
+Agência Nacional de Águas.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/ana/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 06 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+INPE
+</div>
+
+<div class="source-category">
+SATÉLITE
+</div>
+
+</div>
+
+<div class="source-description">
+Pesquisa espacial e observação da Terra.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/inpe/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 07 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+TerraBrasilis
+</div>
+
+<div class="source-category">
+AMBIENTE
+</div>
+
+</div>
+
+<div class="source-description">
+Dados territoriais e ambientais.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://terrabrasilis.dpi.inpe.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 08 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Programa Queimadas
+</div>
+
+<div class="source-category">
+FOGO
+</div>
+
+</div>
+
+<div class="source-description">
+Monitoramento de focos de queimadas.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://terrabrasilis.dpi.inpe.br/queimadas/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 09 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+IBAMA
+</div>
+
+<div class="source-category">
+AMBIENTE
+</div>
+
+</div>
+
+<div class="source-description">
+Fiscalização e informações ambientais.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/ibama/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 10 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+ICMBio
+</div>
+
+<div class="source-category">
+CONSERVAÇÃO
+</div>
+
+</div>
+
+<div class="source-description">
+Unidades de conservação e biodiversidade.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/icmbio/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 11 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+MMA
+</div>
+
+<div class="source-category">
+AMBIENTE
+</div>
+
+</div>
+
+<div class="source-description">
+Ministério do Meio Ambiente.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/mma/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 12 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Defesa Civil Nacional
+</div>
+
+<div class="source-category">
+RISCO
+</div>
+
+</div>
+
+<div class="source-description">
+Informações de prevenção e proteção.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/mdr/pt-br/assuntos/protecao-e-defesa-civil')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 13 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+CENAD
+</div>
+
+<div class="source-category">
+RISCO
+</div>
+
+</div>
+
+<div class="source-description">
+Centro Nacional de Gerenciamento de Riscos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/mdr/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 14 -->
+
+<div
+    class="source"
+    data-category="meteorologia ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Alerta Secas
+</div>
+
+<div class="source-category">
+SECA
+</div>
+
+</div>
+
+<div class="source-description">
+Informações sobre condições de seca.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/ana/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 15 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+GeoRisk
+</div>
+
+<div class="source-category">
+RISCO
+</div>
+
+</div>
+
+<div class="source-description">
+Dados geográficos e áreas de risco.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 16 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+REINDESC
+</div>
+
+<div class="source-category">
+RISCO
+</div>
+
+</div>
+
+<div class="source-description">
+Informações relacionadas a desastres.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 17 -->
+
+<div
+    class="source"
+    data-category="hidrologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+HidroWeb
+</div>
+
+<div class="source-category">
+ÁGUAS
+</div>
+
+</div>
+
+<div class="source-description">
+Dados hidrológicos brasileiros.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.snirh.gov.br/hidroweb/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 18 -->
+
+<div
+    class="source"
+    data-category="hidrologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+SNIRH
+</div>
+
+<div class="source-category">
+ÁGUAS
+</div>
+
+</div>
+
+<div class="source-description">
+Sistema Nacional de Informações sobre Recursos Hídricos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.snirh.gov.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 19 -->
+
+<div
+    class="source"
+    data-category="hidrologia ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Monitor de Secas
+</div>
+
+<div class="source-category">
+SECA
+</div>
+
+</div>
+
+<div class="source-description">
+Acompanhamento das condições de seca.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://monitordesecas.ana.gov.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 20 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+REDEMET
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Meteorologia aeronáutica.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://redemet.decea.mil.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 21 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Marinha — DHN
+</div>
+
+<div class="source-category">
+MAR
+</div>
+
+</div>
+
+<div class="source-description">
+Informações meteorológicas e oceânicas.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.marinha.mil.br/chm/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 22 -->
+
+<div
+    class="source"
+    data-category="energia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+ONS
+</div>
+
+<div class="source-category">
+ENERGIA
+</div>
+
+</div>
+
+<div class="source-description">
+Informações do sistema elétrico.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.ons.org.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 23 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Earth Nullschool
+</div>
+
+<div class="source-category">
+VENTOS
+</div>
+
+</div>
+
+<div class="source-description">
+Visualização global de vento e atmosfera.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://earth.nullschool.net/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 24 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Ventusky
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Mapas meteorológicos interativos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.ventusky.com/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 25 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Zoom Earth
+</div>
+
+<div class="source-category">
+SATÉLITE
+</div>
+
+</div>
+
+<div class="source-description">
+Satélite e acompanhamento meteorológico.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://zoom.earth/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 26 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+RainViewer
+</div>
+
+<div class="source-category">
+CHUVA
+</div>
+
+</div>
+
+<div class="source-description">
+Radar e precipitação.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.rainviewer.com/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 27 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Meteored
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Previsões e notícias meteorológicas.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.tempo.com/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 28 -->
+
+<div
+    class="source"
+    data-category="meteorologia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Climatempo
+</div>
+
+<div class="source-category">
+METEO
+</div>
+
+</div>
+
+<div class="source-description">
+Previsão do tempo e clima.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.climatempo.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 29 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Jornal Nacional
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Notícias nacionais e informações de interesse público.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://g1.globo.com/jornal-nacional/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 30 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+G1
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Notícias e acontecimentos em tempo real.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://g1.globo.com/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 31 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Agência Brasil
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Agência pública de notícias.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://agenciabrasil.ebc.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 32 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+CNN Brasil
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Notícias nacionais e internacionais.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.cnnbrasil.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 33 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+BBC News Brasil
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Cobertura de notícias e acontecimentos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.bbc.com/portuguese')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 34 -->
+
+<div
+    class="source"
+    data-category="noticias"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+UOL
+</div>
+
+<div class="source-category">
+NOTÍCIAS
+</div>
+
+</div>
+
+<div class="source-description">
+Portal de notícias e informações.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.uol.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 35 -->
+
+<div
+    class="source"
+    data-category="noticias bahia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Correio*
+</div>
+
+<div class="source-category">
+BAHIA
+</div>
+
+</div>
+
+<div class="source-description">
+Notícias da Bahia e região.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.correio24horas.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 36 -->
+
+<div
+    class="source"
+    data-category="noticias bahia"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+A TARDE
+</div>
+
+<div class="source-category">
+BAHIA
+</div>
+
+</div>
+
+<div class="source-description">
+Notícias da Bahia.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://atarde.com.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 37 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+MapBiomas
+</div>
+
+<div class="source-category">
+TERRITÓRIO
+</div>
+
+</div>
+
+<div class="source-description">
+Mapeamento e dados ambientais.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://mapbiomas.org/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 38 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Global Forest Watch
+</div>
+
+<div class="source-category">
+FLORESTAS
+</div>
+
+</div>
+
+<div class="source-description">
+Monitoramento de florestas e mudanças ambientais.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.globalforestwatch.org/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 39 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+OpenStreetMap
+</div>
+
+<div class="source-category">
+MAPAS
+</div>
+
+</div>
+
+<div class="source-description">
+Mapa colaborativo e dados geográficos.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.openstreetmap.org/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+<!-- 40 -->
+
+<div
+    class="source"
+    data-category="ambiental"
+>
+
+<div class="source-top">
+
+<div class="source-name">
+Portal Gov.br
+</div>
+
+<div class="source-category">
+OFICIAL
+</div>
+
+</div>
+
+<div class="source-description">
+Portal oficial do Governo Federal.
+</div>
+
+<button
+    class="source-button"
+    onclick="abrirExterno('https://www.gov.br/')"
+>
+Abrir fonte
+</button>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     NOTÍCIAS
+===================================================== -->
+
+<section
+    class="section"
+    id="noticias"
+>
+
+<div class="section-title">
+
+<div>
+
+<h2>
+📰 Notícias e informações
+</h2>
+
+<p>
+Acesso rápido a fontes jornalísticas.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="news-grid">
+
+
+<div class="news-card">
+
+<div class="news-icon">
+📺
+</div>
+
+<h3>
+Jornal Nacional
+</h3>
+
+<p>
+Acompanhe notícias de interesse nacional
+e acontecimentos relacionados ao clima.
+</p>
+
+<a
+    href="https://g1.globo.com/jornal-nacional/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+Abrir notícias →
+</a>
+
+</div>
+
+
+<div class="news-card">
+
+<div class="news-icon">
+🌎
+</div>
+
+<h3>
+G1
+</h3>
+
+<p>
+Notícias gerais, Bahia, clima,
+meio ambiente e acontecimentos.
+</p>
+
+<a
+    href="https://g1.globo.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+Abrir G1 →
+</a>
+
+</div>
+
+
+<div class="news-card">
+
+<div class="news-icon">
+🗞️
+</div>
+
+<h3>
+Agência Brasil
+</h3>
+
+<p>
+Informações e notícias de interesse público.
+</p>
+
+<a
+    href="https://agenciabrasil.ebc.com.br/"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+Abrir Agência Brasil →
+</a>
+
+</div>
+
+
+<div class="news-card">
+
+<div class="news-icon">
+🌱
+</div>
+
+<h3>
+Acompanhamento ambiental
+</h3>
+
+<p>
+Consulte também as fontes ambientais
+e meteorológicas disponíveis acima.
+</p>
+
+<a
+    href="#fontes"
+    onclick="irPara('fontes');return false;"
+>
+Ver fontes →
+</a>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CRÉDITOS / INFORMAÇÕES
+===================================================== -->
+
+<section
+    class="credits"
+    id="creditos"
+>
+
+<strong>
+ViniGeoClima BA
+</strong>
+
+<br>
+
+Portal independente de visualização e organização
+de informações meteorológicas, ambientais,
+hidrológicas e jornalísticas.
+
+<br><br>
+
+<strong>
+Fontes e serviços utilizados:
+</strong>
+
+Windy, INMET, CPTEC/INPE, CEMADEN,
+ANA, INPE, TerraBrasilis, Programa Queimadas,
+IBAMA, ICMBio, MMA, Defesa Civil,
+CENAD, HidroWeb, SNIRH, Monitor de Secas,
+REDEMET, Marinha/DHN, ONS, Earth Nullschool,
+Ventusky, Zoom Earth, RainViewer, Meteored,
+Climatempo, Jornal Nacional, G1,
+Agência Brasil, CNN Brasil, BBC News Brasil,
+UOL, Correio*, A TARDE, MapBiomas,
+Global Forest Watch, OpenStreetMap,
+Portal Gov.br e Monitoramento Ambiental AIBA.
+
+<br><br>
+
+<strong>
+Mapas:
+</strong>
+
+Windy e Monitoramento Ambiental AIBA.
+
+<br><br>
+
+As imagens de fundo utilizadas nas áreas
+principais permanecem no site.
+A galeria repetida de imagens no final
+foi removida para deixar a área de informações
+mais limpa.
+
+</section>
 
 
 </main>
 
 
-<!-- =========================================================
-     CONFIGURAÇÕES
-========================================================= -->
-
-<dialog id="settingsDialog">
-
-    <div class="dialog-header">
-
-        <h2>
-            Configurações
-        </h2>
-
-        <button
-            id="closeSettings"
-            class="close-button"
-        >
-            ×
-        </button>
-
-    </div>
-
-
-    <div class="dialog-body">
-
-        <label>
-            Configurações do monitoramento
-        </label>
-
-        <p class="dialog-text">
-
-            O núcleo meteorológico do ViniGeoClima funciona
-            sem chave de API paga.
-
-        </p>
-
-
-        <div class="alert-box">
-
-            <div class="alert-title">
-                📡 Radar
-            </div>
-
-            <div class="alert-text">
-                O radar utiliza a API pública do RainViewer
-                para dados de radar passado.
-            </div>
-
-        </div>
-
-
-        <div class="alert-box">
-
-            <div class="alert-title">
-                🔥 Focos de calor
-            </div>
-
-            <div class="alert-text">
-                A integração com dados de focos de calor
-                pode ser adicionada posteriormente.
-            </div>
-
-        </div>
-
-
-        <div class="dialog-actions">
-
-            <button
-                id="closeSettings2"
-                class="small-button"
-            >
-                Fechar
-            </button>
-
-        </div>
-
-    </div>
-
-</dialog>
-
-
-<!-- =========================================================
-     TOAST
-========================================================= -->
+<!-- =====================================================
+     MODAL
+===================================================== -->
 
 <div
-    id="toast"
-    class="toast hidden"
-    role="status"
-    aria-live="polite"
-></div>
+    class="modal"
+    id="modal"
+>
 
+<div class="modal-box">
 
-<!-- =========================================================
-     LEAFLET
-========================================================= -->
+<div class="modal-head">
 
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-></script>
+<span id="modalTitle">
+Fonte
+</span>
 
+<button
+    class="modal-close"
+    onclick="fecharFonte()"
+>
+×
+</button>
 
-<!-- =========================================================
-     PARTE 3 COMEÇA AQUI
-========================================================= --><script>
+</div>
 
-"use strict";
+<iframe
+    class="modal-frame"
+    id="modalFrame"
+    title="Fonte externa"
+></iframe>
 
+</div>
 
-/* =========================================================
-   CONFIGURAÇÃO PRINCIPAL
-========================================================= */
-
-const CONFIG = {
-
-    defaultCity:
-        "Barreiras",
-
-    defaultState:
-        "Bahia",
-
-    defaultCountry:
-        "Brasil",
-
-    defaultLat:
-        -12.1528,
-
-    defaultLon:
-        -44.9967,
-
-    forecastDays:
-        7,
-
-    radarRefresh:
-        5 * 60 * 1000
-
-};
-
+</div><script>
 
 /* =========================================================
-   ESTADO CENTRAL
+   NAVEGAÇÃO
 ========================================================= */
 
-const STATE = {
+function irPara(id){
 
-    location:{
+    const elemento =
+        document.getElementById(id);
 
-        name:CONFIG.defaultCity,
+    if(!elemento){
+        return;
+    }
 
-        state:CONFIG.defaultState,
-
-        country:CONFIG.defaultCountry,
-
-        latitude:CONFIG.defaultLat,
-
-        longitude:CONFIG.defaultLon
-
-    },
-
-    weather:null,
-
-    air:null,
-
-    map:null,
-
-    marker:null,
-
-    layers:{},
-
-    radarLayer:null,
-
-    radarFrames:[],
-
-    radarIndex:0,
-
-    radarActive:false,
-
-    radarPlaying:false,
-
-    radarTimer:null,
-
-    loading:false,
-
-    requestId:0
-
-};
-
-
-/* =========================================================
-   ATALHO DOM
-========================================================= */
-
-const $ = id =>
-    document.getElementById(id);
-
-
-/* =========================================================
-   UTILIDADES
-========================================================= */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    elemento.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
 
 }
 
 
-function showToast(message){
+/* =========================================================
+   MODAL DE FONTES
+========================================================= */
 
-    const toast =
-        $("toast");
+function abrirFonte(nome,url){
 
-    toast.textContent =
-        message;
+    const modal =
+        document.getElementById("modal");
 
-    toast.classList.remove(
-        "hidden"
+    const title =
+        document.getElementById("modalTitle");
+
+    const frame =
+        document.getElementById("modalFrame");
+
+    title.textContent =
+        nome;
+
+    frame.src =
+        url;
+
+    modal.classList.add("active");
+
+}
+
+
+function fecharFonte(){
+
+    const modal =
+        document.getElementById("modal");
+
+    const frame =
+        document.getElementById("modalFrame");
+
+    frame.src =
+        "";
+
+    modal.classList.remove("active");
+
+}
+
+
+/* =========================================================
+   FECHAR MODAL CLICANDO FORA
+========================================================= */
+
+document
+    .getElementById("modal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                fecharFonte();
+
+            }
+
+        }
     );
 
-    clearTimeout(
-        showToast.timer
-    );
 
-    showToast.timer =
-        setTimeout(
-            () => {
+/* =========================================================
+   ESC FECHA MODAL
+========================================================= */
 
-                toast.classList.add(
-                    "hidden"
-                );
+document.addEventListener(
+    "keydown",
+    function(event){
 
-            },
-            3200
-        );
+        if(
+            event.key === "Escape"
+        ){
 
-}
+            fecharFonte();
 
+        }
 
-function setStatus(message){
-
-    $("searchStatus").textContent =
-        message;
-
-}
+    }
+);
 
 
-function formatNumber(
-    value,
-    digits=0
+/* =========================================================
+   FILTRO DAS 40 FONTES
+========================================================= */
+
+function filtrarFontes(
+    categoria,
+    botao
 ){
 
-    if(
-        value === null ||
-        value === undefined ||
-        Number.isNaN(
-            Number(value)
-        )
-    ){
+    const fontes =
+        document.querySelectorAll(
+            ".source"
+        );
 
-        return "--";
+    const botoes =
+        document.querySelectorAll(
+            ".source-filter button"
+        );
+
+
+    botoes.forEach(
+        function(item){
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    if(botao){
+
+        botao.classList.add(
+            "active"
+        );
 
     }
 
-    return Number(value)
-        .toLocaleString(
-            "pt-BR",
-            {
-                maximumFractionDigits:
-                    digits
+
+    fontes.forEach(
+        function(fonte){
+
+            const categorias =
+                fonte.dataset.category
+                    .toLowerCase();
+
+
+            if(
+                categoria === "todos"
+            ){
+
+                fonte.style.display =
+                    "flex";
+
+                return;
+
             }
-        );
+
+
+            if(
+                categorias.includes(
+                    categoria.toLowerCase()
+                )
+            ){
+
+                fonte.style.display =
+                    "flex";
+
+            }
+
+            else{
+
+                fonte.style.display =
+                    "none";
+
+            }
+
+        }
+    );
 
 }
 
 
-function formatHour(
-    dateString
-){
+/* =========================================================
+   LINKS EXTERNOS
+========================================================= */
 
-    try{
+function abrirExterno(url){
 
-        return new Date(
-            dateString
-        ).toLocaleTimeString(
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =========================================================
+   STATUS DE ATUALIZAÇÃO
+========================================================= */
+
+function atualizarStatus(){
+
+    const agora =
+        new Date();
+
+
+    const hora =
+        agora.toLocaleTimeString(
             "pt-BR",
             {
                 hour:"2-digit",
@@ -2808,1930 +3408,86 @@ function formatHour(
             }
         );
 
-    }catch{
-
-        return "--:--";
-
-    }
-
-}
-
-
-function formatDay(
-    dateString
-){
-
-    try{
-
-        return new Date(
-            dateString
-        ).toLocaleDateString(
-            "pt-BR",
-            {
-                weekday:"short",
-                day:"2-digit",
-                month:"2-digit"
-            }
-        ).replace(".","");
-
-    }catch{
-
-        return "--";
-
-    }
-
-}
-
-
-/* =========================================================
-   CÓDIGOS METEOROLÓGICOS
-========================================================= */
-
-function weatherInfo(code){
-
-    const map = {
-
-        0:["☀️","Céu limpo"],
-
-        1:["🌤️","Principalmente limpo"],
-
-        2:["⛅","Parcialmente nublado"],
-
-        3:["☁️","Nublado"],
-
-        45:["🌫️","Neblina"],
-
-        48:["🌫️","Neblina"],
-
-        51:["🌦️","Garoa leve"],
-
-        53:["🌦️","Garoa"],
-
-        55:["🌧️","Garoa forte"],
-
-        56:["🌧️","Garoa congelante"],
-
-        57:["🌧️","Garoa congelante forte"],
-
-        61:["🌦️","Chuva leve"],
-
-        63:["🌧️","Chuva moderada"],
-
-        65:["🌧️","Chuva forte"],
-
-        66:["🌧️","Chuva congelante"],
-
-        67:["🌧️","Chuva congelante forte"],
-
-        71:["🌨️","Neve leve"],
-
-        73:["🌨️","Neve"],
-
-        75:["❄️","Neve forte"],
-
-        77:["🌨️","Granizo de neve"],
-
-        80:["🌦️","Pancadas leves"],
-
-        81:["🌧️","Pancadas"],
-
-        82:["⛈️","Pancadas fortes"],
-
-        85:["🌨️","Pancadas de neve"],
-
-        86:["🌨️","Pancadas fortes de neve"],
-
-        95:["⛈️","Tempestade"],
-
-        96:["⛈️","Tempestade com granizo"],
-
-        99:["⛈️","Tempestade forte"]
-
-    };
-
-    return (
-        map[code] ||
-        ["🌤️","Condição desconhecida"]
-    );
-
-}
-
-
-/* =========================================================
-   API
-========================================================= */
-
-async function api(
-    url
-){
-
-    const controller =
-        new AbortController();
-
-    const timeout =
-        setTimeout(
-            () => controller.abort(),
-            15000
-        );
-
-    try{
-
-        const response =
-            await fetch(
-                url,
-                {
-                    signal:
-                        controller.signal
-                }
-            );
-
-        if(!response.ok){
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-        return await response.json();
-
-    }finally{
-
-        clearTimeout(
-            timeout
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   GEOCODIFICAÇÃO
-========================================================= */
-
-async function searchLocations(
-    query
-){
-
-    const url =
-        "https://geocoding-api.open-meteo.com/v1/search"
-        +
-        "?name="
-        +
-        encodeURIComponent(query)
-        +
-        "&count=8"
-        +
-        "&language=pt"
-        +
-        "&format=json";
-
-    const data =
-        await api(url);
-
-    return data.results || [];
-
-}
-
-
-async function searchCity(
-    query
-){
-
-    if(!query.trim()){
-
-        showToast(
-            "Digite uma cidade."
-        );
-
-        return;
-
-    }
-
-    setStatus(
-        "Procurando localização..."
-    );
-
-    try{
-
-        const results =
-            await searchLocations(
-                query
-            );
-
-        if(!results.length){
-
-            setStatus(
-                "Nenhuma cidade encontrada."
-            );
-
-            showToast(
-                "Cidade não encontrada."
-            );
-
-            return;
-
-        }
-
-        if(
-            results.length === 1
-        ){
-
-            await selectLocation(
-                results[0]
-            );
-
-            return;
-
-        }
-
-        showSuggestions(
-            results
-        );
-
-        setStatus(
-            `${results.length} locais encontrados.`
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showToast(
-            "Erro ao pesquisar a cidade."
-        );
-
-        setStatus(
-            "Pesquisa indisponível."
-        );
-
-    }
-
-}
-
-
-function showSuggestions(
-    results
-){
-
-    const box =
-        $("suggestions");
-
-    box.innerHTML =
-        "";
-
-    box.classList.remove(
-        "hidden"
-    );
-
-    results.forEach(
-        place => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-            button.className =
-                "suggestion";
-
-            button.type =
-                "button";
-
-            const state =
-                place.admin1 || "";
-
-            const country =
-                place.country || "";
-
-            button.innerHTML =
-                `<strong>${escapeHTML(place.name)}</strong>
-                 <br>
-                 <small>
-                 ${escapeHTML(state)}
-                 ${state && country ? " · " : ""}
-                 ${escapeHTML(country)}
-                 </small>`;
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    selectLocation(
-                        place
-                    );
-
-                }
-            );
-
-            box.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-async function selectLocation(
-    place
-){
-
-    $("suggestions")
-        .classList
-        .add("hidden");
-
-    STATE.location = {
-
-        name:
-            place.name,
-
-        state:
-            place.admin1 ||
-            place.admin2 ||
-            "",
-
-        country:
-            place.country ||
-            "",
-
-        latitude:
-            Number(
-                place.latitude
-            ),
-
-        longitude:
-            Number(
-                place.longitude
-            )
-
-    };
-
-    $("locationInput").value =
-        [
-            STATE.location.name,
-            STATE.location.state
-        ]
-        .filter(Boolean)
-        .join(", ");
-
-    await loadAll();
-
-}
-
-
-/* =========================================================
-   URL DO CLIMA
-========================================================= */
-
-function buildWeatherURL(){
-
-    const params =
-        new URLSearchParams({
-
-            latitude:
-                STATE.location.latitude,
-
-            longitude:
-                STATE.location.longitude,
-
-            current:[
-                "temperature_2m",
-                "relative_humidity_2m",
-                "apparent_temperature",
-                "precipitation",
-                "weather_code",
-                "pressure_msl",
-                "wind_speed_10m",
-                "wind_gusts_10m"
-            ].join(","),
-
-            hourly:[
-                "temperature_2m",
-                "apparent_temperature",
-                "precipitation_probability",
-                "precipitation",
-                "weather_code",
-                "wind_speed_10m",
-                "wind_gusts_10m"
-            ].join(","),
-
-            daily:[
-                "weather_code",
-                "temperature_2m_max",
-                "temperature_2m_min",
-                "precipitation_probability_max",
-                "precipitation_sum",
-                "wind_gusts_10m_max",
-                "sunrise",
-                "sunset"
-            ].join(","),
-
-            timezone:
-                "auto",
-
-            forecast_days:
-                CONFIG.forecastDays
-
-        });
-
-    return (
-        "https://api.open-meteo.com/v1/forecast?"
-        +
-        params.toString()
-    );
-
-}
-
-
-/* =========================================================
-   QUALIDADE DO AR
-========================================================= */
-
-async function loadAirQuality(){
-
-    const params =
-        new URLSearchParams({
-
-            latitude:
-                STATE.location.latitude,
-
-            longitude:
-                STATE.location.longitude,
-
-            current:[
-                "pm2_5",
-                "pm10",
-                "ozone",
-                "european_aqi"
-            ].join(","),
-
-            timezone:
-                "auto"
-
-        });
-
-    const url =
-        "https://air-quality-api.open-meteo.com/v1/air-quality?"
-        +
-        params.toString();
-
-    try{
-
-        const data =
-            await api(url);
-
-        STATE.air =
-            data;
-
-        renderAirQuality(
-            data
-        );
-
-    }catch(error){
-
-        console.error(
-            "Qualidade do ar:",
-            error
-        );
-
-        $("airScore").textContent =
-            "--";
-
-        $("airLabel").textContent =
-            "Indisponível";
-
-        $("airDetails").textContent =
-            "Não foi possível atualizar.";
-
-    }
-
-}
-
-
-function renderAirQuality(
-    data
-){
-
-    const current =
-        data.current;
-
-    const aqi =
-        current.european_aqi;
-
-    $("airScore").textContent =
-        aqi == null
-        ? "--"
-        : Math.round(aqi);
-
-    let label =
-        "Boa";
-
-    if(aqi >= 20)
-        label = "Moderada";
-
-    if(aqi >= 40)
-        label = "Ruim";
-
-    if(aqi >= 60)
-        label = "Muito ruim";
-
-    if(aqi >= 80)
-        label =
-            "Extremamente ruim";
-
-    $("airLabel").textContent =
-        aqi == null
-        ? "Indisponível"
-        : label;
-
-    $("airDetails").innerHTML = `
-
-        PM2.5:
-        ${formatNumber(
-            current.pm2_5,
-            1
-        )}
-        µg/m³
-
-        <br>
-
-        PM10:
-        ${formatNumber(
-            current.pm10,
-            1
-        )}
-        µg/m³
-
-        <br>
-
-        O₃:
-        ${formatNumber(
-            current.ozone,
-            1
-        )}
-        µg/m³
-
-    `;
-
-}
-
-
-/* =========================================================
-   CARREGAR CLIMA
-========================================================= */
-
-async function loadWeather(){
-
-    const data =
-        await api(
-            buildWeatherURL()
-        );
-
-    STATE.weather =
-        data;
-
-    renderCurrent(
-        data
-    );
-
-    renderDaily(
-        data
-    );
-
-    renderHourly(
-        data
-    );
-
-    renderEnvironmentalSummary(
-        data
-    );
-
-}
-
-
-/* =========================================================
-   CLIMA ATUAL
-========================================================= */
-
-function renderCurrent(
-    data
-){
-
-    const current =
-        data.current;
-
-    const info =
-        weatherInfo(
-            current.weather_code
-        );
-
-    $("cityName").textContent =
-        [
-            STATE.location.name,
-            STATE.location.state
-        ]
-        .filter(Boolean)
-        .join(", ");
-
-    $("weatherIcon").textContent =
-        info[0];
-
-    $("condition").textContent =
-        info[1];
-
-    $("temperature").textContent =
-        `${Math.round(
-            current.temperature_2m
-        )}°`;
-
-    $("feelsLike").textContent =
-        `${Math.round(
-            current.apparent_temperature
-        )}°`;
-
-    $("humidity").textContent =
-        `${Math.round(
-            current.relative_humidity_2m
-        )}%`;
-
-    $("wind").textContent =
-        `${Math.round(
-            current.wind_speed_10m
-        )} km/h`;
-
-    $("rain").textContent =
-        `${formatNumber(
-            current.precipitation,
-            1
-        )} mm`;
-
-    $("pressure").textContent =
-        `${formatNumber(
-            current.pressure_msl
-        )} hPa`;
-
-    $("gust").textContent =
-        `${formatNumber(
-            current.wind_gusts_10m
-        )} km/h`;
-
-    $("updateTime").textContent =
-        `Atualizado às ${
-            formatHour(current.time)
-        }`;
-
-}
-
-
-/* =========================================================
-   PREVISÃO DIÁRIA
-========================================================= */
-
-function renderDaily(
-    data
-){
-
-    const daily =
-        data.daily;
-
-    const box =
-        $("dailyForecast");
-
-    box.innerHTML =
-        "";
-
-    for(
-        let i=0;
-        i<daily.time.length;
-        i++
-    ){
-
-        const info =
-            weatherInfo(
-                daily.weather_code[i]
-            );
-
-        const item =
-            document.createElement(
-                "div"
-            );
-
-        item.className =
-            "day";
-
-        item.innerHTML = `
-
-            <div class="day-name">
-                ${
-                    i === 0
-                    ? "Hoje"
-                    : formatDay(
-                        daily.time[i]
-                    )
-                }
-            </div>
-
-            <div class="day-icon">
-                ${info[0]}
-            </div>
-
-            <div class="day-temp">
-                ${Math.round(
-                    daily.temperature_2m_max[i]
-                )}°
-            </div>
-
-            <div class="day-low">
-                ${Math.round(
-                    daily.temperature_2m_min[i]
-                )}°
-            </div>
-
-            <div class="day-rain">
-                💧 ${
-                    daily
-                    .precipitation_probability_max[i]
-                    ?? 0
-                }%
-            </div>
-
-        `;
-
-        box.appendChild(
-            item
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PREVISÃO HORÁRIA
-========================================================= */
-
-function renderHourly(
-    data
-){
-
-    const hourly =
-        data.hourly;
-
-    const box =
-        $("hourlyForecast");
-
-    box.innerHTML =
-        "";
-
-    const now =
-        new Date();
-
-    let count =
-        0;
-
-    for(
-        let i=0;
-        i<hourly.time.length &&
-        count<24;
-        i++
-    ){
-
-        const date =
-            new Date(
-                hourly.time[i]
-            );
-
-        if(
-            date < now
-        )
-            continue;
-
-        const info =
-            weatherInfo(
-                hourly.weather_code[i]
-            );
-
-        const item =
-            document.createElement(
-                "div"
-            );
-
-        item.className =
-            "hour";
-
-        item.innerHTML = `
-
-            <div class="hour-time">
-                ${formatHour(
-                    hourly.time[i]
-                )}
-            </div>
-
-            <div class="hour-icon">
-                ${info[0]}
-            </div>
-
-            <div class="hour-temp">
-                ${Math.round(
-                    hourly.temperature_2m[i]
-                )}°
-            </div>
-
-            <div class="hour-rain">
-                💧 ${
-                    hourly
-                    .precipitation_probability[i]
-                    ?? 0
-                }%
-            </div>
-
-        `;
-
-        box.appendChild(
-            item
-        );
-
-        count++;
-
-    }
-
-}
-
-
-/* =========================================================
-   RESUMO AMBIENTAL
-========================================================= */
-
-function renderEnvironmentalSummary(
-    data
-){
-
-    const daily =
-        data.daily;
-
-    const rainProbability =
-        daily
-        .precipitation_probability_max[0]
-        ?? 0;
-
-    const maxTemp =
-        daily
-        .temperature_2m_max[0];
-
-    const maxWind =
-        daily
-        .wind_gusts_10m_max[0];
-
-    $("rainProbability").textContent =
-        `${rainProbability}%`;
-
-    $("maxTemperature").textContent =
-        `${Math.round(
-            maxTemp
-        )}°`;
-
-    $("maxWind").textContent =
-        `${Math.round(
-            maxWind
-        )} km/h`;
-
-    $("sunrise").textContent =
-        formatHour(
-            daily.sunrise[0]
-        );
-
-    $("sunset").textContent =
-        `pôr do sol ${
-            formatHour(
-                daily.sunset[0]
-            )
-        }`;
-
-}
-
-
-/* =========================================================
-   ANÁLISE AUTOMÁTICA
-========================================================= */
-
-function renderInformation(){
-
-    const box =
-        $("informationList");
-
-    const weather =
-        STATE.weather;
-
-    if(!weather){
-
-        box.innerHTML =
-            "<div class='info-item'>Dados indisponíveis.</div>";
-
-        return;
-
-    }
-
-    const current =
-        weather.current;
-
-    const temperature =
-        Math.round(
-            current.temperature_2m
-        );
-
-    const humidity =
-        Math.round(
-            current.relative_humidity_2m
-        );
-
-    const wind =
-        Math.round(
-            current.wind_speed_10m
-        );
-
-    const gust =
-        Math.round(
-            current.wind_gusts_10m
-        );
-
-    const rain =
-        Number(
-            current.precipitation ||
-            0
-        );
-
-    const items = [];
-
-
-    if(
-        temperature >= 35
-    ){
-
-        items.push(
-            "🌡️ Temperatura elevada registrada no momento."
-        );
-
-    }else if(
-        temperature <= 18
-    ){
-
-        items.push(
-            "🌡️ Temperatura relativamente baixa para o período."
-        );
-
-    }else{
-
-        items.push(
-            "🌡️ Temperatura atual sem indicação de extremo pelo limite utilizado neste painel."
-        );
-
-    }
-
-
-    if(
-        humidity < 30
-    ){
-
-        items.push(
-            "💧 Umidade relativa baixa."
-        );
-
-    }else{
-
-        items.push(
-            `💧 Umidade relativa atual: ${humidity}%.`
-        );
-
-    }
-
-
-    if(
-        gust >= 50
-    ){
-
-        items.push(
-            "💨 Rajadas elevadas estão sendo registradas."
-        );
-
-    }else{
-
-        items.push(
-            `💨 Vento atual: ${wind} km/h, com rajadas de até ${gust} km/h.`
-        );
-
-    }
-
-
-    if(
-        rain > 0
-    ){
-
-        items.push(
-            `🌧️ Precipitação atual: ${formatNumber(
-                rain,
-                1
-            )} mm.`
-        );
-
-    }else{
-
-        items.push(
-            "🌤️ Não há precipitação significativa registrada neste instante."
-        );
-
-    }
-
-
-    if(
-        STATE.air &&
-        STATE.air.current
-    ){
-
-        const aqi =
-            STATE.air.current
-                .european_aqi;
-
-        if(aqi != null){
-
-            items.push(
-                `🫁 Índice de qualidade do ar exibido: ${Math.round(aqi)}.`
-            );
-
-        }
-
-    }
-
-
-    box.innerHTML =
-        items
-            .map(
-                item =>
-                    `<div class="info-item">
-                        ${escapeHTML(item)}
-                    </div>`
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   MAPA
-========================================================= */
-
-function initMap(){
-
-    if(STATE.map)
-        return;
-
-    STATE.map =
-        L.map(
-            "map",
-            {
-                zoomControl:true,
-                attributionControl:true
-            }
-        )
-        .setView(
-            [
-                CONFIG.defaultLat,
-                CONFIG.defaultLon
-            ],
-            9
-        );
-
-
-    STATE.layers.street =
-        L.tileLayer(
-            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom:19,
-
-                attribution:
-                    '&copy; OpenStreetMap contributors'
-            }
-        );
-
-
-    STATE.layers.satellite =
-        L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            {
-                maxZoom:19,
-
-                attribution:
-                    "Esri"
-            }
-        );
-
-
-    STATE.layers.terrain =
-        L.tileLayer(
-            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom:17,
-
-                attribution:
-                    "OpenTopoMap"
-            }
-        );
-
-
-    STATE.layers.street.addTo(
-        STATE.map
-    );
-
-
-    STATE.marker =
-        L.marker(
-            [
-                CONFIG.defaultLat,
-                CONFIG.defaultLon
-            ]
-        )
-        .addTo(
-            STATE.map
-        );
-
-
-    STATE.marker.bindPopup(
-        "<strong>Barreiras, Bahia</strong><br>Localização inicial"
-    );
-
-
-    $("mapStatus").textContent =
-        "Mapa carregado.";
-
-}
-
-
-function updateMapLocation(){
-
-    if(!STATE.map)
-        return;
-
-    const lat =
-        STATE.location.latitude;
-
-    const lon =
-        STATE.location.longitude;
-
-    STATE.map.setView(
-        [lat,lon],
-        9,
-        {
-            animate:true
-        }
-    );
-
-
-    if(STATE.marker){
-
-        STATE.marker.setLatLng(
-            [lat,lon]
-        );
-
-        STATE.marker.setPopupContent(
-            `<strong>
-                ${escapeHTML(
-                    STATE.location.name
-                )}
-            </strong>
-            <br>
-            ${escapeHTML(
-                STATE.location.state
-            )}`
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CAMADAS DO MAPA
-========================================================= */
-
-function changeMapLayer(
-    type
-){
-
-    if(!STATE.map)
-        return;
-
-    Object.values(
-        STATE.layers
-    )
-    .forEach(
-        layer => {
-
-            if(
-                STATE.map.hasLayer(
-                    layer
-                )
-            ){
-
-                STATE.map.removeLayer(
-                    layer
-                );
-
-            }
-
-        }
-    );
-
-
-    const selected =
-        STATE.layers[type];
-
-    if(selected){
-
-        selected.addTo(
-            STATE.map
-        );
-
-    }
-
 
     document
-        .querySelectorAll(
-            ".map-button[data-layer]"
-        )
+        .querySelectorAll(".status")
         .forEach(
-            button => {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.layer === type
-                );
-
-            }
-        );
-
-
-    const names = {
-
-        street:
-            "Mapa de ruas",
-
-        satellite:
-            "Imagem de satélite",
-
-        terrain:
-            "Mapa de terreno"
-
-    };
-
-
-    $("mapStatus").textContent =
-        `${names[type] || "Camada"} ativa.`;
-
-}
-
-
-/* =========================================================
-   RADAR RAINVIEWER
-========================================================= */
-
-async function loadRadar(){
-
-    try{
-
-        $("mapStatus").textContent =
-            "Obtendo frames de radar...";
-
-        const data =
-            await api(
-                "https://api.rainviewer.com/public/weather-maps.json"
-            );
-
-
-        if(
-            !data ||
-            !data.radar ||
-            !data.radar.past ||
-            !data.radar.past.length
-        ){
-
-            throw new Error(
-                "Radar indisponível"
-            );
-
-        }
-
-
-        STATE.radarFrames =
-            data.radar.past;
-
-
-        STATE.radarIndex =
-            STATE.radarFrames.length - 1;
-
-
-        STATE.radarActive =
-            true;
-
-
-        showRadarFrame();
-
-
-        $("radarButton")
-            .classList
-            .add("active");
-
-
-        $("mapStatus").textContent =
-            "Radar RainViewer ativo.";
-
-    }catch(error){
-
-        console.error(
-            "Radar:",
-            error
-        );
-
-        STATE.radarActive =
-            false;
-
-        $("radarButton")
-            .classList
-            .remove("active");
-
-        $("mapStatus").textContent =
-            "Radar indisponível neste momento.";
-
-        showToast(
-            "Não foi possível carregar o radar."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   FRAME RADAR
-========================================================= */
-
-function showRadarFrame(){
-
-    if(
-        !STATE.map ||
-        !STATE.radarFrames.length
-    ){
-
-        return;
-
-    }
-
-
-    const frame =
-        STATE.radarFrames[
-            STATE.radarIndex
-        ];
-
-
-    if(!frame)
-        return;
-
-
-    if(STATE.radarLayer){
-
-        STATE.map.removeLayer(
-            STATE.radarLayer
-        );
-
-    }
-
-
-    const path =
-        frame.path;
-
-    if(!path)
-        return;
-
-
-    const url =
-        `https://tilecache.rainviewer.com${path}/256/{z}/{x}/{y}/2/1_1.png`;
-
-
-    STATE.radarLayer =
-        L.tileLayer(
-            url,
-            {
-                opacity:.62,
-
-                tileSize:256,
-
-                maxZoom:7,
-
-                attribution:
-                    "RainViewer"
-            }
-        );
-
-
-    STATE.radarLayer.addTo(
-        STATE.map
-    );
-
-
-    const timestamp =
-        frame.time
-        ? new Date(
-            frame.time * 1000
-        )
-        : null;
-
-
-    if(timestamp){
-
-        $("mapOverlay").textContent =
-            `📡 Radar · ${timestamp.toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            )}`;
-
-    }
-
-}
-
-
-/* =========================================================
-   REMOVER RADAR
-========================================================= */
-
-function removeRadar(){
-
-    if(
-        STATE.radarLayer &&
-        STATE.map &&
-        STATE.map.hasLayer(
-            STATE.radarLayer
-        )
-    ){
-
-        STATE.map.removeLayer(
-            STATE.radarLayer
-        );
-
-    }
-
-    STATE.radarLayer =
-        null;
-
-}
-
-
-/* =========================================================
-   RADAR ON/OFF
-========================================================= */
-
-async function toggleRadar(){
-
-    if(
-        STATE.radarActive
-    ){
-
-        STATE.radarActive =
-            false;
-
-        stopRadarAnimation();
-
-        removeRadar();
-
-        $("radarButton")
-            .classList
-            .remove("active");
-
-        $("radarPlayButton")
-            .classList
-            .remove("active");
-
-        $("mapStatus").textContent =
-            "Radar desligado.";
-
-        $("mapOverlay").textContent =
-            "📡 Monitoramento meteorológico";
-
-        return;
-
-    }
-
-
-    await loadRadar();
-
-}
-
-
-/* =========================================================
-   ANIMAÇÃO DO RADAR
-========================================================= */
-
-function playRadarAnimation(){
-
-    if(
-        !STATE.radarFrames.length
-    ){
-
-        showToast(
-            "Ative o radar primeiro."
-        );
-
-        return;
-
-    }
-
-
-    if(
-        STATE.radarPlaying
-    ){
-
-        stopRadarAnimation();
-
-        return;
-
-    }
-
-
-    STATE.radarPlaying =
-        true;
-
-
-    $("radarPlayButton")
-        .classList
-        .add("active");
-
-
-    $("radarPlayButton")
-        .textContent =
-        "⏸ Radar";
-
-
-    STATE.radarTimer =
-        setInterval(
-            () => {
+            function(item){
 
                 if(
-                    !STATE.radarFrames.length
-                )
-                    return;
-
-
-                STATE.radarIndex++;
-
-                if(
-                    STATE.radarIndex >=
-                    STATE.radarFrames.length
+                    item.textContent
+                        .includes(
+                            "ATUALIZAÇÃO"
+                        )
                 ){
 
-                    STATE.radarIndex =
-                        0;
+                    item.innerHTML =
+                        "Atualização: " +
+                        "<strong>" +
+                        hora +
+                        "</strong>";
 
                 }
-
-
-                showRadarFrame();
-
-            },
-            700
-        );
-
-}
-
-
-function stopRadarAnimation(){
-
-    STATE.radarPlaying =
-        false;
-
-    clearInterval(
-        STATE.radarTimer
-    );
-
-    STATE.radarTimer =
-        null;
-
-
-    $("radarPlayButton")
-        .classList
-        .remove("active");
-
-
-    $("radarPlayButton")
-        .textContent =
-        "▶ Radar";
-
-}
-
-
-/* =========================================================
-   CARREGAMENTO GERAL
-========================================================= */
-
-async function loadAll(){
-
-    if(STATE.loading){
-
-        return;
-
-    }
-
-
-    const request =
-        ++STATE.requestId;
-
-
-    STATE.loading =
-        true;
-
-
-    setStatus(
-        "Atualizando meteorologia e ambiente..."
-    );
-
-
-    try{
-
-        await Promise.all([
-
-            loadWeather(),
-
-            loadAirQuality()
-
-        ]);
-
-
-        if(
-            request !==
-            STATE.requestId
-        ){
-
-            return;
-
-        }
-
-
-        updateMapLocation();
-
-        renderInformation();
-
-
-        setStatus(
-            "Dados atualizados."
-        );
-
-    }catch(error){
-
-        console.error(
-            "LoadAll:",
-            error
-        );
-
-        setStatus(
-            "Alguns dados não puderam ser atualizados."
-        );
-
-        showToast(
-            "Algumas informações estão temporariamente indisponíveis."
-        );
-
-    }finally{
-
-        STATE.loading =
-            false;
-
-    }
-
-}
-
-
-/* =========================================================
-   CONFIGURAÇÕES
-========================================================= */
-
-$("menuButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            $("settingsDialog")
-                .showModal();
-
-        }
-    );
-
-
-$("closeSettings")
-    .addEventListener(
-        "click",
-        () => {
-
-            $("settingsDialog")
-                .close();
-
-        }
-    );
-
-
-$("closeSettings2")
-    .addEventListener(
-        "click",
-        () => {
-
-            $("settingsDialog")
-                .close();
-
-        }
-    );
-
-
-/* =========================================================
-   PESQUISA
-========================================================= */
-
-$("searchForm")
-    .addEventListener(
-        "submit",
-        event => {
-
-            event.preventDefault();
-
-            searchCity(
-                $("locationInput").value
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   ATUALIZAR
-========================================================= */
-
-$("refreshButton")
-    .addEventListener(
-        "click",
-        async () => {
-
-            if(STATE.loading){
-
-                showToast(
-                    "Aguarde a atualização atual terminar."
-                );
-
-                return;
 
             }
+        );
 
-            showToast(
-                "Atualizando..."
-            );
-
-            await loadAll();
-
-        }
-    );
-
-
-/* =========================================================
-   CAMADAS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".map-button[data-layer]"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    changeMapLayer(
-                        button.dataset.layer
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   RADAR
-========================================================= */
-
-$("radarButton")
-    .addEventListener(
-        "click",
-        toggleRadar
-    );
-
-
-$("radarPlayButton")
-    .addEventListener(
-        "click",
-        playRadarAnimation
-    );
+}
 
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-async function init(){
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
 
-    try{
+        const primeiroBotao =
+            document.querySelector(
+                ".source-filter button"
+            );
 
-        initMap();
 
-        await loadAll();
-
-    }catch(error){
-
-        console.error(
-            "Inicialização:",
-            error
+        filtrarFontes(
+            "todos",
+            primeiroBotao
         );
 
-        showToast(
-            "O site abriu, mas alguns dados não puderam ser carregados."
-        );
+
+        atualizarStatus();
 
     }
-
-}
-
-
-window.addEventListener(
-    "DOMContentLoaded",
-    init
 );
 
 
 /* =========================================================
-   ATUALIZAÇÃO AUTOMÁTICA
+   ATUALIZAÇÃO DO HORÁRIO
 ========================================================= */
 
 setInterval(
-    () => {
-
-        if(
-            document.visibilityState ===
-            "visible" &&
-            !STATE.loading
-        ){
-
-            loadAll();
-
-        }
-
-    },
-    10 * 60 * 1000
+    atualizarStatus,
+    60000
 );
 
 
 /* =========================================================
-   SERVICE WORKER
+   TRATAMENTO DE ERROS
 ========================================================= */
 
-if(
-    "serviceWorker" in navigator
-){
+window.addEventListener(
+    "error",
+    function(event){
 
-    window.addEventListener(
-        "load",
-        () => {
+        console.warn(
+            "ViniGeoClima:",
+            event.message
+        );
 
-            navigator.serviceWorker
-                .register("./sw.js")
-                .catch(
-                    error => {
-
-                        console.warn(
-                            "Service Worker:",
-                            error
-                        );
-
-                    }
-                );
-
-        }
-    );
-
-}
+    }
+);
 
 </script>
 
 </body>
-
 </html>
