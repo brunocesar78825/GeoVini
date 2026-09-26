@@ -1,2367 +1,844 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
 
-<meta
-    name="theme-color"
-    content="#000000"
->
+<meta name="theme-color" content="#111">
 
 <title>De Tempo em Tempo</title>
 
 <style>
-
-/* =====================================================
-   RESET
-===================================================== */
-
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+html,body{
+    width:100%;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    background:#111;
 }
 
 body{
-
     min-height:100vh;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    color:#fff;
-
-    background:#111;
-
     overflow-x:hidden;
 }
 
-
-/* =====================================================
-   FUNDO REAL
-===================================================== */
-
+/* FUNDO REAL */
 #weatherBackground{
-
     position:fixed;
-
     inset:0;
-
-    z-index:-10;
-
-    background-image:
-        url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=90");
-
-    background-size:cover;
+    z-index:-3;
 
     background-position:center;
-
+    background-size:cover;
     background-repeat:no-repeat;
 
     transition:
-        background-image 1.2s ease;
-
+        background-image .8s ease,
+        opacity .5s ease;
 }
 
-
-/* escurecimento MUITO leve apenas para
-   permitir leitura do texto */
-
-#weatherBackground::after{
-
-    content:"";
-
-    position:absolute;
-
+#backgroundOverlay{
+    position:fixed;
     inset:0;
+    z-index:-2;
 
     background:
-        rgba(0,0,0,.12);
-
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.30),
+            rgba(0,0,0,.52)
+        );
 }
 
-
-/* =====================================================
-   APP
-===================================================== */
-
+/* CONTAINER */
 .app{
-
     width:100%;
-
-    min-height:100vh;
-
-    padding:
-        20px
-        20px
-        50px;
-
-}
-
-
-/* =====================================================
-   CONTAINER
-===================================================== */
-
-.container{
-
-    width:100%;
-
-    max-width:1500px;
-
+    max-width:1250px;
     margin:auto;
-
+    padding:22px;
 }
 
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header{
-
+/* TOPO */
+header{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    gap:20px;
-
-    padding:
-        5px
-        0
-        10px;
-
+    gap:15px;
+    margin-bottom:25px;
 }
-
 
 .logo{
-
-    font-size:
-        clamp(22px,3vw,36px);
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        -1px;
-
-    text-shadow:
-        0 3px 15px rgba(0,0,0,.8);
-
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:2px;
+    text-shadow:0 2px 12px rgba(0,0,0,.7);
 }
-
 
 .location{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:
-        10px
-        15px;
-
-    border-radius:
-        16px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.30);
-
-    background:
-        rgba(255,255,255,.12);
-
-    backdrop-filter:
-        blur(10px);
-
-    -webkit-backdrop-filter:
-        blur(10px);
-
-    font-size:14px;
-
+    padding:10px 15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.13);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.18);
 }
 
-
-/* =====================================================
-   STATUS
-===================================================== */
-
+/* STATUS */
 .status{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    margin-top:5px;
-
-    font-size:11px;
-
-    opacity:.75;
-
+    margin-bottom:15px;
+    font-size:13px;
+    opacity:.85;
 }
 
-
-.status-dot{
-
-    width:7px;
-
-    height:7px;
-
-    border-radius:50%;
-
-    background:#7dff9a;
-
-    box-shadow:
-        0 0 10px
-        rgba(125,255,154,.8);
-
-}
-
-
-/* =====================================================
-   HERO
-===================================================== */
-
+/* PRINCIPAL */
 .hero{
-
-    min-height:
-        390px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
     text-align:center;
-
+    margin:10px auto 28px;
 }
 
-
-.weather-icon{
-
-    font-size:
-        clamp(60px,9vw,105px);
-
+.weatherIcon{
+    font-size:72px;
     line-height:1;
-
-    margin-bottom:10px;
-
-    filter:
-        drop-shadow(
-            0 8px 20px
-            rgba(0,0,0,.45)
-        );
-
 }
-
 
 .temperature{
-
-    font-size:
-        clamp(70px,12vw,135px);
-
-    line-height:.9;
-
+    font-size:72px;
     font-weight:700;
-
-    letter-spacing:
-        -7px;
-
-    text-shadow:
-        0 5px 25px
-        rgba(0,0,0,.65);
-
+    line-height:1;
+    margin:10px 0;
 }
-
 
 .condition{
-
-    margin-top:15px;
-
-    font-size:
-        clamp(17px,2vw,24px);
-
-    text-shadow:
-        0 2px 10px
-        rgba(0,0,0,.8);
-
+    font-size:20px;
+    opacity:.95;
 }
 
+.update{
+    font-size:12px;
+    opacity:.7;
+    margin-top:7px;
+}
 
-/* =====================================================
-   DATA GRID
-===================================================== */
-
-.data-grid{
-
+/* GRID */
+.cards{
     display:grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap:15px;
-
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
 }
-
-
-/* =====================================================
-   GLASS CARD
-===================================================== */
 
 .card{
+    min-height:105px;
+    padding:18px;
 
-    min-height:120px;
+    border-radius:20px;
 
-    padding:20px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.18);
 
-    border-radius:21px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.30);
-
-    background:
-        rgba(255,255,255,.12);
-
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
 
     box-shadow:
-        0 8px 35px
-        rgba(0,0,0,.15);
+        0 10px 35px rgba(0,0,0,.16);
 
+    transition:transform .2s ease;
 }
 
+.card:hover{
+    transform:translateY(-2px);
+}
 
-.card-title{
-
+.cardTitle{
     font-size:14px;
-
-    opacity:.82;
-
-    margin-bottom:10px;
-
+    opacity:.8;
+    margin-bottom:8px;
 }
 
-
-.card-value{
-
-    font-size:29px;
-
+.cardValue{
+    font-size:25px;
     font-weight:700;
-
 }
 
-
-.card-info{
-
-    margin-top:6px;
-
+.cardSmall{
     font-size:12px;
-
-    opacity:.70;
-
+    opacity:.7;
+    margin-top:5px;
 }
 
-
-/* =====================================================
-   SEÇÕES
-===================================================== */
-
+/* SEÇÕES */
 .section{
-
-    margin-top:30px;
-
+    margin-top:25px;
 }
 
-
-.section-title{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:13px;
-
+.sectionTitle{
+    font-size:19px;
+    font-weight:700;
+    margin-bottom:12px;
 }
 
-
-.section-title h2{
-
-    font-size:20px;
-
-}
-
-
-.section-title span{
-
-    font-size:11px;
-
-    opacity:.65;
-
-}
-
-
-/* =====================================================
-   HORAS
-===================================================== */
-
+/* HORAS */
 .hourly{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(12,1fr);
-
-    gap:9px;
-
+    display:flex;
+    gap:10px;
     overflow-x:auto;
-
-    padding-bottom:5px;
-
+    padding-bottom:7px;
 }
 
+.hour{
+    min-width:85px;
+    padding:13px 10px;
+    text-align:center;
 
-.hour-card{
+    border-radius:16px;
 
-    min-width:90px;
+    background:rgba(255,255,255,.11);
+    border:1px solid rgba(255,255,255,.15);
 
+    backdrop-filter:blur(10px);
+}
+
+.hourTime{
+    font-size:12px;
+    opacity:.75;
+}
+
+.hourIcon{
+    font-size:27px;
+    margin:8px 0;
+}
+
+.hourTemp{
+    font-weight:bold;
+}
+
+/* DIAS */
+.daily{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:9px;
+}
+
+.day{
+    text-align:center;
     padding:13px 8px;
 
-    text-align:center;
+    border-radius:15px;
 
-    border-radius:17px;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.15);
 
-    border:
-        1px solid
-        rgba(255,255,255,.25);
-
-    background:
-        rgba(255,255,255,.11);
-
-    backdrop-filter:
-        blur(10px);
-
+    backdrop-filter:blur(10px);
 }
 
-
-.hour-time{
-
+.dayName{
     font-size:12px;
-
     opacity:.7;
-
 }
 
-
-.hour-icon{
-
+.dayIcon{
     font-size:27px;
-
-    margin:9px 0;
-
+    margin:8px 0;
 }
 
-
-.hour-temp{
-
-    font-size:17px;
-
-    font-weight:700;
-
+.dayTemp{
+    font-weight:bold;
 }
 
-
-.hour-rain{
-
-    margin-top:6px;
-
-    font-size:10px;
-
-    opacity:.7;
-
-}
-
-
-/* =====================================================
-   7 DIAS
-===================================================== */
-
-.forecast{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:10px;
-
-}
-
-
-.day-card{
-
-    padding:17px 8px;
-
-    text-align:center;
-
-    border-radius:18px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.26);
-
-    background:
-        rgba(255,255,255,.11);
-
-    backdrop-filter:
-        blur(10px);
-
-}
-
-
-.day-name{
-
-    font-size:13px;
-
-    font-weight:700;
-
-}
-
-
-.day-icon{
-
-    font-size:31px;
-
-    margin:12px 0;
-
-}
-
-
-.day-temp{
-
-    font-size:17px;
-
-    font-weight:700;
-
-}
-
-
-.day-min{
-
+.dayMin{
+    opacity:.65;
     font-size:12px;
-
-    opacity:.6;
-
 }
 
-
-.day-rain{
-
-    margin-top:7px;
-
-    font-size:10px;
-
-    opacity:.7;
-
-}
-
-
-/* =====================================================
-   MAPAS
-===================================================== */
-
-.map-grid{
-
+/* MAPAS */
+.maps{
     display:grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap:16px;
-
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
 }
 
-
-.map-card{
-
+.mapCard{
+    min-height:330px;
+    border-radius:18px;
     overflow:hidden;
 
-    border-radius:21px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.30);
-
-    background:
-        rgba(0,0,0,.25);
-
-    box-shadow:
-        0 8px 35px
-        rgba(0,0,0,.25);
-
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.15);
 }
 
-
-.map-title{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:14px 17px;
-
-    background:
-        rgba(255,255,255,.12);
-
-    font-size:15px;
-
-    font-weight:700;
-
+.mapHeader{
+    padding:12px 15px;
+    font-weight:bold;
 }
 
-
-.map-status{
-
-    font-size:10px;
-
-    opacity:.65;
-
-}
-
-
-.map-frame{
-
-    display:block;
-
+.mapFrame{
     width:100%;
-
-    height:420px;
-
+    height:280px;
     border:0;
-
-    background:#111;
-
+    display:block;
 }
 
-
-/* =====================================================
-   AIBA
-===================================================== */
-
-.aiba-card{
-
-    grid-column:
-        1 / -1;
-
-}
-
-
+/* AIBA */
 .aiba-frame{
-
     width:100%;
-
-    height:650px;
-
+    height:600px;
     border:0;
-
-    display:block;
-
+    background:white;
 }
 
+.openButton{
+    display:inline-block;
+    margin-top:10px;
+    padding:11px 15px;
 
-/* =====================================================
-   LINKS EXTERNOS
-===================================================== */
-
-.external-bar{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:10px;
-
-    padding:15px;
-
-}
-
-
-.external-button{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:7px;
-
-    padding:
-        10px
-        14px;
-
-    border-radius:12px;
-
-    color:#fff;
-
+    color:white;
     text-decoration:none;
 
-    background:
-        rgba(255,255,255,.13);
-
-    border:
-        1px solid
-        rgba(255,255,255,.25);
-
-    font-size:12px;
-
+    border-radius:12px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.2);
 }
 
-
-.external-button:hover{
-
-    background:
-        rgba(255,255,255,.22);
-
-}
-
-
-/* =====================================================
-   RODAPÉ
-===================================================== */
-
-.footer{
-
-    margin-top:40px;
-
-    text-align:center;
-
-    font-size:11px;
-
-    opacity:.55;
-
-}
-
-
-/* =====================================================
-   BOTÕES
-===================================================== */
-
-.tools{
-
+/* BOTÕES */
+.controls{
     display:flex;
-
     flex-wrap:wrap;
-
     gap:10px;
-
+    margin:20px 0;
 }
 
-
-.tool-button{
-
+button{
     border:0;
-
+    color:white;
     cursor:pointer;
 
-    padding:
-        10px
-        14px;
+    padding:11px 15px;
+    border-radius:12px;
 
-    border-radius:13px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.18);
 
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.13);
-
-    border:
-        1px solid
-        rgba(255,255,255,.25);
-
+    backdrop-filter:blur(10px);
 }
 
-
-/* =====================================================
-   LOW PERFORMANCE
-===================================================== */
-
-.low-performance #weatherBackground{
-
-    transition:none;
-
+button:active{
+    transform:scale(.97);
 }
 
-
-.low-performance .card,
-.low-performance .location,
-.low-performance .day-card,
-.low-performance .hour-card,
-.low-performance .map-card{
-
-    backdrop-filter:none;
-
-    -webkit-backdrop-filter:none;
-
-    box-shadow:none;
-
-    background:
-        rgba(15,15,15,.45);
-
+/* CARREGANDO */
+.loading{
+    opacity:.6;
 }
 
-
-/* =====================================================
-   RESPONSIVO
-===================================================== */
-
-@media(max-width:1000px){
-
-    .hourly{
-
-        grid-template-columns:
-            repeat(12,90px);
-
-    }
-
-    .forecast{
-
-        grid-template-columns:
-            repeat(4,1fr);
-
-    }
-
+.error{
+    color:#ffd0d0;
 }
 
+/* RODAPÉ */
+footer{
+    text-align:center;
+    padding:30px 0 15px;
+    font-size:12px;
+    opacity:.6;
+}
 
+/* CELULAR */
 @media(max-width:700px){
 
     .app{
-
-        padding:
-            13px
-            13px
-            35px;
-
+        padding:14px;
     }
 
-
-    .header{
-
-        align-items:
-            flex-start;
-
+    header{
+        align-items:flex-start;
+        flex-direction:column;
     }
-
-
-    .location{
-
-        font-size:11px;
-
-        padding:
-            8px
-            10px;
-
-    }
-
-
-    .hero{
-
-        min-height:300px;
-
-    }
-
-
-    .data-grid{
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .forecast{
-
-        grid-template-columns:
-            repeat(3,1fr);
-
-    }
-
-
-    .map-grid{
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .map-frame{
-
-        height:330px;
-
-    }
-
-
-    .aiba-card{
-
-        grid-column:
-            auto;
-
-    }
-
-
-    .aiba-frame{
-
-        height:500px;
-
-    }
-
-}
-
-
-@media(max-width:430px){
 
     .logo{
-
-        font-size:20px;
-
+        font-size:21px;
     }
 
-
-    .forecast{
-
-        grid-template-columns:
-            repeat(2,1fr);
-
+    .location{
+        font-size:13px;
     }
-
 
     .temperature{
-
-        font-size:80px;
-
+        font-size:58px;
     }
 
+    .weatherIcon{
+        font-size:60px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .daily{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .maps{
+        grid-template-columns:1fr;
+    }
+
+    .aiba-frame{
+        height:500px;
+    }
 }
 
+/* MODO ECONÔMICO */
+body.lowPerformance *{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    box-shadow:none !important;
+    transition:none !important;
+}
+
+body.lowPerformance .card,
+body.lowPerformance .hour,
+body.lowPerformance .day,
+body.lowPerformance .mapCard{
+    background:rgba(20,20,20,.72);
+}
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- FUNDO -->
-
 <div id="weatherBackground"></div>
-
+<div id="backgroundOverlay"></div>
 
 <div class="app">
 
-<div class="container">
+<header>
+    <div class="logo">DE TEMPO EM TEMPO</div>
 
-
-<!-- =====================================================
-     CABEÇALHO
-===================================================== -->
-
-<header class="header">
-
-    <div>
-
-        <div class="logo">
-            DE TEMPO EM TEMPO
-        </div>
-
-        <div class="status">
-
-            <span class="status-dot"></span>
-
-            <span id="statusText">
-                Atualizando dados...
-            </span>
-
-        </div>
-
+    <div class="location" id="locationText">
+        📍 Barreiras, BA
     </div>
-
-
-    <div
-        class="location"
-        id="location"
-    >
-
-        📍 Localizando...
-
-    </div>
-
 </header>
 
+<div class="status" id="status">
+    Atualizando dados...
+</div>
 
-<!-- =====================================================
-     CLIMA PRINCIPAL
-===================================================== -->
+<div class="controls">
+    <button onclick="locateUser()">
+        📍 Atualizar localização
+    </button>
 
+    <button onclick="loadAll(true)">
+        🔄 Atualizar
+    </button>
+
+    <button onclick="toggleLowPerformance()">
+        ⚡ Modo econômico
+    </button>
+</div>
+
+<!-- CLIMA PRINCIPAL -->
 <section class="hero">
 
-    <div
-        class="weather-icon"
-        id="weatherIcon"
-    >
+    <div class="weatherIcon" id="weatherIcon">
         ☁️
     </div>
 
-
-    <div
-        class="temperature"
-        id="temperature"
-    >
+    <div class="temperature" id="temperature">
         --°
     </div>
 
-
-    <div
-        class="condition"
-        id="condition"
-    >
+    <div class="condition" id="condition">
         Carregando clima...
     </div>
 
+    <div class="update" id="lastUpdate">
+        --
+    </div>
+
 </section>
 
-
-<!-- =====================================================
-     CARDS
-===================================================== -->
-
-<section class="data-grid">
-
+<!-- CARDS -->
+<section class="cards">
 
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             🌡️ Sensação térmica
         </div>
 
-        <div
-            class="card-value"
-            id="feels"
-        >
+        <div class="cardValue" id="feels">
             --°C
         </div>
 
+        <div class="cardSmall">
+            Temperatura aparente
+        </div>
     </div>
 
-
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             🔥 Queimadas
         </div>
 
-        <div
-            class="card-value"
-            id="fires"
-        >
+        <div class="cardValue" id="fires">
             --
         </div>
 
-        <div
-            class="card-info"
-            id="firesInfo"
-        >
+        <div class="cardSmall" id="fireStatus">
             Consultando NASA FIRMS...
         </div>
-
     </div>
 
-
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             💧 Umidade
         </div>
 
-        <div
-            class="card-value"
-            id="humidity"
-        >
+        <div class="cardValue" id="humidity">
             --%
         </div>
 
+        <div class="cardSmall">
+            Umidade relativa
+        </div>
     </div>
 
-
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             🌫️ Qualidade do ar
         </div>
 
-        <div
-            class="card-value"
-            id="air"
-        >
+        <div class="cardValue" id="air">
             --
         </div>
 
-        <div
-            class="card-info"
-            id="airInfo"
-        >
+        <div class="cardSmall" id="airStatus">
             Consultando...
         </div>
-
     </div>
 
-
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             💨 Vento
         </div>
 
-        <div
-            class="card-value"
-            id="wind"
-        >
+        <div class="cardValue" id="wind">
             -- km/h
         </div>
 
-        <div
-            class="card-info"
-            id="windDirection"
-        >
+        <div class="cardSmall" id="windDirection">
             Direção: --
         </div>
-
     </div>
 
-
     <div class="card">
-
-        <div class="card-title">
+        <div class="cardTitle">
             🌧️ Probabilidade de chuva
         </div>
 
-        <div
-            class="card-value"
-            id="rain"
-        >
+        <div class="cardValue" id="rainProbability">
             --%
         </div>
 
-        <div class="card-info">
+        <div class="cardSmall">
             Próxima hora
+        </div>
+    </div>
+
+</section>
+
+<!-- PRÓXIMAS HORAS -->
+<section class="section">
+
+    <div class="sectionTitle">
+        ⏱️ Próximas horas
+    </div>
+
+    <div class="hourly" id="hourly">
+        <div class="hour loading">
+            Carregando...
+        </div>
+    </div>
+
+</section>
+
+<!-- 7 DIAS -->
+<section class="section">
+
+    <div class="sectionTitle">
+        📅 Previsão para 7 dias
+    </div>
+
+    <div class="daily" id="daily">
+        <div class="day loading">
+            Carregando...
+        </div>
+    </div>
+
+</section>
+
+<!-- MAPAS -->
+<section class="section">
+
+    <div class="sectionTitle">
+        🗺️ Monitoramento
+    </div>
+
+    <div class="maps">
+
+        <div class="mapCard">
+            <div class="mapHeader">
+                🌧️ Radar de chuva
+            </div>
+
+            <iframe
+                class="mapFrame"
+                loading="lazy"
+                src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=rain&product=ecmwf">
+            </iframe>
+        </div>
+
+        <div class="mapCard">
+            <div class="mapHeader">
+                💨 Ventos
+            </div>
+
+            <iframe
+                class="mapFrame"
+                loading="lazy"
+                src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=wind&product=ecmwf">
+            </iframe>
+        </div>
+
+        <div class="mapCard">
+            <div class="mapHeader">
+                🌎 Mapa meteorológico
+            </div>
+
+            <iframe
+                class="mapFrame"
+                loading="lazy"
+                src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=temp&product=ecmwf">
+            </iframe>
+        </div>
+
+        <div class="mapCard">
+            <div class="mapHeader">
+                🛰️ Satélite
+            </div>
+
+            <iframe
+                class="mapFrame"
+                loading="lazy"
+                src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=satellite">
+            </iframe>
         </div>
 
     </div>
 
 </section>
 
-
-<!-- =====================================================
-     PREVISÃO POR HORA
-===================================================== -->
-
+<!-- NASA FIRMS -->
 <section class="section">
 
-    <div class="section-title">
-
-        <h2>
-            Previsão por hora
-        </h2>
-
-        <span>
-            Próximas 12 horas
-        </span>
-
+    <div class="sectionTitle">
+        🔥 Monitoramento de queimadas — NASA FIRMS
     </div>
 
+    <div class="mapCard">
 
-    <div
-        class="hourly"
-        id="hourly"
-    ></div>
+        <iframe
+            id="firmsFrame"
+            class="mapFrame"
+            style="height:500px"
+            loading="lazy">
+        </iframe>
+
+    </div>
 
 </section>
 
-
-<!-- =====================================================
-     7 DIAS
-===================================================== -->
-
+<!-- AIBA -->
 <section class="section">
 
-    <div class="section-title">
+    <div class="sectionTitle">
+        🔥 Monitoramento AIBA
+    </div>
 
-        <h2>
-            Próximos 7 dias
-        </h2>
+    <div class="mapCard">
+
+        <iframe
+            id="aibaFrame"
+            class="aiba-frame"
+            title="Monitoramento AIBA"
+            loading="lazy"
+            src="https://monitoramento.aiba.org.br/"
+            allow="fullscreen">
+        </iframe>
 
     </div>
 
-
-    <div
-        class="forecast"
-        id="forecast"
-    ></div>
+    <a
+        class="openButton"
+        href="https://monitoramento.aiba.org.br/"
+        target="_blank"
+        rel="noopener">
+        🔗 Abrir monitoramento AIBA
+    </a>
 
 </section>
 
-
-<!-- continua na PARTE 2 --><!-- =====================================================
-     MAPAS E MONITORAMENTO
-===================================================== -->
-
-<section class="section">
-
-<div class="section-title">
-
-    <h2>
-        Mapas e monitoramento
-    </h2>
-
-    <span>
-        Dados meteorológicos
-    </span>
-
-</div>
-
-
-<div class="map-grid">
-
-
-<!-- =====================================================
-     RADAR DE CHUVA
-===================================================== -->
-
-<div class="map-card">
-
-    <div class="map-title">
-
-        <span>
-            🌧️ Radar de chuva
-        </span>
-
-        <span class="map-status">
-            Atual
-        </span>
-
-    </div>
-
-
-    <iframe
-        id="radarFrame"
-        class="map-frame"
-        title="Radar de chuva"
-        loading="lazy"
-        src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh">
-    </iframe>
-
-</div>
-
-
-<!-- =====================================================
-     VENTO
-===================================================== -->
-
-<div class="map-card">
-
-    <div class="map-title">
-
-        <span>
-            💨 Mapa de vento
-        </span>
-
-        <span class="map-status">
-            Atual
-        </span>
-
-    </div>
-
-
-    <iframe
-        id="windFrame"
-        class="map-frame"
-        title="Mapa de vento"
-        loading="lazy"
-        src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=7&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh">
-    </iframe>
-
-</div>
-
-
-<!-- =====================================================
-     SATÉLITE
-===================================================== -->
-
-<div class="map-card">
-
-    <div class="map-title">
-
-        <span>
-            🛰️ Satélite
-        </span>
-
-        <span class="map-status">
-            Imagem meteorológica
-        </span>
-
-    </div>
-
-
-    <iframe
-        id="satelliteFrame"
-        class="map-frame"
-        title="Satélite meteorológico"
-        loading="lazy"
-        src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=6&level=surface&overlay=satellite&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh">
-    </iframe>
-
-</div>
-
-
-<!-- =====================================================
-     MAPA GERAL
-===================================================== -->
-
-<div class="map-card">
-
-    <div class="map-title">
-
-        <span>
-            🗺️ Mapa meteorológico
-        </span>
-
-        <span class="map-status">
-            Interativo
-        </span>
-
-    </div>
-
-
-    <iframe
-        id="generalFrame"
-        class="map-frame"
-        title="Mapa meteorológico"
-        loading="lazy"
-        src="https://embed.windy.com/embed2.html?lat=-12.15&lon=-44.99&detailLat=-12.15&detailLon=-44.99&width=650&height=450&zoom=6&level=surface&overlay=clouds&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh">
-    </iframe>
-
-</div>
-
-
-<!-- =====================================================
-     NASA FIRMS
-===================================================== -->
-
-<div class="map-card">
-
-    <div class="map-title">
-
-        <span>
-            🔥 NASA FIRMS
-        </span>
-
-        <span class="map-status">
-            Focos de calor
-        </span>
-
-    </div>
-
-
-    <iframe
-        class="map-frame"
-        title="NASA FIRMS"
-        loading="lazy"
-        src="https://firms.modaps.eosdis.nasa.gov/map/">
-    </iframe>
-
-
-    <div class="external-bar">
-
-        <a
-            class="external-button"
-            href="https://firms.modaps.eosdis.nasa.gov/api/map_key/"
-            target="_blank"
-            rel="noopener"
-        >
-            🔑 Obter MAP_KEY
-        </a>
-
-        <a
-            class="external-button"
-            href="https://firms.modaps.eosdis.nasa.gov/"
-            target="_blank"
-            rel="noopener"
-        >
-            🌎 Abrir NASA FIRMS
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     AIBA
-===================================================== -->
-
-<div class="map-card aiba-card">
-
-    <div class="map-title">
-
-        <span>
-            🔥 Monitoramento AIBA
-        </span>
-
-        <span class="map-status">
-            Oeste da Bahia
-        </span>
-
-    </div>
-
-
-    <iframe
-        id="aibaFrame"
-        class="aiba-frame"
-        title="Monitoramento AIBA"
-        loading="lazy"
-        src="https://monitoramento.aiba.org.br/"
-        allow="fullscreen">
-    </iframe>
-
-
-    <div class="external-bar">
-
-        <a
-            class="external-button"
-            href="https://monitoramento.aiba.org.br/"
-            target="_blank"
-            rel="noopener"
-        >
-            🔥 Abrir Monitoramento AIBA
-        </a>
-
-    </div>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     FERRAMENTAS
-===================================================== -->
-
-<section class="section">
-
-<div class="section-title">
-
-    <h2>
-        Configurações
-    </h2>
-
-</div>
-
-
-<div class="tools">
-
-
-<button
-    class="tool-button"
-    id="locationButton"
->
-    📍 Atualizar localização
-</button>
-
-
-<button
-    class="tool-button"
-    id="lowButton"
->
-    📱 Modo aparelho fraco
-</button>
-
-
-<button
-    class="tool-button"
-    id="refreshButton"
->
-    🔄 Atualizar agora
-</button>
-
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     FONTES
-===================================================== -->
-
-<section class="section">
-
-<div class="section-title">
-
-    <h2>
-        Fontes e monitoramento
-    </h2>
-
-</div>
-
-
-<div class="external-bar">
-
-
-<a
-    class="external-button"
-    href="https://open-meteo.com/"
-    target="_blank"
-    rel="noopener"
->
-    🌤️ Open-Meteo
-</a>
-
-
-<a
-    class="external-button"
-    href="https://firms.modaps.eosdis.nasa.gov/"
-    target="_blank"
-    rel="noopener"
->
-    🔥 NASA FIRMS
-</a>
-
-
-<a
-    class="external-button"
-    href="https://monitoramento.aiba.org.br/"
-    target="_blank"
-    rel="noopener"
->
-    🗺️ AIBA
-</a>
-
-
-<a
-    class="external-button"
-    href="https://embed.windy.com/"
-    target="_blank"
-    rel="noopener"
->
-    💨 Windy
-</a>
-
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     RODAPÉ
-===================================================== -->
-
-<footer class="footer">
-
-    <p>
-        De Tempo em Tempo
-    </p>
-
-    <p id="lastUpdate">
-        Última atualização: --
-    </p>
-
+<footer>
+    De Tempo em Tempo • Dados meteorológicos e ambientais
 </footer>
 
-
 </div>
-
-</div>
-
 
 <script>
+/* O JAVASCRIPT CONTINUA NA PARTE 2 */<script>
 
-/* =====================================================
+/* =========================================================
    CONFIGURAÇÃO
-===================================================== */
-
-
-/*
-   COLOQUE SUA MAP_KEY DA NASA FIRMS AQUI.
-
-   Exemplo:
-
-   const FIRMS_MAP_KEY =
-       "abc123...";
-
-   Sem a chave, o contador de queimadas
-   permanece desativado.
-*/
+========================================================= */
 
 const FIRMS_MAP_KEY = "";
 
-
-/*
-   Local padrão:
-   Barreiras - BA
-
-   Se o usuário permitir localização,
-   essas coordenadas são substituídas.
-*/
-
 const DEFAULT_LOCATION = {
-
-    latitude:
-        -12.1528,
-
-    longitude:
-        -44.9967
-
+    latitude: -12.1528,
+    longitude: -44.9967,
+    name: "Barreiras, BA"
 };
 
+let locationData = {
+    ...DEFAULT_LOCATION
+};
 
-/* =====================================================
-   APIS
-===================================================== */
-
-const WEATHER_API =
-    "https://api.open-meteo.com/v1/forecast";
+let weatherData = null;
 
 
-const AIR_API =
-    "https://air-quality-api.open-meteo.com/v1/air-quality";
-
-
-const GEOCODING_API =
-    "https://geocoding-api.open-meteo.com/v1/search";
-
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
-let latitude =
-    DEFAULT_LOCATION.latitude;
-
-
-let longitude =
-    DEFAULT_LOCATION.longitude;
-
-
-let weatherData =
-    null;
-
-
-/* =====================================================
+/* =========================================================
    ELEMENTOS
-===================================================== */
+========================================================= */
 
-const $ = id =>
-    document.getElementById(id);
-
-
-/* =====================================================
-   LOCALIZAÇÃO
-===================================================== */
-
-async function getLocation(){
-
-    return new Promise(resolve => {
-
-        if(
-            !navigator.geolocation
-        ){
-
-            resolve();
-
-            return;
-
-        }
+const $ = id => document.getElementById(id);
 
 
-        navigator.geolocation.getCurrentPosition(
+/* =========================================================
+   TIMEOUT PARA NÃO TRAVAR A PÁGINA
+========================================================= */
 
-            position => {
+async function fetchTimeout(url, options = {}, timeout = 7000){
 
-                latitude =
-                    position.coords.latitude;
+    const controller = new AbortController();
 
-                longitude =
-                    position.coords.longitude;
-
-                resolve();
-
-            },
-
-            () => {
-
-                /*
-                   Se o usuário negar,
-                   continua usando Barreiras.
-                */
-
-                latitude =
-                    DEFAULT_LOCATION.latitude;
-
-                longitude =
-                    DEFAULT_LOCATION.longitude;
-
-                resolve();
-
-            },
-
-            {
-
-                enableHighAccuracy:true,
-
-                timeout:8000,
-
-                maximumAge:600000
-
-            }
-
-        );
-
-    });
-
-}
-
-
-/* =====================================================
-   CIDADE
-===================================================== */
-
-async function loadCity(){
+    const timer = setTimeout(
+        () => controller.abort(),
+        timeout
+    );
 
     try{
 
-        const url =
-            `${GEOCODING_API}?latitude=${latitude}&longitude=${longitude}&count=1&language=pt&format=json`;
+        const response = await fetch(url,{
+            ...options,
+            signal:controller.signal
+        });
 
-        /*
-          O endpoint de geocoding normalmente trabalha
-          com busca por nome. Por isso mantemos
-          Barreiras como fallback.
-        */
+        if(!response.ok){
+            throw new Error(
+                "HTTP " + response.status
+            );
+        }
 
-        $("location").textContent =
-            "📍 Localização atual";
+        return response;
 
-    }
+    }finally{
 
-    catch{
-
-        $("location").textContent =
-            "📍 Barreiras, BA";
+        clearTimeout(timer);
 
     }
-
 }
 
 
-/* =====================================================
-   CÓDIGO DO TEMPO
-===================================================== */
-
-function weatherIcon(
-    code,
-    isDay=true
-){
-
-    if(!isDay)
-        return "🌙";
-
-
-    if(code === 0)
-        return "☀️";
-
-
-    if(
-        code === 1 ||
-        code === 2
-    )
-        return "⛅";
-
-
-    if(code === 3)
-        return "☁️";
-
-
-    if(
-        code === 45 ||
-        code === 48
-    )
-        return "🌫️";
-
-
-    if(
-        code >= 51 &&
-        code <= 57
-    )
-        return "🌦️";
-
-
-    if(
-        code >= 61 &&
-        code <= 67
-    )
-        return "🌧️";
-
-
-    if(
-        code >= 71 &&
-        code <= 77
-    )
-        return "🌨️";
-
-
-    if(
-        code >= 80 &&
-        code <= 82
-    )
-        return "🌧️";
-
-
-    if(
-        code >= 95
-    )
-        return "⛈️";
-
-
-    return "☁️";
-
-}
-
-
-/* =====================================================
-   DESCRIÇÃO
-===================================================== */
-
-function weatherText(code){
-
-    const map = {
-
-        0:"Céu limpo",
-
-        1:"Principalmente limpo",
-
-        2:"Parcialmente nublado",
-
-        3:"Nublado",
-
-        45:"Neblina",
-
-        48:"Neblina",
-
-        51:"Garoa leve",
-
-        53:"Garoa",
-
-        55:"Garoa forte",
-
-        56:"Garoa congelante",
-
-        57:"Garoa congelante forte",
-
-        61:"Chuva leve",
-
-        63:"Chuva moderada",
-
-        65:"Chuva forte",
-
-        66:"Chuva congelante",
-
-        67:"Chuva congelante forte",
-
-        71:"Neve",
-
-        73:"Neve moderada",
-
-        75:"Neve forte",
-
-        77:"Granizo de neve",
-
-        80:"Pancadas de chuva",
-
-        81:"Pancadas moderadas",
-
-        82:"Pancadas fortes",
-
-        95:"Tempestade",
-
-        96:"Tempestade com granizo",
-
-        99:"Tempestade forte"
-
-    };
-
-    return (
-        map[code] ||
-        "Condição desconhecida"
-    );
-
-}
-
-
-/* =====================================================
-   DIREÇÃO DO VENTO
-===================================================== */
-
-function windDirection(degrees){
-
-    const directions = [
-
-        "N",
-
-        "NE",
-
-        "L",
-
-        "SE",
-
-        "S",
-
-        "SO",
-
-        "O",
-
-        "NO"
-
-    ];
-
-
-    const index =
-        Math.round(
-            degrees / 45
-        ) % 8;
-
-
-    return directions[index];
-
-}
-
-
-/* =====================================================
-   FUNDO DINÂMICO
-===================================================== */
-
-const BACKGROUNDS = {
-
-    clear:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=90",
-
-    cloudy:
-        "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=2400&q=90",
-
-    rain:
-        "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=2400&q=90",
-
-    storm:
-        "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=2400&q=90",
-
-    fog:
-        "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=2400&q=90",
-
-    night:
-        "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2400&q=90"
-
-};
-
-
-/* =====================================================
-   ESCOLHER FUNDO
-===================================================== */
-
-function setBackground(
-    code,
-    isDay
-){
-
-    let image;
-
-
-    if(!isDay){
-
-        image =
-            BACKGROUNDS.night;
-
-    }
-
-    else if(
-        code >= 95
-    ){
-
-        image =
-            BACKGROUNDS.storm;
-
-    }
-
-    else if(
-        (
-            code >= 61 &&
-            code <= 67
-        ) ||
-        (
-            code >= 80 &&
-            code <= 82
-        )
-    ){
-
-        image =
-            BACKGROUNDS.rain;
-
-    }
-
-    else if(
-        code === 45 ||
-        code === 48
-    ){
-
-        image =
-            BACKGROUNDS.fog;
-
-    }
-
-    else if(
-        code === 2 ||
-        code === 3
-    ){
-
-        image =
-            BACKGROUNDS.cloudy;
-
-    }
-
-    else{
-
-        image =
-            BACKGROUNDS.clear;
-
-    }
-
-
-    $("weatherBackground")
-        .style
-        .backgroundImage =
-        `url("${image}")`;
-
-}
-
-
-/* continua na PARTE 3 */<script>
-
-/* =====================================================
+/* =========================================================
    CLIMA
-===================================================== */
+   ESTA É A API PRIORITÁRIA
+========================================================= */
 
 async function loadWeather(){
 
+    const lat = locationData.latitude;
+    const lon = locationData.longitude;
+
+    const url =
+        "https://api.open-meteo.com/v1/forecast" +
+
+        "?latitude=" + encodeURIComponent(lat) +
+
+        "&longitude=" + encodeURIComponent(lon) +
+
+        "&current=" +
+        [
+            "temperature_2m",
+            "relative_humidity_2m",
+            "apparent_temperature",
+            "precipitation",
+            "weather_code",
+            "wind_speed_10m",
+            "wind_direction_10m"
+        ].join(",") +
+
+        "&hourly=" +
+        [
+            "temperature_2m",
+            "weather_code",
+            "precipitation_probability"
+        ].join(",") +
+
+        "&daily=" +
+        [
+            "weather_code",
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "precipitation_probability_max"
+        ].join(",") +
+
+        "&timezone=auto" +
+
+        "&forecast_days=7";
+
     try{
 
-        const params =
-            new URLSearchParams({
-
-                latitude,
-
-                longitude,
-
-                current:[
-                    "temperature_2m",
-                    "relative_humidity_2m",
-                    "apparent_temperature",
-                    "weather_code",
-                    "wind_speed_10m",
-                    "wind_direction_10m",
-                    "is_day",
-                    "precipitation"
-                ].join(","),
-
-                hourly:[
-                    "temperature_2m",
-                    "weather_code",
-                    "precipitation_probability",
-                    "wind_speed_10m"
-                ].join(","),
-
-                daily:[
-                    "weather_code",
-                    "temperature_2m_max",
-                    "temperature_2m_min",
-                    "precipitation_probability_max"
-                ].join(","),
-
-                forecast_days:7,
-
-                timezone:"auto"
-
-            });
-
-
         const response =
-            await fetch(
-                `${WEATHER_API}?${params}`
-            );
-
-
-        if(!response.ok)
-            throw new Error(
-                "Erro na API do clima"
-            );
-
+            await fetchTimeout(url,{},6000);
 
         const data =
             await response.json();
 
+        weatherData = data;
 
-        weatherData =
-            data;
+        renderCurrentWeather(data);
 
+        renderHourly(data);
 
-        const current =
-            data.current;
-
-
-        const code =
-            current.weather_code;
-
-
-        $("weatherIcon")
-            .textContent =
-            weatherIcon(
-                code,
-                current.is_day === 1
-            );
-
-
-        $("temperature")
-            .textContent =
-            `${Math.round(
-                current.temperature_2m
-            )}°`;
-
-
-        $("condition")
-            .textContent =
-            weatherText(code);
-
-
-        $("feels")
-            .textContent =
-            `${Math.round(
-                current.apparent_temperature
-            )}°C`;
-
-
-        $("humidity")
-            .textContent =
-            `${Math.round(
-                current.relative_humidity_2m
-            )}%`;
-
-
-        $("wind")
-            .textContent =
-            `${Math.round(
-                current.wind_speed_10m
-            )} km/h`;
-
-
-        $("windDirection")
-            .textContent =
-            `Direção: ${
-                windDirection(
-                    current.wind_direction_10m
-                )
-            }`;
-
-
-        /*
-          Encontra o horário mais próximo
-          do momento atual.
-        */
-
-        const currentHour =
-            new Date(
-                current.time
-            );
-
-
-        let closestIndex = 0;
-
-        let closestDifference =
-            Infinity;
-
-
-        data.hourly.time.forEach(
-            (time,index) => {
-
-                const difference =
-                    Math.abs(
-                        new Date(time)
-                        - currentHour
-                    );
-
-
-                if(
-                    difference <
-                    closestDifference
-                ){
-
-                    closestDifference =
-                        difference;
-
-                    closestIndex =
-                        index;
-
-                }
-
-            }
-        );
-
-
-        $("rain")
-            .textContent =
-            `${data.hourly
-                .precipitation_probability[
-                    closestIndex
-                ] ?? 0}%`;
-
-
-        renderHourly(
-            data,
-            closestIndex
-        );
-
-
-        renderDaily(
-            data
-        );
-
+        renderDaily(data);
 
         setBackground(
-            code,
-            current.is_day === 1
+            data.current.weather_code
         );
 
+        $("status").textContent =
+            "Dados meteorológicos atualizados";
 
-        $("statusText")
-            .textContent =
-            "Dados atualizados";
-
-
-        $("lastUpdate")
-            .textContent =
-            "Última atualização: " +
-            new Date()
-                .toLocaleTimeString(
-                    "pt-BR",
-                    {
-                        hour:"2-digit",
-                        minute:"2-digit"
-                    }
-                );
-
-
-        /*
-           Atualiza os mapas para a
-           localização detectada.
-        */
-
-        updateMaps();
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        $("statusText")
-            .textContent =
-            "Erro ao atualizar clima";
-
-    }
-
-}
-
-
-/* =====================================================
-   PREVISÃO POR HORA
-===================================================== */
-
-function renderHourly(
-    data,
-    startIndex
-){
-
-    const container =
-        $("hourly");
-
-
-    container.innerHTML =
-        "";
-
-
-    for(
-        let i = startIndex;
-        i < startIndex + 12;
-        i++
-    ){
-
-        if(
-            !data.hourly.time[i]
-        )
-            break;
-
-
-        const date =
-            new Date(
-                data.hourly.time[i]
-            );
-
-
-        const time =
-            date.toLocaleTimeString(
+        $("lastUpdate").textContent =
+            "Atualizado às " +
+            new Date().toLocaleTimeString(
                 "pt-BR",
                 {
                     hour:"2-digit",
@@ -2369,615 +846,854 @@ function renderHourly(
                 }
             );
 
+    }catch(error){
 
-        const temp =
-            Math.round(
-                data.hourly
-                    .temperature_2m[i]
-            );
+        console.error(
+            "Erro clima:",
+            error
+        );
 
+        $("condition").textContent =
+            "Não foi possível atualizar o clima";
 
-        const rain =
-            data.hourly
-                .precipitation_probability[i]
-                ?? 0;
-
-
-        const code =
-            data.hourly
-                .weather_code[i];
-
-
-        container.innerHTML += `
-
-            <div class="hour-card">
-
-                <div class="hour-time">
-                    ${time}
-                </div>
-
-                <div class="hour-icon">
-                    ${weatherIcon(code)}
-                </div>
-
-                <div class="hour-temp">
-                    ${temp}°
-                </div>
-
-                <div class="hour-rain">
-                    🌧️ ${rain}%
-                </div>
-
-            </div>
-
-        `;
+        $("status").textContent =
+            "Clima temporariamente indisponível";
 
     }
 
 }
 
 
-/* =====================================================
-   7 DIAS
-===================================================== */
+/* =========================================================
+   CLIMA ATUAL
+========================================================= */
 
-function renderDaily(data){
+function renderCurrentWeather(data){
 
-    const container =
-        $("forecast");
+    const c = data.current;
 
+    $("temperature").textContent =
+        Math.round(c.temperature_2m) + "°";
 
-    container.innerHTML =
-        "";
+    $("feels").textContent =
+        Math.round(c.apparent_temperature) + "°C";
 
+    $("humidity").textContent =
+        Math.round(c.relative_humidity_2m) + "%";
 
-    const days = [
+    $("wind").textContent =
+        Math.round(c.wind_speed_10m) + " km/h";
 
-        "Dom",
-        "Seg",
-        "Ter",
-        "Qua",
-        "Qui",
-        "Sex",
-        "Sáb"
+    $("windDirection").textContent =
+        "Direção: " +
+        degreesToDirection(
+            c.wind_direction_10m
+        );
 
-    ];
+    $("condition").textContent =
+        weatherDescription(
+            c.weather_code
+        );
 
+    $("weatherIcon").textContent =
+        weatherIcon(
+            c.weather_code,
+            true
+        );
 
-    data.daily.time.forEach(
-        (dateString,index) => {
+    if(
+        data.hourly &&
+        data.hourly.precipitation_probability
+    ){
 
-            const date =
-                new Date(
-                    dateString +
-                    "T12:00:00"
-                );
+        const nowIndex =
+            findClosestHour(
+                data.hourly.time
+            );
 
-
-            const name =
-                index === 0
-                    ? "Hoje"
-                    : days[
-                        date.getDay()
-                    ];
-
-
-            const code =
-                data.daily
-                    .weather_code[index];
-
-
-            const max =
-                Math.round(
-                    data.daily
-                        .temperature_2m_max[index]
-                );
-
-
-            const min =
-                Math.round(
-                    data.daily
-                        .temperature_2m_min[index]
-                );
-
-
-            const rain =
-                data.daily
-                    .precipitation_probability_max[index]
-                    ?? 0;
-
-
-            container.innerHTML += `
-
-                <div class="day-card">
-
-                    <div class="day-name">
-                        ${name}
-                    </div>
-
-                    <div class="day-icon">
-                        ${weatherIcon(code)}
-                    </div>
-
-                    <div class="day-temp">
-                        ${max}°
-                        <span
-                            class="day-min"
-                        >
-                            ${min}°
-                        </span>
-                    </div>
-
-                    <div class="day-rain">
-                        🌧️ ${rain}%
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
+        $("rainProbability").textContent =
+            (
+                data.hourly
+                .precipitation_probability[
+                    nowIndex
+                ] ?? 0
+            ) + "%";
+    }
 }
 
 
-/* =====================================================
-   QUALIDADE DO AR
-===================================================== */
+/* =========================================================
+   PRÓXIMAS 12 HORAS
+========================================================= */
 
-async function loadAir(){
+function renderHourly(data){
+
+    const container = $("hourly");
+
+    container.innerHTML = "";
+
+    const h = data.hourly;
+
+    const start =
+        findClosestHour(h.time);
+
+    const end =
+        Math.min(
+            start + 12,
+            h.time.length
+        );
+
+    for(let i=start;i<end;i++){
+
+        const date =
+            new Date(h.time[i]);
+
+        const item =
+            document.createElement("div");
+
+        item.className = "hour";
+
+        item.innerHTML = `
+            <div class="hourTime">
+                ${date.toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                )}
+            </div>
+
+            <div class="hourIcon">
+                ${weatherIcon(
+                    h.weather_code[i]
+                )}
+            </div>
+
+            <div class="hourTemp">
+                ${Math.round(
+                    h.temperature_2m[i]
+                )}°
+            </div>
+
+            <div class="cardSmall">
+                ${h.precipitation_probability[i] ?? 0}%
+            </div>
+        `;
+
+        container.appendChild(item);
+    }
+}
+
+
+/* =========================================================
+   7 DIAS
+========================================================= */
+
+function renderDaily(data){
+
+    const container = $("daily");
+
+    container.innerHTML = "";
+
+    const d = data.daily;
+
+    for(let i=0;i<7;i++){
+
+        const date =
+            new Date(d.time[i]);
+
+        const item =
+            document.createElement("div");
+
+        item.className = "day";
+
+        const name =
+            i === 0
+            ? "Hoje"
+            : date.toLocaleDateString(
+                "pt-BR",
+                {weekday:"short"}
+              ).replace(".","");
+
+        item.innerHTML = `
+            <div class="dayName">
+                ${name}
+            </div>
+
+            <div class="dayIcon">
+                ${weatherIcon(
+                    d.weather_code[i]
+                )}
+            </div>
+
+            <div class="dayTemp">
+                ${Math.round(
+                    d.temperature_2m_max[i]
+                )}°
+            </div>
+
+            <div class="dayMin">
+                ${Math.round(
+                    d.temperature_2m_min[i]
+                )}°
+            </div>
+
+            <div class="cardSmall">
+                🌧️ ${d.precipitation_probability_max[i] ?? 0}%
+            </div>
+        `;
+
+        container.appendChild(item);
+    }
+}
+
+
+/* =========================================================
+   NASA FIRMS
+   RODA DEPOIS DO CLIMA
+========================================================= */
+
+async function loadFires(){
+
+    if(!FIRMS_MAP_KEY){
+
+        $("fires").textContent = "--";
+
+        $("fireStatus").textContent =
+            "Configure a chave NASA FIRMS";
+
+        return;
+    }
+
+    $("fireStatus").textContent =
+        "Consultando NASA FIRMS...";
 
     try{
 
-        const params =
-            new URLSearchParams({
+        const lat =
+            locationData.latitude;
 
-                latitude,
+        const lon =
+            locationData.longitude;
 
-                longitude,
+        const left = lon - 2;
+        const right = lon + 2;
+        const bottom = lat - 2;
+        const top = lat + 2;
 
-                current:[
-                    "us_aqi",
-                    "pm2_5",
-                    "pm10"
-                ].join(","),
+        const area =
+            `${left},${bottom},${right},${top}`;
 
-                timezone:"auto"
-
-            });
-
+        const url =
+            "https://firms.modaps.eosdis.nasa.gov/api/area/csv/" +
+            FIRMS_MAP_KEY +
+            "/VIIRS_NOAA21_NRT/" +
+            area +
+            "/1";
 
         const response =
-            await fetch(
-                `${AIR_API}?${params}`
+            await fetchTimeout(
+                url,
+                {},
+                6000
             );
 
+        const text =
+            await response.text();
 
-        if(!response.ok)
-            throw new Error();
+        const lines =
+            text.trim()
+                .split(/\r?\n/);
 
+        let count = 0;
+
+        if(lines.length > 1){
+            count = lines.length - 1;
+        }
+
+        $("fires").textContent =
+            count;
+
+        $("fireStatus").textContent =
+            count === 1
+            ? "1 foco na região"
+            : `${count} focos na região`;
+
+    }catch(error){
+
+        console.warn(
+            "NASA FIRMS:",
+            error
+        );
+
+        $("fires").textContent =
+            "--";
+
+        $("fireStatus").textContent =
+            "NASA FIRMS indisponível";
+    }
+}
+
+
+/* =========================================================
+   QUALIDADE DO AR
+   TAMBÉM NÃO BLOQUEIA O CLIMA
+========================================================= */
+
+async function loadAirQuality(){
+
+    const lat =
+        locationData.latitude;
+
+    const lon =
+        locationData.longitude;
+
+    const url =
+        "https://air-quality-api.open-meteo.com/v1/air-quality" +
+
+        "?latitude=" +
+        encodeURIComponent(lat) +
+
+        "&longitude=" +
+        encodeURIComponent(lon) +
+
+        "&current=" +
+        [
+            "us_aqi",
+            "pm2_5",
+            "pm10"
+        ].join(",");
+
+    try{
+
+        const response =
+            await fetchTimeout(
+                url,
+                {},
+                6000
+            );
 
         const data =
             await response.json();
 
-
-        const current =
-            data.current;
-
-
         const aqi =
-            current.us_aqi;
+            data.current?.us_aqi;
 
+        if(aqi == null){
 
-        $("air")
-            .textContent =
+            $("air").textContent =
+                "--";
+
+            $("airStatus").textContent =
+                "Sem dados";
+
+            return;
+        }
+
+        $("air").textContent =
             Math.round(aqi);
 
+        $("airStatus").textContent =
+            airClassification(aqi);
 
-        $("airInfo")
-            .textContent =
-            getAirText(aqi);
+    }catch(error){
 
-    }
+        console.warn(
+            "Qualidade do ar:",
+            error
+        );
 
-    catch(error){
-
-        $("air")
-            .textContent =
+        $("air").textContent =
             "--";
 
-
-        $("airInfo")
-            .textContent =
-            "Dados indisponíveis";
-
+        $("airStatus").textContent =
+            "Indisponível";
     }
-
 }
 
 
-/* =====================================================
-   TEXTO AQI
-===================================================== */
+/* =========================================================
+   FUNÇÕES DE CLIMA
+========================================================= */
 
-function getAirText(aqi){
+function weatherDescription(code){
+
+    if(code === 0)
+        return "Céu limpo";
+
+    if([1,2,3].includes(code))
+        return "Parcialmente nublado";
+
+    if([45,48].includes(code))
+        return "Neblina";
+
+    if([51,53,55].includes(code))
+        return "Garoa";
+
+    if([56,57].includes(code))
+        return "Garoa congelante";
+
+    if([61,63,65].includes(code))
+        return "Chuva";
+
+    if([66,67].includes(code))
+        return "Chuva congelante";
+
+    if([71,73,75,77].includes(code))
+        return "Neve";
+
+    if([80,81,82].includes(code))
+        return "Pancadas de chuva";
+
+    if([85,86].includes(code))
+        return "Pancadas de neve";
+
+    if([95].includes(code))
+        return "Trovoada";
+
+    if([96,99].includes(code))
+        return "Trovoada com granizo";
+
+    return "Condição desconhecida";
+}
+
+
+function weatherIcon(code, current=false){
+
+    if(code === 0)
+        return current ? "☀️" : "☀️";
+
+    if([1,2].includes(code))
+        return "⛅";
+
+    if(code === 3)
+        return "☁️";
+
+    if([45,48].includes(code))
+        return "🌫️";
+
+    if([51,53,55,56,57].includes(code))
+        return "🌦️";
+
+    if([61,63,65,66,67,80,81,82].includes(code))
+        return "🌧️";
+
+    if([95,96,99].includes(code))
+        return "⛈️";
+
+    if([71,73,75,77,85,86].includes(code))
+        return "🌨️";
+
+    return "☁️";
+}
+
+
+function degreesToDirection(deg){
+
+    if(deg == null)
+        return "--";
+
+    const dirs = [
+        "N","NE","L","SE",
+        "S","SO","O","NO"
+    ];
+
+    return dirs[
+        Math.round(deg / 45) % 8
+    ];
+}
+
+
+function airClassification(aqi){
 
     if(aqi <= 50)
         return "Boa";
 
-
     if(aqi <= 100)
         return "Moderada";
 
-
     if(aqi <= 150)
-        return "Não saudável para grupos sensíveis";
-
+        return "Insalubre para grupos sensíveis";
 
     if(aqi <= 200)
-        return "Não saudável";
-
+        return "Insalubre";
 
     if(aqi <= 300)
         return "Muito insalubre";
 
-
     return "Perigosa";
-
 }
 
 
-/* =====================================================
-   QUEIMADAS NASA FIRMS
-===================================================== */
+function findClosestHour(times){
 
-async function loadFires(){
+    const now =
+        Date.now();
 
-    /*
-       Sem MAP_KEY não fazemos a chamada.
-    */
+    let best = 0;
+    let diff = Infinity;
 
-    if(!FIRMS_MAP_KEY){
+    for(let i=0;i<times.length;i++){
 
-        $("fires")
-            .textContent =
-            "—";
-
-
-        $("firesInfo")
-            .textContent =
-            "Configure a MAP_KEY da NASA FIRMS";
-
-        return;
-
-    }
-
-
-    try{
-
-        /*
-           Caixa ao redor da localização.
-
-           aproximadamente:
-           2 graus para cada lado.
-        */
-
-        const west =
-            longitude - 2;
-
-
-        const south =
-            latitude - 2;
-
-
-        const east =
-            longitude + 2;
-
-
-        const north =
-            latitude + 2;
-
-
-        const area =
-            `${west},${south},${east},${north}`;
-
-
-        /*
-           NOAA-21 NRT.
-        */
-
-        const url =
-            `https://firms.modaps.eosdis.nasa.gov/api/area/csv/${FIRMS_MAP_KEY}/VIIRS_NOAA21_NRT/${area}/1`;
-
-
-        const response =
-            await fetch(url);
-
-
-        if(!response.ok)
-            throw new Error();
-
-
-        const csv =
-            await response.text();
-
-
-        const rows =
-            csv
-                .trim()
-                .split(/\r?\n/);
-
-
-        /*
-           primeira linha é o cabeçalho.
-        */
-
-        const count =
-            Math.max(
-                0,
-                rows.length - 1
+        const d =
+            Math.abs(
+                new Date(times[i]).getTime()
+                - now
             );
 
+        if(d < diff){
 
-        $("fires")
-            .textContent =
-            count;
-
-
-        $("firesInfo")
-            .textContent =
-            count === 1
-                ? "foco detectado na área"
-                : "focos detectados na área";
-
+            diff = d;
+            best = i;
+        }
     }
 
-    catch(error){
+    return best;
+}<script>
 
-        console.error(error);
+/* =========================================================
+   FUNDO FOTOGRÁFICO
+========================================================= */
+
+const WEATHER_BACKGROUNDS = {
+
+    clearDay:
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=85",
+
+    cloudy:
+        "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=2000&q=85",
+
+    rain:
+        "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=2000&q=85",
+
+    storm:
+        "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=2000&q=85",
+
+    fog:
+        "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=2000&q=85",
+
+    night:
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2000&q=85"
+};
 
 
-        $("fires")
-            .textContent =
-            "—";
+function setBackground(code){
 
+    let image =
+        WEATHER_BACKGROUNDS.clearDay;
 
-        $("firesInfo")
-            .textContent =
-            "Não foi possível consultar";
+    const hour =
+        new Date().getHours();
 
+    const night =
+        hour < 6 ||
+        hour >= 18;
+
+    if(night){
+
+        image =
+            WEATHER_BACKGROUNDS.night;
+
+    }else if(
+        [95,96,99].includes(code)
+    ){
+
+        image =
+            WEATHER_BACKGROUNDS.storm;
+
+    }else if(
+        [61,63,65,80,81,82].includes(code)
+    ){
+
+        image =
+            WEATHER_BACKGROUNDS.rain;
+
+    }else if(
+        [45,48].includes(code)
+    ){
+
+        image =
+            WEATHER_BACKGROUNDS.fog;
+
+    }else if(
+        [1,2,3].includes(code)
+    ){
+
+        image =
+            WEATHER_BACKGROUNDS.cloudy;
     }
 
+    const bg =
+        $("weatherBackground");
+
+    bg.style.backgroundImage =
+        `url("${image}")`;
 }
 
 
-/* =====================================================
-   ATUALIZAR MAPAS
-===================================================== */
+/* =========================================================
+   LOCALIZAÇÃO
+   NÃO BLOQUEIA O CLIMA
+========================================================= */
 
-function updateMaps(){
+function locateUser(){
+
+    $("locationText").textContent =
+        "📍 Localizando...";
+
+    if(!navigator.geolocation){
+
+        $("locationText").textContent =
+            "📍 Barreiras, BA";
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        async position => {
+
+            const lat =
+                position.coords.latitude;
+
+            const lon =
+                position.coords.longitude;
+
+            locationData = {
+                latitude:lat,
+                longitude:lon,
+                name:"Localização atual"
+            };
+
+            $("locationText").textContent =
+                "📍 Localização atual";
+
+            /*
+             * Recarrega os dados usando
+             * a nova posição.
+             */
+            await loadAll(false);
+        },
+
+        error => {
+
+            console.warn(
+                "Geolocalização:",
+                error
+            );
+
+            /*
+             * NÃO trava a página.
+             * Continua usando Barreiras.
+             */
+            locationData = {
+                ...DEFAULT_LOCATION
+            };
+
+            $("locationText").textContent =
+                "📍 Barreiras, BA";
+        },
+
+        {
+            enableHighAccuracy:false,
+            timeout:3500,
+            maximumAge:300000
+        }
+    );
+}
+
+
+/* =========================================================
+   CARREGAMENTO PRINCIPAL
+========================================================= */
+
+async function loadAll(manual=false){
+
+    $("status").textContent =
+        manual
+        ? "Atualizando dados..."
+        : "Atualizando clima...";
 
     /*
-       Os mapas acompanham a localização
-       detectada pelo navegador.
-    */
+     * PRIMEIRO:
+     * clima principal.
+     *
+     * Ele é aguardado porque é a parte
+     * mais importante da página.
+     */
+    await loadWeather();
 
+    /*
+     * DEPOIS:
+     * APIs secundárias em paralelo.
+     *
+     * Se uma travar, não trava as outras.
+     */
+    Promise.allSettled([
+        loadAirQuality(),
+        loadFires()
+    ]);
 
-    const lat =
-        latitude;
-
-
-    const lon =
-        longitude;
-
-
-    const common =
-        `lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}`;
-
-
-    const base =
-        `https://embed.windy.com/embed2.html?${common}`;
-
-
-    $("radarFrame").src =
-        base +
-        `&width=650&height=450&zoom=7&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh`;
-
-
-    $("windFrame").src =
-        base +
-        `&width=650&height=450&zoom=7&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh`;
-
-
-    $("satelliteFrame").src =
-        base +
-        `&width=650&height=450&zoom=6&level=surface&overlay=satellite&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh`;
-
-
-    $("generalFrame").src =
-        base +
-        `&width=650&height=450&zoom=6&level=surface&overlay=clouds&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh`;
-
+    /*
+     * Mapas NÃO são carregados pelo JS.
+     * Os iframes usam loading="lazy".
+     */
 }
 
 
-/* =====================================================
-   MODO APARELHO FRACO
-===================================================== */
+/* =========================================================
+   MODO ECONÔMICO
+========================================================= */
 
-function setupLowPerformance(){
+function toggleLowPerformance(){
+
+    const enabled =
+        document.body.classList.toggle(
+            "lowPerformance"
+        );
+
+    localStorage.setItem(
+        "lowPerformance",
+        enabled ? "1" : "0"
+    );
+}
+
+
+function loadPerformanceMode(){
 
     const enabled =
         localStorage.getItem(
-            "deTempoEmTempoLowPerformance"
-        ) === "true";
-
+            "lowPerformance"
+        ) === "1";
 
     if(enabled){
 
-        document.body
-            .classList
-            .add(
-                "low-performance"
-            );
+        document.body.classList.add(
+            "lowPerformance"
+        );
+    }
+}
 
+
+/* =========================================================
+   NASA FIRMS MAP
+========================================================= */
+
+function setupFirmsMap(){
+
+    /*
+     * Sem chave, não tenta carregar
+     * o mapa automaticamente.
+     *
+     * Isso evita uma requisição inútil
+     * logo na abertura.
+     */
+
+    if(!FIRMS_MAP_KEY){
+
+        $("firmsFrame").src =
+            "about:blank";
+
+        return;
     }
 
+    const lat =
+        locationData.latitude;
+
+    const lon =
+        locationData.longitude;
+
+    /*
+     * Mapa visual da NASA FIRMS.
+     */
+    $("firmsFrame").src =
+        "https://firms.modaps.eosdis.nasa.gov/map/#d:" +
+        "24hrs;@"+lon+","+lat+",7z";
 }
 
 
-/* =====================================================
-   BOTÃO MODO FRACO
-===================================================== */
-
-$("lowButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            const enabled =
-                document.body
-                    .classList
-                    .toggle(
-                        "low-performance"
-                    );
-
-
-            localStorage.setItem(
-
-                "deTempoEmTempoLowPerformance",
-
-                enabled
-                    ? "true"
-                    : "false"
-
-            );
-
-        }
-    );
-
-
-/* =====================================================
-   BOTÃO LOCALIZAÇÃO
-===================================================== */
-
-$("locationButton")
-    .addEventListener(
-        "click",
-        async () => {
-
-            $("location")
-                .textContent =
-                "📍 Localizando...";
-
-
-            await getLocation();
-
-
-            await loadCity();
-
-
-            await Promise.all([
-
-                loadWeather(),
-
-                loadAir(),
-
-                loadFires()
-
-            ]);
-
-        }
-    );
-
-
-/* =====================================================
-   BOTÃO ATUALIZAR
-===================================================== */
-
-$("refreshButton")
-    .addEventListener(
-        "click",
-        async () => {
-
-            $("statusText")
-                .textContent =
-                "Atualizando...";
-
-
-            await Promise.all([
-
-                loadWeather(),
-
-                loadAir(),
-
-                loadFires()
-
-            ]);
-
-        }
-    );
-
-
-/* =====================================================
+/* =========================================================
    INICIALIZAÇÃO
-===================================================== */
+========================================================= */
 
-async function start(){
-
-    setupLowPerformance();
-
-
-    await getLocation();
-
-
-    await loadCity();
-
-
-    await Promise.all([
-
-        loadWeather(),
-
-        loadAir(),
-
-        loadFires()
-
-    ]);
-
-}
-
-
-/* =====================================================
-   AUTO UPDATE
-===================================================== */
-
-/*
-   Atualiza a cada 10 minutos.
-*/
-
-setInterval(
-
+document.addEventListener(
+    "DOMContentLoaded",
     () => {
 
-        loadWeather();
+        loadPerformanceMode();
 
-        loadAir();
+        /*
+         * Mostra Barreiras imediatamente.
+         * Não espera geolocalização.
+         */
+        locationData = {
+            ...DEFAULT_LOCATION
+        };
 
-        loadFires();
+        $("locationText").textContent =
+            "📍 Barreiras, BA";
 
-    },
+        /*
+         * Fundo aparece imediatamente.
+         */
+        setBackground(2);
 
-    10 * 60 * 1000
+        /*
+         * CLIMA COMEÇA IMEDIATAMENTE.
+         */
+        loadAll(false);
 
+        /*
+         * Localização é tentada em paralelo.
+         * Não bloqueia o carregamento.
+         */
+        setTimeout(
+            locateUser,
+            100
+        );
+
+        /*
+         * Configura mapa depois.
+         */
+        setTimeout(
+            setupFirmsMap,
+            1500
+        );
+    }
 );
 
 
-/* =====================================================
-   INICIAR
-===================================================== */
+/* =========================================================
+   ATUALIZAÇÃO AUTOMÁTICA
+========================================================= */
 
-start();
+setInterval(
+    () => {
+
+        loadAll(false);
+
+    },
+    10 * 60 * 1000
+);
+
+
+/* =========================================================
+   EVITA ERRO VISUAL CASO UMA API FALHE
+========================================================= */
+
+window.addEventListener(
+    "unhandledrejection",
+    event => {
+
+        console.warn(
+            "Falha de API:",
+            event.reason
+        );
+
+        event.preventDefault();
+    }
+);
 
 </script>
 
